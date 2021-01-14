@@ -53,18 +53,18 @@ window.addEventListener('DOMContentLoaded', () => {
         
         div.innerHTML = `
             <div class="w-60 border relative">
-                <span class="w-100 p-x border weight-600 d-none m-d-block">Naziv</span>
+                <span class="w-100 p-x border weight-600 d-none s-d-block">Naziv</span>
                 <input type="text" name="${numberOfArticles}-imeArtikla" class="w-100 p-xs border-none h-100 imeArtikla"  list="${numberOfArticles}-artikli">
                 <span class="registration-form__error"></span>
                 <datalist id="${numberOfArticles}-artikli" class="dropdown"></ul>
             </div>
             <div class="w-20 border">
-                <span class="w-100 d-none p-x border weight-600 d-none m-d-block">Cijena</span>
+                <span class="w-100 d-none p-x border weight-600 d-none s-d-block">Cijena</span>
                 <input type="number" name="${numberOfArticles}-cijena" step="0.01" class="w-100 p-xs border-none h-100">
                 <span class="registration-form__error"></span>
             </div>
             <div class="w-20 border">
-                <span class="w-10 p-x border weight-600 d-none m-d-block">Količina</span>
+                <span class="w-10 p-x border weight-600 d-none s-d-block">Količina</span>
                 <input type="number" name="${numberOfArticles}-kolicina" step="0.01" class="w-100 p-xs border-none h-100" >
                 <span class="registration-form__error"></span>
             </div>

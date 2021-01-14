@@ -589,6 +589,9 @@ main.active {
   .desktop {
     display: none;
   }
+  .navigation__menu li:not(:last-child) {
+    margin-left: 0;
+  }
   .m-w-50 {
     width: 50%;
   }
