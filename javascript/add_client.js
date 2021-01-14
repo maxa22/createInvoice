@@ -30,7 +30,7 @@ firmForm.addEventListener('submit', e => {
     let formData = new FormData(firmForm);
     formData.append('submit', '');
     const url = 'include/add_client.inc.php';
-    let inputs = document.querySelectorAll('input[name="ime"], input[name="adresa"], input[name="racun"]');
+    let inputs = document.querySelectorAll('#ime, #adresa, #racun, #jib');
     let errorArray = [];
     isEmpty(inputs, errorArray);
     if(errorArray.length < 1) {
@@ -66,7 +66,7 @@ firmForm.addEventListener('submit', e => {
 
 
 
-// ### FUNCTIONS ###
+// ### FUNCTIONS ### 
 
 async function postData(url, data) {
     const response = await fetch(url, {

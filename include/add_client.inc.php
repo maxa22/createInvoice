@@ -22,7 +22,7 @@
         $args['userId'] = $_SESSION['id']; 
 
         foreach($args as $key => $value) {
-            if(!empty($value) || $key == 'racun' || $key == 'ime' || $key == 'adresa') {
+            if(!empty($value) || $key == 'racun' || $key == 'ime' || $key == 'adresa' || $key == 'jib') {
                 Validate::validateString($key, $args[$key]);
                 $args[$key] = Sanitize::sanitizeString($value);
             } 

@@ -85,7 +85,7 @@ $output = '
     <p style="font-size: 14px;">' . $firm['ime'] . '</p>
     <p style="font-size: 14px;">' . $firm['adresa'] . '</p>
     <p style="font-size: 14px;">JIB: ' . $firm['jib'] . '</p>';
-    if($firm['pib'] !== '-') {
+    if($firm['pdv'] != '0') {
         $output .=  '<p style="font-size: 14px;"> PIB: ' . $firm['pib'] . '</p>';
     }
     $output .= '<p style="font-size: 14px; margin-bottom: 0;">Telefon: ' . $firm['telefon'] . '</p>
@@ -108,47 +108,76 @@ $output = '
 
 <div style="clear:both; background-color: #007bff; text-align: center; color: #fff; padding: 2px;">
     <h2 style="padding: 0px; margin: 0px;">Račun broj: ' . $invoice['broj'] . '</h2>
-</div>
-
-<table style="margin-bottom: 50px;">
-    <tr>
-        <td>Redni broj</td>
-        <td style="width: 40%">Naziv robe</td>
-        <td>Količina</td>
-        <td>Cijena</td>
-        <td>Ukupno bez PDV</td>
-        <td>PDV</td>
-        <td>Ukupno sa PDV</td>
-    </tr>';
+</div>';
     $i = 1;
-    $ukupno = 0;
-    $ukupnoPDV = 0;
-    $ukupnoBezPDV = 0;
-    foreach($articles as $article) {
-        $pdv = sprintf("%.2f", $article['kolicina'] * $article['cijena'] * 14.53 / 100);
-        $ukupnoPDV += $pdv;
-        $cijena = sprintf("%.2f", $article['kolicina'] * $article['cijena']);
-        $ukupno += $cijena;
-        $bezPDV = sprintf("%.2f", $cijena - $pdv);
-        $ukupnoBezPDV += $bezPDV;
+    if($firm['pdv'] == '1') {
         $output .= '
-        <tr>
-            <td>' . $i . '</td>
-            <td>' . $article['ime'] . '</td>
-            <td>' . $article['kolicina'] . '</td>
-            <td>' . $article['cijena'] . '</td>
-            <td>' . $bezPDV . 'km</td>
-            <td>' . $pdv . 'km</td>
-            <td>' . $cijena . 'km</td>
-        </tr>
-        ';
-        $i++;
+        <table style="margin-bottom: 50px;">
+            <tr>
+                <td>Redni broj</td>
+                <td style="width: 40%">Naziv robe</td>
+                <td>Količina</td>
+                <td>Cijena</td>
+                <td>Ukupno bez PDV</td>
+                <td>PDV</td>
+                <td>Ukupno sa PDV</td>
+            </tr>';
+        $ukupno = 0;
+        $ukupnoPDV = 0;
+        $ukupnoBezPDV = 0;
+        foreach($articles as $article) {
+            $pdv = sprintf("%.2f", $article['kolicina'] * $article['cijena'] * 14.53 / 100);
+            $ukupnoPDV += $pdv;
+            $cijena = sprintf("%.2f", $article['kolicina'] * $article['cijena']);
+            $ukupno += $cijena;
+            $bezPDV = sprintf("%.2f", $cijena - $pdv);
+            $ukupnoBezPDV += $bezPDV;
+            $output .= '
+            <tr>
+                <td>' . $i . '</td>
+                <td>' . $article['ime'] . '</td>
+                <td>' . $article['kolicina'] . '</td>
+                <td>' . $article['cijena'] . '</td>
+                <td>' . $bezPDV . 'km</td>
+                <td>' . $pdv . 'km</td>
+                <td>' . $cijena . 'km</td>
+            </tr>
+            ';
+            $i++;
+        }
+    } else {
+        $output .= '
+        <table style="margin-bottom: 50px;">
+            <tr>
+                <td>Redni broj</td>
+                <td style="width: 40%">Naziv robe</td>
+                <td>Količina</td>
+                <td>Cijena</td>
+                <td>Ukupno</td>
+            </tr>';
+        $ukupno = 0;
+        foreach($articles as $article) {
+            $cijena = sprintf("%.2f", $article['kolicina'] * $article['cijena']);
+            $ukupno += $cijena;
+            $output .= '
+            <tr>
+                <td>' . $i . '</td>
+                <td>' . $article['ime'] . '</td>
+                <td>' . $article['kolicina'] . '</td>
+                <td>' . $article['cijena'] . '</td>
+                <td>' . $cijena . 'km</td>
+            </tr>
+            ';
+            $i++;
+        }
     }
 $output .= '</table>';
 
 $output .= '
 <div style="float:right; width: 40%; border: 1px solid black; padding: 3px; margin: 20px 0 0 0;" class="ukupno">
-    <table>
+    <table>';
+    if($firm['pdv'] == '1') {
+        $output .= '
     <tr>
         <td>Ukupno bez PDV: </td>
         <td>' . sprintf("%.2f", $ukupnoBezPDV) . '</td>
@@ -161,8 +190,15 @@ $output .= '
         <td>Ukupno: </td>
         <td>' . sprintf("%.2f", $ukupno) . '</td>
     
-    </tr>
-    </table>
+    </tr>';
+    } else {
+        $output .= '
+        <tr>
+            <td>Ukupno: </td>
+            <td>' . sprintf("%.2f", $ukupno) . '</td>
+        </tr>';
+    }
+   $output .= ' </table>
 </div>
 <div style="width:30%;">
     <p>Fakturisao: </p>

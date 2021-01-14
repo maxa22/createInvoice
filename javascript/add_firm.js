@@ -30,7 +30,7 @@ firmForm.addEventListener('submit', e => {
     let formData = new FormData(firmForm);
     formData.append('submit', '');
     const url = 'include/add_firm.inc.php';
-    let inputs = document.querySelectorAll('input');
+    let inputs = document.querySelectorAll('input[type="text"], input[type="file"]');
     let errorArray = [];
     isEmpty(inputs, errorArray);
     if(errorArray.length < 1) {
