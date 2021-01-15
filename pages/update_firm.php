@@ -24,7 +24,6 @@
 <form action="" method="POST">
     <h2 class="card__header text-center card__header-border weight-500 mb-xs">Dodajte firmu</h2>
     <div class="card-body">
-        <p class="success-message mb-xs text-center"></p>
         <div class="mb-xs">
             <label for="name">Naziv firme</label>
             <input type="text" name="<?php echo $firm['id']; ?>-ime" id="name"  class="form__input" value="<?php echo $firm['ime']; ?>">
@@ -98,6 +97,7 @@
             <input type="text" name="racun" id="racun" class="form__input"  value="<?php echo $firm['racun']; ?>">
             <span class="registration-form__error"></span>
         </div>
+        <p class="success-message mb-xs text-center"></p>
         <button class="btn btn-primary" name="submit">Sačuvaj</button>
     </form>
 </div>

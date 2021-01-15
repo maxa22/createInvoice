@@ -31,7 +31,7 @@ $articles = Article::findAllWithOffset('userId', $id, $paginate->limit, $paginat
         <h1>Artikli</h1>
     </div>                          
         <?php if($articles) { ?>
-            <div class="card mb-s">
+            <div class="card mb-s m-card-unset">
                 <div class="d-flex btn-primary mm-d-none">
                     <span class="w-10 p-xs border weight-600 m-d-none">Šifra</span>
                     <span class="w-25 p-xs border weight-600 m-d-none">Naziv</span>
@@ -39,7 +39,7 @@ $articles = Article::findAllWithOffset('userId', $id, $paginate->limit, $paginat
                     <span class="w-55 p-xs border weight-600 m-d-none">Opis</span>
                 </div>
         <?php foreach($articles as $article) { ?>
-                <form action="" method="POST" class="update-article m-mb-m">
+                <form action="" method="POST" class="update-article m-card m-mb-m">
                 <div class="d-flex m-flex-column">
                     <div class="w-10 border m-d-flex m-w-100">
                         <span class="w-30 p-xs weight-600 btn-primary d-none m-d-block">Id</span>
@@ -58,11 +58,10 @@ $articles = Article::findAllWithOffset('userId', $id, $paginate->limit, $paginat
                     </div>
                     <div class="w-45 border m-d-flex m-w-100">
                         <span class="w-30 p-xs btn-primary weight-600 d-none m-d-block">Opis</span>
-                        <textarea type="text" name="opis" disabled class="w-100 p-xs border-none h-100" value="<?php echo $article['opis']; ?> "><?php echo $article['opis']; ?>
-                        </textarea>
+                        <textarea type="text" name="opis" disabled class="w-100 p-xs border-none h-100" value="<?php echo $article['opis']; ?> "><?php echo $article['opis']; ?></textarea>
                         <span class="registration-form__error"></span>
                     </div>
-                    <div class="w-10 d-flex jc-c ai-c info text-center border m-w-100">
+                    <div class="w-10 d-flex jc-c ai-c info text-center border m-w-100 m-p-xs">
                         <span class="w-100 edit editing">
                             <i class="fas fa-edit d-iblock w-100"></i>
                         </span>
@@ -70,10 +69,10 @@ $articles = Article::findAllWithOffset('userId', $id, $paginate->limit, $paginat
                             <i class="fas fa-trash d-iblock w-100"></i>
                         </a>
                         <button class="w-100 saving success d-none btn-transparent" name="submit">
-                            <i class="fas fa-check-circle d-iblock w-100"></i>
+                            <i class="fas fa-check d-iblock w-100 pointer"></i>
                         </button>
                         <span class="w-100 saving cancel d-none">
-                            <i class="fas fa-times d-iblock w-100"></i>
+                            <i class="fas fa-times d-iblock w-100 pointer"></i>
                         </span>
                     </div>
                 </div>

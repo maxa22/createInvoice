@@ -8,7 +8,7 @@
 <div class="wrapper">
 <div class="form-container m-auto">
 <form action="include/add_firm.inc.php" enctype="multipart/form-data" method="POST">
-    <h2 class="card__header text-center card__header-border weight-500 mb-xs">Dodajte firmu</h2>
+    <h2 class="card__header text-center card__header-border weight-500 mb-xs">Dodaj firmu</h2>
     <div class="card-body">
         <div class="mb-xs">
             <label for="name">Naziv firme</label>

@@ -75,24 +75,24 @@
         </div>
         <div id="articles">
             <div class="d-flex btn-primary">
-                <span class="w-60 p-x border weight-500 hidden m-d-none">Naziv</span>
-                <span class="w-20 p-x border weight-500 hidden m-d-none">Jed. cijena</span>
-                <span class="w-20 p-x border weight-500 hidden m-d-none">Količina</span>
+                <span class="w-60 p-x border weight-500 hidden s-d-none">Artikal</span>
+                <span class="w-20 p-x border weight-500 hidden s-d-none">Jed. cijena</span>
+                <span class="w-20 p-x border weight-500 hidden s-d-none">Količina</span>
             </div>
-            <div class="d-flex articlesNumber">
-                <div class="w-60 border relative">
-                    <span class="w-100 p-x border weight-600 d-none s-d-block">Naziv</span>
+            <div class="d-flex articlesNumber s-w-100 s-flex-column s-card s-mb-xs">
+                <div class="w-60 border relative s-d-flex s-w-100">
+                    <span class="w-40 p-x btn-primary weight-600 d-none s-d-block">Artikal</span>
                     <input type="text" name="1-imeArtikla" class="w-100 p-xs border-none h-100 imeArtikla" list="1-artikli">
                     <span class="registration-form__error"></span>
                     <datalist id="1-artikli" class="dropdown"></datalist>
                 </div>
-                <div class="w-20 border">
-                    <span class="w-100 d-none p-x border weight-600 d-none s-d-block">Cijena</span>
+                <div class="w-20 border s-d-flex s-w-100">
+                    <span class="w-40 d-none p-x btn-primary weight-600 d-none s-d-block">Cijena</span>
                     <input type="number" step="0.01" name="1-cijena" class="w-100 p-xs border-none h-100">
                     <span class="registration-form__error"></span>
                 </div>
-                <div class="w-20 border">
-                    <span class="w-10 p-x border weight-600 d-none s-d-block">Količina</span>
+                <div class="w-20 border s-d-flex s-w-100">
+                    <span class="w-40 p-x btn-primary weight-600 d-none s-d-block">Količina</span>
                     <input type="number" step="0.01" name="1-kolicina" class="w-100 p-xs border-none h-100" >
                     <span class="registration-form__error"></span>
                 </div>
