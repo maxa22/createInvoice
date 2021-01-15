@@ -39,6 +39,9 @@ h5,
 h6 {
   font-weight: 500;
 }
+h3 {
+  word-break: break-all;
+}
 a {
   text-decoration: none;
 }
@@ -330,8 +333,12 @@ main.active {
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
+.fa-list,
+.fa-plus {
+  font-size: 1.6rem;
+}
 .sidebar__dropdown-active .sidebar__arrow {
-  transform: translateY(-50%) rotate(90deg);
+  transform: translateY(-50%) rotate(-90deg);
 }
 
 /* #### END OF ADMIN #### */
