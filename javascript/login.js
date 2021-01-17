@@ -12,7 +12,7 @@ registrationForm.addEventListener('submit', e => {
         postData(url, formData)
         .then(data => {
             if(!data){
-                window.location.href = 'index';
+                window.location.href = 'firms';
             } else {
                 let errorMessage = document.querySelectorAll('.registration-form__error')[1];
                 errorMessage.innerHTML = data['error'];

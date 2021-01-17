@@ -17,6 +17,7 @@
                 break;
             }
         }
+        $args['firmaId'] = '';
         $args['ime'] = $_POST['ime'];
         Validate::validateString('ime', $args['ime']);
         $args['ime'] = Sanitize::sanitizeString($args['ime']);

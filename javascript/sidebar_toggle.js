@@ -15,18 +15,8 @@ sidebarOverlay.addEventListener('click', () => {
 
 for(let sidebarMenuDropdown of sidebarMenuDropdowns) {
     sidebarMenuDropdown.addEventListener('click', e => {
-        removeActiveClasses();
         let dropdown = sidebarMenuDropdown.querySelector('ul');
-        if(dropdown.offsetHeight == '0') {
-            sidebarMenuDropdown.classList.add('sidebar__dropdown-active');
-            let dropdownItem = sidebarMenuDropdown.querySelector('li');
-            let dropdownItemsCount = sidebarMenuDropdown.querySelectorAll('li').length;
-            let dropdownHeight = dropdownItem.offsetHeight * dropdownItemsCount;
-            dropdown.style.height = `${dropdownHeight}px`;
-        } else {
-            sidebarMenuDropdown.classList.remove('sidebar__dropdown-active');
-            dropdown.style.height = '0';
-        }
+        sidebarMenuDropdown.classList.toggle('sidebar__dropdown-active');
     });
 }
 
@@ -45,3 +35,4 @@ function removeActiveClasses() {
         dropdown.style.height = '0';
     }
 }
+

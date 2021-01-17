@@ -77,6 +77,9 @@
                 $properties = $this->properties();
                 // remove last element from array, foreign key
                 array_pop($properties);
+                if(static::$dbTable == 'artikal') {
+                    array_pop($properties);
+                }
                 $database = Database::instance();
                 $connection = $database->connect();
                 $placeholders = str_repeat('?, ', count($properties) - 1) . '?';

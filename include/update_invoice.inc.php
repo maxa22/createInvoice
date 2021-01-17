@@ -5,8 +5,7 @@
         header('Location: ../login');
         exit();
     }
- 
-    
+
     if(isset($_POST['submit'])) {
         
         require_once('autoloader.php');
@@ -21,22 +20,20 @@
         
         $args['firmaId'] = $_POST['firma'];
         $args['mjesto'] = $_POST['mjesto'];
-        $args['nacin'] = $_POST['nacin'];
+        $args['tip'] = $_POST['tip'];
         $args['fakturista'] = $_POST['fakturista'];
-        if(count(explode(',', $_POST['kupac'])) > 1) {
-            $kupacIme = explode(',', $_POST['kupac'])[0];
-            $kupacMjesto = trim(explode(',', $_POST['kupac'])[1]);
-            $kupac = Client::findAllByQuery3('ime', $kupacIme, 'mjesto', $kupacMjesto, 'userId', $_SESSION['id']);
-        } else {
-            $kupac = Client::findAllByQuery2('ime', trim($_POST['kupac']), 'userId', $_SESSION['id']);
-        }
         $args['userId'] = $_SESSION['id'];
-        $args['kupacId'] = $kupac['id'];
+        $args['kupacId'] = $_POST['kupac'];
         foreach($args as $key => $value) {
             Validate::validateString($key, $args[$key]);
             $args[$key] = Sanitize::sanitizeString($value);
         }
 
+        $args['nacin'] = $_POST['nacin'];
+        if($args['nacin']) {
+            Validate::validateString('nacin', $args['nacin']);
+            $args['nacin'] = Sanitize::sanitizeString($args['nacin']);
+        }
         
         $args['rok'] = $_POST['rok'];
         if(!empty($_POST['rok'])) {
@@ -60,13 +57,32 @@
         }
 
         $i = 1;
-        foreach($_POST as $key => $value) {
-            if(strpos($key, 'imeArtikla')) {
-                $id = explode('-', $key)[0];
-                $articleArgs[$id]['ime'] = Sanitize::sanitizeString($value);
-                Validate::validateString($key, $value);
-                continue;
+        while(isset($_POST[$i . '-imeArtikla'])) {
+            $articleArgs[$i]['ime'] = Sanitize::sanitizeString($_POST[$i . '-imeArtikla']);
+            Validate::validateString($i . '-imeArtikla',$_POST[$i . '-imeArtikla']);
+            $articleArgs[$i]['kolicina'] = Sanitize::sanitizeString($_POST[$i . '-kolicina']);
+            Validate::validateNumber($i . '-kolicina',$_POST[$i . '-kolicina']);
+            $articleArgs[$i]['rabat'] = Sanitize::sanitizeString($_POST[$i . '-rabat']);
+            Validate::validateNumber($i . '-rabat',$_POST[$i . '-rabat']);
+            $articleArgs[$i]['ukupno'] = Sanitize::sanitizeString(substr($_POST[$i . '-ukupno'], 0, -2));
+            Validate::validateNumber($i . '-ukupno', $articleArgs[$i]['ukupno']);
+            if(isset($_POST[$i . '-pdv'])) { 
+                $articleArgs[$i]['pdv'] = Sanitize::sanitizeString(substr($_POST[$i . '-pdv'], 0, -2));
+                Validate::validateNumber($i . '-pdv',$articleArgs[$i]['pdv']);
+                $articleArgs[$i]['bezPdv'] = Sanitize::sanitizeString(substr($_POST[$i . '-bezPdv'], 0, -2));
+                Validate::validateNumber($i . '-bezPdv',$articleArgs[$i]['bezPdv']);
             }
+            if(isset($_POST[$i . '-idArtikla'])) {
+                $newArticleArgs[$i]['ime'] = Sanitize::sanitizeString($_POST[$i . '-imeArtikla']);
+                $newArticleArgs[$i]['idArtikla'] = Sanitize::sanitizeString($_POST[$i . '-idArtikla']);
+                $newArticleArgs[$i]['firmaId'] = Sanitize::sanitizeString($args['firmaId']);
+                $newArticleArgs[$i]['opis'] = '';
+                $newArticleArgs[$i]['userId'] = Sanitize::sanitizeString($_SESSION['id']);
+            }
+            $i++;
+        }
+
+        foreach($_POST as $key => $value) {
             if(strpos($key, 'cijena')) {
                 if(count(explode('-', $key)) > 2) {
                     $id = explode('-', $key)[0];
@@ -75,15 +91,12 @@
                 } else {
                     $id = explode('-', $key)[0];
                 }
+                if(isset($_POST[$id . '-idArtikla'])) {
+                    $newArticleArgs[$id]['cijena'] = Sanitize::sanitizeString($value);
+                }
                 $articleArgs[$id]['cijena'] = Sanitize::sanitizeString($value);
                 Validate::validateNumber($key, $value);
                 Validate::validateNumber($key, $articleId);
-                continue;
-            }
-            if(strpos($key, 'kolicina')) {
-                $id = explode('-', $key)[0];
-                $articleArgs[$id]['kolicina'] = Sanitize::sanitizeString($value);
-                Validate::validateNumber($key, $value);
                 continue;
             }
         }
@@ -100,6 +113,12 @@
             $articleArgs[$key]['fakturaId'] = $args['id'];
             $invoiceArticle = new InvoiceArticle($articleArgs[$key]);
             $invoiceArticle->save();
+        }
+        if(isset($newArticleArgs)) {
+            foreach($newArticleArgs as $key => $value) {
+                $article = new Article($newArticleArgs[$key]);
+                $article->save();
+            }
         }
         $error = Message::getError();
         echo json_encode($error);

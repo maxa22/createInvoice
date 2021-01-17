@@ -13,6 +13,7 @@ if(Message::getError()) {
     exit();
 }
 
+
 $limit = 10;
 $numberOfRows = Article::countRows('userId', $id);
 
@@ -30,7 +31,7 @@ $articles = Article::findAllWithOffset('userId', $id, $paginate->limit, $paginat
     <div class="mt-s mb-s">
         <h1>Artikli</h1>
     </div>                          
-        <?php if($articles) { ?>
+        <?php if(!empty($articles)) { ?>
             <div class="card mb-s m-card-unset">
                 <div class="d-flex btn-primary mm-d-none">
                     <span class="w-10 p-xs border weight-600 m-d-none">Šifra</span>
@@ -80,16 +81,16 @@ $articles = Article::findAllWithOffset('userId', $id, $paginate->limit, $paginat
         <?php } ?>
     </div>
     <?php if($paginate->page_total() > 1) { ?>
-        <div class="mb-m">
+        <div class="mb-m mt-m">
             <ul class="d-flex jc-c list-style-none"> 
             <?php if($page > 1) { ?>
-                <li><a class='page-link' href="<?php base(); ?>articles/<?php echo $paginate->previous(); ?>">«</a></li>
+                <li><a class="page-link" href="<?php base(); ?>articles/<?php echo $paginate->previous(); ?>">«</a></li>
             <?php } ?>
             <?php  for($i = 1; $i <= $paginate->page_total(); $i++) { ?>
-                <li><a class='page-link' href="<?php base(); ?>articles/<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                <li><a class="page-link <?php echo $i == $page ? 'active' : '' ?>" href="<?php base(); ?>articles/<?php echo $i; ?>"><?php echo $i; ?></a></li>
             <?php } ?>
             <?php if($paginate->has_next()) { ?>
-                <li><a class='page-link' href="<?php base(); ?>articles/<?php echo $paginate->next(); ?>">»</a></li>
+                <li><a class="page-link" href="<?php base(); ?>articles/<?php echo $paginate->next(); ?>">»</a></li>
             <?php } ?>
             </ul>
         </div>

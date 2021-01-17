@@ -22,7 +22,7 @@
 <div class="wrapper">
 <div class="form-container m-auto">
 <form action="" method="POST">
-    <h2 class="card__header text-center card__header-border weight-500 mb-xs">Dodajte firmu</h2>
+    <h2 class="card__header text-center card__header-border weight-500 mb-xs">Uredi firmu</h2>
     <div class="card-body">
         <div class="mb-xs">
             <label for="name">Naziv firme</label>
@@ -95,6 +95,11 @@
         <div class="mb-s">
             <label for="racun">Žiro račun firme</label>
             <input type="text" name="racun" id="racun" class="form__input"  value="<?php echo $firm['racun']; ?>">
+            <span class="registration-form__error"></span>
+        </div>
+        <div class="mb-s">
+            <label for="banka">Ime banke</label>
+            <input type="text" name="banka" id="banka" class="form__input"  value="<?php echo $firm['banka']; ?>">
             <span class="registration-form__error"></span>
         </div>
         <p class="success-message mb-xs text-center"></p>

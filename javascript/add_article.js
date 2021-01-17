@@ -5,7 +5,7 @@ newArticle.addEventListener('submit', e => {
     let formData = new FormData(newArticle);
     formData.append('submit', '');
     const url = 'include/articles.inc.php';
-    let inputs = newArticle.querySelectorAll('input');
+    let inputs = newArticle.querySelectorAll('input, select');
     let errorArray = [];
     isEmpty(inputs, errorArray);
     if(errorArray.length < 1) {
@@ -14,6 +14,7 @@ newArticle.addEventListener('submit', e => {
             if(!result) {
                 document.querySelector('.success-message').innerHTML = 'Uspješno dodat artikal';
                 document.querySelector('.success-message').style.padding = '0.5rem 1rem';
+                removeErrorTextAndBorderColor(newArticle);
                 setTimeout(function() {
                     document.querySelector('.success-message').innerHTML = '';
                     document.querySelector('.success-message').style.padding = '0';
@@ -68,5 +69,16 @@ function removeInputValues() {
     let inputs = document.querySelectorAll('input, textarea');
     for(let input of inputs) {
         input.value = '';
+    }
+}
+
+function removeErrorTextAndBorderColor(container) {
+    let errorMessages = container.querySelectorAll('.registration-form__error');
+    for(let errorMessage of errorMessages) {
+        errorMessage.innerHTML = '';
+    }
+    let inputs = container.querySelectorAll('input, textarea, select');
+    for (let input of inputs) {
+        input.style.borderColor = '#ced4da'
     }
 }

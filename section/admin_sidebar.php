@@ -5,7 +5,7 @@
     </div>
     <ul class="mt-s">
         <li class="sidebar__dropdown-toggle">
-            <div class="sidebar__menu-link d-flex ai-c relative">
+            <div class="sidebar__menu-link d-flex ai-c relative d-none l-d-block">
                 <span class="d-iblock">
                     <span class="sidebar__menu-icon">
                         <i class="fas fa-tachometer-alt"></i>
@@ -16,7 +16,12 @@
             <ul class="sidebar__menu-dropdown list-style-none">
                 <li>
                     <a href="<?php base(); ?>firms" class="sidebar__menu-link d-flex ai-c">
-                        <span class="d-iblock">
+                        <span class="l-d-none">
+                            <span class="sidebar__menu-icon">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </span>
+                        </span>
+                        <span class="d-none l-d-block">
                             <span class="sidebar__menu-icon">
                                 <i class="fas fa-list"></i>
                             </span>
@@ -37,7 +42,7 @@
             </ul>
         </li>
         <li class="sidebar__dropdown-toggle">
-            <div class="sidebar__menu-link d-flex ai-c relative">
+            <div class="sidebar__menu-link d-flex ai-c relative d-none l-d-block">
                 <span class="d-iblock">
                     <span class="sidebar__menu-icon">
                         <i class="fas fa-users"></i>
@@ -48,12 +53,17 @@
             <ul class="sidebar__menu-dropdown list-style-none">
                 <li>
                     <a href="<?php base(); ?>clients" class="sidebar__menu-link d-flex ai-c">
-                    <span class="d-iblock">
-                        <span class="sidebar__menu-icon">
-                        <i class="fas fa-list"></i>
+                        <span class="l-d-none">
+                            <span class="sidebar__menu-icon">
+                            <i class="fas fa-users"></i>
+                            </span>
                         </span>
-                    </span>
-                    <span class="sidebar__menu-text">Klijenti</span>
+                        <span class="d-none l-d-block">
+                            <span class="sidebar__menu-icon">
+                            <i class="fas fa-list"></i>
+                            </span>
+                        </span>
+                        <span class="sidebar__menu-text">Klijenti</span>
                     </a>
                 </li>
                 <li>
@@ -69,7 +79,7 @@
             </ul>
         </li>
         <li class="sidebar__dropdown-toggle">
-            <div class="sidebar__menu-link d-flex ai-c relative">
+            <div class="sidebar__menu-link d-flex ai-c relative d-none l-d-block">
                 <span class="d-iblock">
                     <span class="sidebar__menu-icon">
                         <i class="fas fa-money-bill-wave"></i>
@@ -80,12 +90,17 @@
             <ul class="sidebar__menu-dropdown list-style-none">
                 <li>
                     <a href="<?php base(); ?>bills" class="sidebar__menu-link d-flex ai-c">
-                    <span class="d-iblock">
-                        <span class="sidebar__menu-icon">
-                        <i class="fas fa-list"></i>
+                        <span class="l-d-none">
+                            <span class="sidebar__menu-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                            </span>
                         </span>
-                    </span>
-                    <span class="sidebar__menu-text">Fiskalni računi </span>
+                        <span class="d-none l-d-block">
+                            <span class="sidebar__menu-icon">
+                            <i class="fas fa-list"></i>
+                            </span>
+                        </span>
+                        <span class="sidebar__menu-text">Fiskalni računi </span>
                     </a>
                 </li>
                 <li>
@@ -101,7 +116,7 @@
             </ul>
         </li>
         <li class="sidebar__dropdown-toggle">
-            <div class="sidebar__menu-link d-flex ai-c relative">
+            <div class="sidebar__menu-link d-flex ai-c relative d-none l-d-block">
                 <span class="d-iblock">
                     <span class="sidebar__menu-icon">
                         <i class="fas fa-archive"></i>
@@ -112,12 +127,17 @@
             <ul class="sidebar__menu-dropdown list-style-none">
                 <li>
                     <a href="<?php base(); ?>articles" class="sidebar__menu-link d-flex ai-c">
-                    <span class="d-iblock">
-                        <span class="sidebar__menu-icon">
-                        <i class="fas fa-list"></i>
+                        <span class="l-d-none">
+                            <span class="sidebar__menu-icon">
+                            <i class="fas fa-archive"></i>
+                            </span>
                         </span>
-                    </span>
-                    <span class="sidebar__menu-text">Artikli</span>
+                        <span class="d-none l-d-block">
+                            <span class="sidebar__menu-icon">
+                            <i class="fas fa-list"></i>
+                            </span>
+                        </span>
+                        <span class="sidebar__menu-text">Artikli</span>
                     </a>
                 </li>
                 <li>
@@ -133,7 +153,7 @@
             </ul>
         </li>
         <li class="sidebar__dropdown-toggle">
-            <div class="sidebar__menu-link d-flex ai-c relative">
+            <div class="sidebar__menu-link d-flex ai-c relative d-none l-d-block">
                 <span class="d-iblock">
                     <span class="sidebar__menu-icon">
                         <i class="fas fa-file-invoice"></i>
@@ -144,7 +164,12 @@
             <ul class="sidebar__menu-dropdown list-style-none">
                 <li>
                     <a href="<?php base(); ?>invoices" class="sidebar__menu-link d-flex ai-c">
-                        <span class="d-iblock">
+                        <span class="l-d-none">
+                            <span class="sidebar__menu-icon">
+                            <i class="fas fa-file-invoice"></i>
+                            </span>
+                        </span>
+                        <span class="d-none l-d-block">
                             <span class="sidebar__menu-icon">
                             <i class="fas fa-list"></i>
                             </span>

@@ -5,7 +5,7 @@ if(!isset($_SESSION['id'])) {
 }
 require_once('include/autoloader.php');
 $id = $_SESSION['id'];
-$articles = Article::findAllByQuery('userId', $id);
+$firms = Firm::findAllByQuery('userId', $id);
 ?>
 
 <main>
@@ -13,9 +13,19 @@ $articles = Article::findAllByQuery('userId', $id);
     <div class="form-container m-auto mb-l">
     <h2 class="card__header text-center card__header-border weight-500 mb-xs">Dodaj Artikal</h2>
     <p class="success-message mb-xs text-center"></p>
-    <form action="" id="newArticle" method="POST">
+    <form action="include/articles.inc.php" id="newArticle" method="POST">
         <div class="card-container">
                 <div class="card-body">
+                    <div class="mb-xs">
+                        <label for="firma">Firma</label>
+                        <select name="firma" class="form__input" id="firma">
+                        
+                            <?php foreach($firms as $firm) { ?>
+                                <option value="<?php echo $firm['id']; ?>"><?php echo $firm['ime']; ?></option>
+                            <?php } ?>
+                        </select>
+                        <span class="registration-form__error"></span>
+                    </div>
                     <div class="mb-xs">
                         <label for="<?php echo $id; ?>-id">Šifra</label>
                         <input type="text" name="idArtikla"  class="form__input">

@@ -30,7 +30,7 @@ firmForm.addEventListener('submit', e => {
     let formData = new FormData(firmForm);
     formData.append('submit', '');
     const url = '../include/update_client.inc.php';
-    let inputs = document.querySelectorAll('#name, input[name="racun"], input[name="adresa"]');
+    let inputs = document.querySelectorAll('#ime');
     let errorArray = [];
     isEmpty(inputs, errorArray);
     if(errorArray.length < 1) {
@@ -39,8 +39,9 @@ firmForm.addEventListener('submit', e => {
             if(!result) {
                 document.querySelector('.success-message').innerHTML = 'Uspješno izmijenjeno';
                 document.querySelector('.success-message').style.padding = '0.5rem 1rem';
+                removeErrorTextAndBorderColor(firmForm);
                 setTimeout(function() {
-                    window.location.href = '../clients';
+                    window.location.href = "../clients";
                 }, 1000);
             } else {
                 let errorMessages = document.querySelectorAll('.registration-form__error');
@@ -102,5 +103,16 @@ function showImagePreviewOnChange(fileUploads) {
             let img = container.querySelector('img');
             setImage(fileUpload, img);
         });
+    }
+}
+
+function removeErrorTextAndBorderColor(container) {
+    let errorMessages = container.querySelectorAll('.registration-form__error');
+    for(let errorMessage of errorMessages) {
+        errorMessage.innerHTML = '';
+    }
+    let inputs = container.querySelectorAll('input, textarea, select');
+    for (let input of inputs) {
+        input.style.borderColor = '#ced4da'
     }
 }

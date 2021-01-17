@@ -193,18 +193,20 @@ main.active {
 
 /* #### MODAL STYLING ##### */
 
-.modal-overlay {
-  position: fixed;
+.modal-overlay-firm,
+.modal-overlay-client {
+  position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: -3;
   background-color: rgba(0, 0, 0, 0.9);
+  min-height: 150vh;
   display: none;
 }
 .modal {
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -213,8 +215,10 @@ main.active {
   text-align: left;
   max-width: 54rem;
   width: 95%;
+  padding: 2rem;
 }
-.modal-overlay.active {
+.modal-overlay-firm.active,
+.modal-overlay-client.active {
   z-index: 10;
   display: block;
 }
@@ -327,7 +331,6 @@ main.active {
   display: unset;
 }
 .sidebar__menu-dropdown {
-  height: 0;
   overflow: hidden;
   -webkit-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
@@ -337,9 +340,13 @@ main.active {
 .fa-plus {
   font-size: 1.6rem;
 }
-.sidebar__dropdown-active .sidebar__arrow {
+
+/* .sidebar__dropdown-toggle:hover .sidebar__arrow {
   transform: translateY(-50%) rotate(-90deg);
 }
+.sidebar__dropdown-toggle:hover .sidebar__menu-dropdown {
+  height: auto;
+} */
 
 /* #### END OF ADMIN #### */
 
@@ -359,24 +366,121 @@ main.active {
 
 /* #### END INVOICE #### */
 
-/* utility classes */
-.border {
-  border: 1px solid var(--input-border);
+/* #### PDF PREVIEW #### */
+
+.pdf-wrapper {
+  width: 794px;
+  height: 1123px;
+  margin: 0 auto;
+  padding: 50px 40px;
+  font-size: 14px;
+  background-color: #fff;
+  font-weight: 500;
 }
+.pdf-header__logo {
+  float: left;
+  height: 100px;
+}
+.pdf-header__logo img {
+  height: 100%;
+}
+.pdf-header__info {
+  float: right;
+  font-size: 15px;
+}
+.pdf-line {
+  clear: both;
+  height: 2px;
+  background-color: #007bff;
+  margin-bottom: 25px;
+}
+.pdf-invoice-info {
+  float: left;
+  margin-bottom: 20px;
+}
+.pdf-wrapper p {
+  margin-bottom: 5px;
+}
+.pdf-client-info {
+  float: right;
+}
+.pdf-invoice-number {
+  clear: both;
+  background-color: #007bff;
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  margin-bottom: 25px;
+}
+.pdf-invoice-articles {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 50px;
+  text-align: right;
+}
+.pdf-invoice-articles td {
+  border-bottom: 1px solid #000;
+  padding: 0px 5px;
+}
+td.pdf-invoice-last {
+  padding-right: 0px;
+}
+td.pdf-invoice-first {
+  text-align: left;
+  width: 10%;
+}
+.pdf-signature {
+  float: left;
+}
+.pdf-signature__line {
+  width: 100%;
+  height: 1px;
+  background-color: #000;
+  margin-top: 20px;
+}
+.pdf-total-info {
+  float: right;
+  border: 1px solid #000;
+  padding: 5px;
+}
+.pdf-total-info td {
+  padding: 0 5px;
+}
+/* #### END PDF PREVIEW ##### */
+
+/* utility classes */
 .border-none {
   border: none;
 }
+.border {
+  border: 1px solid var(--input-border);
+}
+.border-right {
+  border-right: 2px solid var(--input-border);
+  border-radius: 0;
+}
+
 .page-link {
   position: relative;
   display: block;
-  padding: 0.5rem 0.75rem;
+  padding: 0.8rem 1.2rem;
   margin-left: -1px;
   line-height: 1.25;
   color: #007bff;
   background-color: #fff;
   border: 1px solid #dee2e6;
 }
-
+.page-link:hover {
+  color: #0056b3;
+  text-decoration: none;
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}
+.page-link.active {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
 .btn {
   font-size: 1.6rem;
   display: inline-block;
@@ -446,6 +550,9 @@ main.active {
 }
 .mb-l {
   margin-bottom: 8rem;
+}
+.ml-auto {
+  margin-left: auto;
 }
 .m-none {
   margin: none;
@@ -580,6 +687,12 @@ main.active {
 .pointer {
   cursor: pointer;
 }
+.word-break {
+  word-break: break-all;
+}
+.clear-both {
+  clear: both;
+}
 /* end of utility classes */
 
 @media screen and (max-width: 992px) {
@@ -607,6 +720,15 @@ main.active {
     display: block;
     right: 0;
   }
+  .sidebar__menu-dropdown {
+    height: 0;
+  }
+  .sidebar__dropdown-active .sidebar__arrow {
+    transform: translateY(-50%) rotate(-90deg);
+  }
+  .sidebar__dropdown-active .sidebar__menu-dropdown {
+    height: 105.6px;
+  }
   .l-w-50 {
     width: 50%;
   }
@@ -615,6 +737,12 @@ main.active {
   }
   .l-w-25 {
     width: 25%;
+  }
+  .l-d-block {
+    display: block;
+  }
+  .l-d-none {
+    display: none;
   }
 }
 
@@ -636,6 +764,9 @@ main.active {
   .m-p-xs {
     padding: 1rem;
   }
+  .m-mb-xs {
+    margin-bottom: 1rem;
+  }
   .m-mb-s {
     margin-bottom: 2rem;
   }
@@ -645,11 +776,20 @@ main.active {
   .m-text-center {
     text-align: center;
   }
+  .m-w-45 {
+    width: 45%;
+  }
   .m-w-50 {
     width: 50%;
   }
+  .m-w-50 {
+    width: 55%;
+  }
   .m-w-100 {
     width: 100%;
+  }
+  .m-w-200 {
+    width: 200%;
   }
   .mm-d-none {
     display: none;

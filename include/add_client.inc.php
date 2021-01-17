@@ -13,16 +13,17 @@
         $args['ime'] = $_POST['ime'];
         $args['jib'] = $_POST['jib'];
         $args['pdv'] = $_POST['pdv'];
-        $args['pib'] = $_POST['pib'] ?? '-';
+        $args['pib'] = $_POST['pib'] ?? '';
         $args['vlasnik'] = $_POST['vlasnik'];
         $args['adresa'] = $_POST['adresa'];
         $args['mjesto'] = $_POST['mjesto'];
         $args['telefon'] = $_POST['telefon'];
         $args['racun'] = $_POST['racun'];
+        $args['banka'] = $_POST['banka'];
         $args['userId'] = $_SESSION['id']; 
 
         foreach($args as $key => $value) {
-            if(!empty($value) || $key == 'racun' || $key == 'ime' || $key == 'adresa' || $key == 'jib') {
+            if(!empty($value) || $key == 'ime') {
                 Validate::validateString($key, $args[$key]);
                 $args[$key] = Sanitize::sanitizeString($value);
             } 
@@ -44,6 +45,10 @@
         $client = new Client($args);
         $client->save();
         $error = Message::getError();
+        if(!$error){
+            $error['success'] = $client->getId();
+            $error['ime'] = $client->ime;
+        }
         echo json_encode($error);
         exit();
     } else {

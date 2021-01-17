@@ -4,18 +4,40 @@ if(!isset($_SESSION['id'])) {
     header('Location: login');
     exit();
 }
+
+require_once('include/autoloader.php');
+
+$id = $_SESSION['id'];
+
+$page = !empty($_GET['id']) ? (int)$_GET['id'] : 1;
+Validate::validateString('id', $page);
+if(Message::getError()) {
+    header('Location: ../index');
+    exit();
+}
+
+
+$limit = 10;
+$numberOfRows = Firm::countRows('userId', $id);
+
+if($limit > $numberOfRows) {
+    $page = 1;
+}
+
+$paginate = new Paginate($page, $limit, $numberOfRows);
+
+$firms = Firm::findAllWithOffset('userId', $id, $paginate->limit, $paginate->offset);
+
+
 ?>
 
 <main>
 <div class="hero">
 <div class="mt-s mb-s">
     <h1>Firme</h1>
-</div>
-<?php 
-    require_once('include/autoloader.php');
+</div> 
+<?php
 
-    $id = $_SESSION['id'];
-    $firms = Firm::findAllByQuery('userId', $id);
     if(count($firms) > 0) { ?>
         <div class="d-flex gap-m wrap s-flex-column">
         <?php
@@ -23,7 +45,9 @@ if(!isset($_SESSION['id'])) {
         ?> 
             <div class="w-25-gap-m l-w-50-gap-m s-w-100 card">
                 <div class="card-body text-center">
-                <img src="images/<?php echo $firm['logo'] ?>" alt="business photo" class="d-block w-100 mb-s">
+                <?php if($firm['logo']) {?>
+                    <img src="<?php base(); ?>images/<?php echo $firm['logo'] ?>" alt="business photo" class="d-block w-100 mb-s">
+                <?php } ?>
 
                 <h3 class="calculator__heading uppercase mb-s">
                     <?php echo $firm['ime']; ?>
@@ -41,6 +65,21 @@ if(!isset($_SESSION['id'])) {
             </div>
     <?php } ?>
         </div>
+        <?php if($paginate->page_total() > 1) { ?>
+        <div class="mb-m mt-m">
+            <ul class="d-flex jc-c list-style-none"> 
+            <?php if($page > 1) { ?>
+                <li><a class="page-link" href="<?php base(); ?>firms/<?php echo $paginate->previous(); ?>">«</a></li>
+            <?php } ?>
+            <?php  for($i = 1; $i <= $paginate->page_total(); $i++) { ?>
+                <li><a class="page-link <?php echo $i == $page ? 'active' : '' ?>" href="<?php base(); ?>firms/<?php echo $i; ?>"><?php echo $i; ?></a></li>
+            <?php } ?>
+            <?php if($paginate->has_next()) { ?>
+                <li><a class="page-link" href="<?php base(); ?>firms/<?php echo $paginate->next(); ?>">»</a></li>
+            <?php } ?>
+            </ul>
+        </div>
+        <?php } ?>
     <?php } else { ?>
         <p>Niste dodali nijednu firmu...</p>
     <?php } ?>

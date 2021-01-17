@@ -30,20 +30,21 @@ firmForm.addEventListener('submit', e => {
     let formData = new FormData(firmForm);
     formData.append('submit', '');
     const url = 'include/add_client.inc.php';
-    let inputs = document.querySelectorAll('#ime, #adresa, #racun, #jib');
+    let inputs = document.querySelectorAll('#ime');
     let errorArray = [];
     isEmpty(inputs, errorArray);
     if(errorArray.length < 1) {
         postData(url, formData)
         .then(result => {
-            if(!result) {
-                document.querySelector('.success-message').innerHTML = 'Uspješno dodat artikal';
+            if(result['success']) {
+                document.querySelector('.success-message').innerHTML = 'Uspješno dodat klijent';
                 document.querySelector('.success-message').style.padding = '0.5rem 1rem';
+                removeErrorTextAndBorderColor(firmForm);
+                removeInputValues();
+                removeImages(firmForm);
                 setTimeout(function() {
                     document.querySelector('.success-message').innerHTML = '';
                     document.querySelector('.success-message').style.padding = '0';
-                    removeInputValues();
-                    removeImages();
                 }, 1000)
             } else {
                 let errorMessages = document.querySelectorAll('.registration-form__error');
@@ -117,9 +118,20 @@ function removeInputValues() {
     }
 }
 
-function removeImages() {
-    let images = document.querySelectorAll('img');
+function removeImages(container) {
+    let images = container.querySelectorAll('img');
     for(let img of images) {
         img.src = '';
+    }
+}
+
+function removeErrorTextAndBorderColor(container) {
+    let errorMessages = container.querySelectorAll('.registration-form__error');
+    for(let errorMessage of errorMessages) {
+        errorMessage.innerHTML = '';
+    }
+    let inputs = container.querySelectorAll('input, textarea, select');
+    for (let input of inputs) {
+        input.style.borderColor = '#ced4da'
     }
 }

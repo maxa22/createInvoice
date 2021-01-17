@@ -9,9 +9,14 @@
 
     if(isset($_POST['submit'])) {
 
+        $args['firmaId'] = $_POST['firma'];
         $args['idArtikla'] = $_POST['idArtikla'];
         $args['ime'] = $_POST['ime'];
         $args['cijena'] = $_POST['cijena'];
+        $args['userId'] = $_SESSION['id'];
+
+        Validate::validateNumber('firma', $args['firmaId']);
+        $args['firmaId'] = Sanitize::sanitizeString($args['firmaId']);
 
         Validate::validateString('idArtikla', $args['idArtikla']);
         $args['idArtikla'] = Sanitize::sanitizeString($args['idArtikla']);
@@ -34,14 +39,13 @@
             echo json_encode($error);
             exit();
         }
-        $args['userId'] = $_SESSION['id'];
         $article = new Article($args);
         $article->save();
         $error = Message::getError(); 
         echo json_encode($error);
         exit();
     } else {
-        // header('Location: ../index');
+        header('Location: ../index');
         exit();
     }
 ?>

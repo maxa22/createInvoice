@@ -21,12 +21,12 @@
 <main>
 <div class="wrapper">
 <div class="form-container m-auto">
-<form action="" method="POST">
-    <h2 class="card__header text-center card__header-border weight-500 mb-xs">Dodajte clientu</h2>
+<form action="../include/update_client.inc.php" enctype="multipart/form-data" method="POST">
+    <h2 class="card__header text-center card__header-border weight-500 mb-xs">Uredi klijenta</h2>
     <div class="card-body">
         <div class="mb-xs">
-            <label for="name">Ime kupca(firme ili fizičkog lica)</label>
-            <input type="text" name="<?php echo $client['id']; ?>-ime" id="name"  class="form__input" value="<?php echo $client['ime']; ?>">
+            <label for="ime">Ime klijenta(firme ili fizičkog lica)</label>
+            <input type="text" name="<?php echo $client['id']; ?>-ime" id="ime"  class="form__input" value="<?php echo $client['ime']; ?>">
             <span class="registration-form__error"></span>
         </div>
         <div class="mb-xs">
@@ -93,8 +93,13 @@
             <span class="registration-form__error"></span>
         </div>
         <div class="mb-s">
-            <label for="racun">Žiro račun cliente</label>
+            <label for="racun">Žiro račun klijenta</label>
             <input type="text" name="racun" id="racun" class="form__input"  value="<?php echo $client['racun']; ?>">
+            <span class="registration-form__error"></span>
+        </div>
+        <div class="mb-s">
+            <label for="banka">Ime banke</label>
+            <input type="text" name="banka" id="banka" class="form__input"  value="<?php echo $client['racun']; ?>">
             <span class="registration-form__error"></span>
         </div>
         <p class="success-message mb-xs text-center"></p>

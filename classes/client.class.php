@@ -2,7 +2,7 @@
     
     class Client extends DatabaseObject {
         protected static $dbTable = 'klijent';
-        protected static $dbFields = array('ime', 'jib', 'logo', 'pdv', 'pib', 'vlasnik', 'adresa','mjesto', 'telefon', 'email', 'racun', 'userId');
+        protected static $dbFields = array('ime', 'jib', 'logo', 'pdv', 'pib', 'vlasnik', 'adresa','mjesto', 'telefon', 'email', 'racun', 'banka','userId');
         protected $id;
         public $ime;
         public $jib;
@@ -15,6 +15,7 @@
         public $telefon;
         public $email;
         public $racun;
+        public $banka;
         public $userId;
 
         public function __construct($args) {
@@ -30,6 +31,7 @@
             $this->telefon =            $args['telefon'];
             $this->email =              $args['email'] ?? '';
             $this->racun =              $args['racun'];
+            $this->banka =              $args['banka'];
             $this->userId =             $args['userId'];
             if($this->logo) {
                 $image = new Image($this->logo);

@@ -26,6 +26,7 @@ function load_page($page){
         case 'add_invoice':
         case 'update_invoice':
         case 'render_pdf':
+        case 'pdf_preview':
             require 'pages/' . $page . '.php';
         break;
         default:

@@ -16,15 +16,18 @@ CREATE TABLE IF NOT EXISTS `artikal` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `idArtikla` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `ime` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `cijena` int(11) NOT NULL DEFAULT '0',
+  `cijena` float NOT NULL DEFAULT '0',
   `opis` varchar(250) COLLATE utf8_unicode_ci DEFAULT '0',
-  `userId` int(11) NOT NULL,
+  `firmaId` int(11) NOT NULL DEFAULT '0',
+  `userId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_artikli_firma` (`userId`),
-  CONSTRAINT `FK_artikli_firma` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `FK_artikal_firma` (`firmaId`),
+  KEY `FK_artikal_user` (`userId`),
+  CONSTRAINT `FK_artikal_firma` FOREIGN KEY (`firmaId`) REFERENCES `firma` (`id`),
+  CONSTRAINT `FK_artikal_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table pdfcreator.artikal: ~7 rows (approximately)
+-- Dumping data for table pdfcreator.artikal: ~15 rows (approximately)
 /*!40000 ALTER TABLE `artikal` DISABLE KEYS */;
 /*!40000 ALTER TABLE `artikal` ENABLE KEYS */;
 
@@ -34,13 +37,17 @@ CREATE TABLE IF NOT EXISTS `artiklifakture` (
   `ime` varchar(150) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `cijena` float NOT NULL DEFAULT '0',
   `kolicina` float NOT NULL DEFAULT '0',
+  `rabat` int(11) NOT NULL,
+  `bezPdv` float NOT NULL DEFAULT '0',
+  `pdv` float NOT NULL DEFAULT '0',
+  `ukupno` float NOT NULL DEFAULT '0',
   `fakturaId` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `FK__faktura` (`fakturaId`),
   CONSTRAINT `FK__faktura` FOREIGN KEY (`fakturaId`) REFERENCES `faktura` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table pdfcreator.artiklifakture: ~9 rows (approximately)
+-- Dumping data for table pdfcreator.artiklifakture: ~36 rows (approximately)
 /*!40000 ALTER TABLE `artiklifakture` DISABLE KEYS */;
 /*!40000 ALTER TABLE `artiklifakture` ENABLE KEYS */;
 
@@ -50,6 +57,7 @@ CREATE TABLE IF NOT EXISTS `faktura` (
   `firmaId` int(11) NOT NULL DEFAULT '0',
   `broj` varchar(150) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `mjesto` varchar(150) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `tip` varchar(150) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `kupacId` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `datum` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `nacin` varchar(150) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
@@ -59,9 +67,9 @@ CREATE TABLE IF NOT EXISTS `faktura` (
   PRIMARY KEY (`id`),
   KEY `FK_faktura_user` (`userId`),
   CONSTRAINT `FK_faktura_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table pdfcreator.faktura: ~5 rows (approximately)
+-- Dumping data for table pdfcreator.faktura: ~10 rows (approximately)
 /*!40000 ALTER TABLE `faktura` DISABLE KEYS */;
 /*!40000 ALTER TABLE `faktura` ENABLE KEYS */;
 
@@ -79,13 +87,14 @@ CREATE TABLE IF NOT EXISTS `firma` (
   `email` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
   `telefon` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
   `racun` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
+  `banka` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `userId` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `FK_firma_user` (`userId`),
   CONSTRAINT `FK_firma_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table pdfcreator.firma: ~1 rows (approximately)
+-- Dumping data for table pdfcreator.firma: ~14 rows (approximately)
 /*!40000 ALTER TABLE `firma` DISABLE KEYS */;
 /*!40000 ALTER TABLE `firma` ENABLE KEYS */;
 
@@ -99,9 +108,9 @@ CREATE TABLE IF NOT EXISTS `fiskalniracun` (
   PRIMARY KEY (`id`),
   KEY `FK_fiskalniRacun_user` (`userId`),
   CONSTRAINT `FK_fiskalniRacun_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table pdfcreator.fiskalniracun: ~0 rows (approximately)
+-- Dumping data for table pdfcreator.fiskalniracun: ~2 rows (approximately)
 /*!40000 ALTER TABLE `fiskalniracun` DISABLE KEYS */;
 /*!40000 ALTER TABLE `fiskalniracun` ENABLE KEYS */;
 
@@ -119,13 +128,14 @@ CREATE TABLE IF NOT EXISTS `klijent` (
   `telefon` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `email` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `racun` varchar(150) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `banka` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `userId` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `FK__user` (`userId`),
   CONSTRAINT `FK__user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table pdfcreator.klijent: ~1 rows (approximately)
+-- Dumping data for table pdfcreator.klijent: ~10 rows (approximately)
 /*!40000 ALTER TABLE `klijent` DISABLE KEYS */;
 /*!40000 ALTER TABLE `klijent` ENABLE KEYS */;
 
@@ -136,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `email` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `password` varchar(250) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Dumping data for table pdfcreator.user: ~1 rows (approximately)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;

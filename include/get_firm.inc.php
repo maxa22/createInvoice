@@ -5,25 +5,17 @@
         exit();
     }
 
-    if(isset($_POST['submit'])) {
+    if(isset($_GET['id'])) {
         require_once('autoloader.php');
-        if(isset($_POST['id'])) {
-            $id = $_POST['id'];
-        } else {
-            $id = $_SESSION['id'];
-        }
+        $id = $_GET['id'];
         Validate::validateString('id', $id);
         if(Message::getError()) {
             header('Location: ../index');
             exit();
         }
         $id = Sanitize::sanitizeString($id);
-        if(isset($_POST['id'])) {
-            $articles = Article::findAllByQuery('firmaId', $id);
-        } else {
-            $articles = Article::findAllByQuery('userId', $id);
-        }
-        echo json_encode($articles);
+        $firm = Firm::findById($id);
+        echo json_encode($firm);
         exit();
     } else {
         header('Location: ../index');

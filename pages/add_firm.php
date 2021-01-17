@@ -11,8 +11,8 @@
     <h2 class="card__header text-center card__header-border weight-500 mb-xs">Dodaj firmu</h2>
     <div class="card-body">
         <div class="mb-xs">
-            <label for="name">Naziv firme</label>
-            <input type="text" name="ime" id="name"  class="form__input">
+            <label for="ime">Naziv firme</label>
+            <input type="text" name="ime" id="ime"  class="form__input">
             <span class="registration-form__error"></span>
         </div>
         <div class="mb-xs">
@@ -73,6 +73,11 @@
         <div class="mb-s">
             <label for="racun">Žiro račun firme</label>
             <input type="text" name="racun" id="racun" class="form__input">
+            <span class="registration-form__error"></span>
+        </div>
+        <div class="mb-s">
+            <label for="banka">Ime banke</label>
+            <input type="text" name="banka" id="banka" class="form__input">
             <span class="registration-form__error"></span>
         </div>
         <p class="success-message mb-xs text-center"></p>

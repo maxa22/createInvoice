@@ -19,11 +19,12 @@ firmForm.addEventListener('submit', e => {
             if(!result) {
                 document.querySelector('.success-message').innerHTML = 'Uspješno dodat artikal';
                 document.querySelector('.success-message').style.padding = '0.5rem 1rem';
+                removeInputValues();
+                removeImages();
+                removeErrorTextAndBorderColor()
                 setTimeout(function() {
                     document.querySelector('.success-message').innerHTML = '';
                     document.querySelector('.success-message').style.padding = '0';
-                    removeInputValues();
-                    removeImages();
                 }, 1000);
             } else {
                 let errorMessages = document.querySelectorAll('.registration-form__error');
@@ -99,5 +100,16 @@ function removeImages() {
     let images = document.querySelectorAll('img');
     for(let img of images) {
         img.src = '';
+    }
+}
+
+function removeErrorTextAndBorderColor(container) {
+    let errorMessages = container.querySelectorAll('.registration-form__error');
+    for(let errorMessage of errorMessages) {
+        errorMessage.innerHTML = '';
+    }
+    let inputs = container.querySelectorAll('input, textarea, select');
+    for (let input of inputs) {
+        input.style.borderColor = '#ced4da'
     }
 }
