@@ -34,7 +34,6 @@
 <form action="../include/update_invoice.inc.php" autocomplete="off"  method="POST">
     <h2 class="card__header text-center card__header-border weight-500 mb-xs">Uredi fakturu</h2>
     <div class="card-body">
-    <p class="success-message mb-xs text-center"></p>
         <div class="d-flex gap-s mb-s m-flex-column">
             <div class="w-100">
                 <label for="firma">Naziv firme</label>
@@ -196,7 +195,7 @@
                 <h4 class="d-flex jc-sb ai-c"><span>Ukupno:</span> <span class="ukupnoSve"></span> </h4>
             </div>
         </div>
-      
+        <p class="success-message mb-xs text-center"></p>
         <div class="mt-m">
             <button class="btn btn-primary add">Dodaj artikal</button>
             <button class="btn btn-primary" name="submit">Potvrdi</button>

@@ -27,9 +27,6 @@ if(!isset($_SESSION['id'])) {
                     <span class="edit info editing p-xs">
                         <i class="fas fa-edit d-iblock w-100"></i>
                     </span>
-                    <a href="<?php base(); ?>include/delete_bill.inc.php?id=<?php echo $bill['id']; ?>" class="p-xs danger editing">
-                        <i class="fas fa-trash d-iblock w-100"></i>
-                    </a>
                 </div>
                 <div class="p-xs">
                     <div class="mb-xs">

@@ -4,6 +4,9 @@ if(!isset($_SESSION['id'])) {
     header('Location: ../index');
     exit();
 }
+function base() {
+    echo str_replace('index.php', '',$_SERVER['PHP_SELF']);
+}
 // include autoloader
 require_once 'dompdf/autoload.inc.php';
 
@@ -11,6 +14,7 @@ require_once 'dompdf/autoload.inc.php';
 use Dompdf\Dompdf;
 
 // instantiate and use the dompdf class
+
 $dompdf = new Dompdf();
 
 require_once('include/autoloader.php');
@@ -41,7 +45,7 @@ $datum = date('d.m.Y', $date);
 $rok = strtotime($invoice['rok']);
 $rok = date('d.m.Y', $rok);
 if($firm['logo']) {
-    $path = 'images/' . $firm['logo'];
+    $path = base() . 'images/' . $firm['logo'];
     $type = pathinfo($path, PATHINFO_EXTENSION);
     $data = file_get_contents($path);
     $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
@@ -52,6 +56,7 @@ $pdfName = str_replace(' ', '_', $pdfName);
 $pdfName = str_replace(['/', '?'], '', $pdfName);
 
 $articles = InvoiceArticle::findAllByQuery('fakturaId', $id);
+
 
 ob_start();
 ?>
@@ -69,7 +74,7 @@ p, div {
   height: 100px;
 }
 .pdf-header__logo img {
-  height: 100%;
+  height: 100px;
 }
 .pdf-header__info {
   float: right;
@@ -143,14 +148,14 @@ td.pdf-invoice-first {
 .text-right {
     text-align: right;
 }
-.w-40 {
+.w-30 {
     width: 30%;
 }
 </style>
 <div class="pdf-header">
     <div class="pdf-header__logo">
         <?php if($firm['logo']) { ?>
-            <img src="<?php base(); ?>images/<?php echo $firm['logo']; ?>" alt="">
+            <img src="<?php echo $base64 ?>" alt="" >
         <?php } ?>
     </div>
     <div class="pdf-header__info">
@@ -171,7 +176,7 @@ td.pdf-invoice-first {
     <p>Datum izdavanja: <?php echo $datum ?></p>
     <p>Mjesto izdavanja: <?php echo $invoice['mjesto'] ?></p>
     <p>Način plaćanja: <?php echo $invoice['nacin'] ?></p>
-    <p>Rok plaćanja: <?php echo $rok ?></p>
+    <p>Rok za plaćanje: <?php echo $rok ?></p>
 </div>
 <div class="pdf-client-info">
     <p>Klijent: <?php echo $client['ime'] ?></p>
@@ -191,7 +196,7 @@ td.pdf-invoice-first {
 <table class="pdf-invoice-articles">
     <tr>
         <td class="pdf-invoice-first">Redni broj</td>
-        <td class="text-left w-40">Naziv robe</td>
+        <td class="text-left w-30">Naziv robe</td>
         <td>Količina</td>
         <td>Cijena</td>
         <td>Popust</td>
@@ -210,7 +215,7 @@ td.pdf-invoice-first {
     ?>
     <tr>
         <td class="pdf-invoice-first"><?php echo $i; ?></td>
-        <td class="text-left w-40"><?php echo $article['ime']; ?></td>
+        <td class="text-left w-30"><?php echo $article['ime']; ?></td>
         <td><?php echo $article['kolicina']; ?></td>
         <td><?php echo $article['cijena']; ?>KM</td>
         <td><?php echo $article['rabat']; ?>%</td>
@@ -254,6 +259,7 @@ $html = ob_get_clean();
 
 $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 
+
 $dompdf->loadHtml($html);
 
 // (Optional) Setup the paper size and orientation
@@ -263,4 +269,4 @@ $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
 
 // Output the generated PDF to Browser
-$dompdf->stream($pdfName);
+$dompdf->stream($pdfName, array('Attachment' => '0'));

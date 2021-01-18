@@ -141,7 +141,7 @@
             {
                 $database = Database::instance();
                 $connection = $database->connect();
-                $sql = "SELECT * FROM " . static::$dbTable . " WHERE $placeholder = ?;";
+                $sql = "SELECT * FROM " . static::$dbTable . " WHERE $placeholder = ? ORDER BY id DESC;";
                 $stmt = $connection->prepare($sql);
                 $stmt->bindParam('1', $id);
                 $stmt->execute();
@@ -272,7 +272,7 @@
             {
                 $database = Database::instance();
                 $connection = $database->connect();
-                $sql = "SELECT * FROM " . static::$dbTable . " WHERE $placeholder=:id LIMIT :limit OFFSET :offset;";
+                $sql = "SELECT * FROM " . static::$dbTable . " WHERE $placeholder=:id ORDER BY id DESC LIMIT :limit OFFSET :offset;";
                 $stmt = $connection->prepare($sql);
                 $stmt->bindValue(':id', $id);
                 $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);

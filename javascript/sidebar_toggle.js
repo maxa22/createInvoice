@@ -15,7 +15,6 @@ sidebarOverlay.addEventListener('click', () => {
 
 for(let sidebarMenuDropdown of sidebarMenuDropdowns) {
     sidebarMenuDropdown.addEventListener('click', e => {
-        let dropdown = sidebarMenuDropdown.querySelector('ul');
         sidebarMenuDropdown.classList.toggle('sidebar__dropdown-active');
     });
 }
@@ -28,11 +27,4 @@ function toggleActiveClass() {
     sidebarOverlay.classList.toggle('active');
 }
 
-function removeActiveClasses() {
-    for(let sidebarMenuDropdown of sidebarMenuDropdowns) {
-        sidebarMenuDropdown.classList.remove('sidebar__dropdown-active');
-        let dropdown = sidebarMenuDropdown.querySelector('ul');
-        dropdown.style.height = '0';
-    }
-}
 

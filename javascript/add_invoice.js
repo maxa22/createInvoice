@@ -99,9 +99,13 @@ let cancels = document.querySelectorAll('.cancel');
 for(let cancel of cancels) {
     cancel.addEventListener('click', e => {
         e.preventDefault();
-        // disableModalInputFieldsEnableOthers();
         document.querySelector('.modal-overlay-firm').classList.remove('active');
         document.querySelector('.modal-overlay-client').classList.remove('active');
+        if(e.currentTarget.parentElement.parentElement.parentElement.parentElement.parentElement.classList.contains('modal-overlay-firm')) {
+            firma.selectedIndex = 0;
+        } else {
+            client.selectedIndex = 0;
+        }
     });
 }
     

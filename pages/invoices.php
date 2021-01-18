@@ -25,9 +25,9 @@ $invoices = Invoice::findAllByQuery('userId', $_SESSION['id']);
             $firm = Firm::findById($invoice['firmaId']);
     ?>
         <div class="w-25-gap-m l-w-50-gap-m s-w-100 card relative">
-            <a href="<?php base(); ?>include/delete_invoice.inc.php?id=<?php echo $invoice['id']; ?>" class="p-xs danger delete__invoice">
+            <span class="p-xs danger delete__invoice">
                 <i class="fas fa-trash d-iblock w-100"></i>
-            </a>
+            </span>
             <div class="card-body">
                 <span class="d-block">Firma: </span><span class="d-block mb-xs"> <?php echo $firm['ime'];?></span>
                 <span class="d-block">Broj fakture: </span><span class="d-block mb-xs"> <?php echo $invoice['broj'];?></span>
@@ -43,6 +43,20 @@ $invoices = Invoice::findAllByQuery('userId', $_SESSION['id']);
                 <a href="render_pdf/<?php echo $invoice['id'] ?>"  target="_blank" rel="nooklijenta" class="btn btn-info w-100 text-center mb-xs">Ispiši PDF</a>
                 <a href="update_invoice/<?php echo $invoice['id'] ?>" class="btn btn-info w-100 text-center">Uredi</a>
             </div>
+            <div class="modal-overlay">
+                <div class="modal p-none">
+                    <div class="modal__heading">
+                        <h3>POTVRDA O BRISANJU</h3>
+                    </div>
+                    <div class="modal__warning">
+                        <p>Are you sure you want to delete calculator?</p>
+                    </div>
+                    <div class="modal__button mt-s text-right p-xs">
+                        <a href="<?php base(); ?>include/delete_invoice.inc.php?id=<?php echo $invoice['id']; ?>" class="btn btn-danger">Izbriši</a>
+                        <span class="btn btn-secondary cancel">Odustani</span>
+                    </div>
+                </div>
+            </div>
         </div>
     <?php } ?>
         </div>
@@ -52,3 +66,5 @@ $invoices = Invoice::findAllByQuery('userId', $_SESSION['id']);
     <a href="add_invoice" class="btn btn-primary mt-m">Kreiraj fakturu</a>
 </div>
 </main>
+
+<script src="<?php base(); ?>javascript/invoices.js"></script>

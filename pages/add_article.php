@@ -12,7 +12,6 @@ $firms = Firm::findAllByQuery('userId', $id);
 <div class="wrapper d-flex jc-c ai-c">
     <div class="form-container m-auto mb-l">
     <h2 class="card__header text-center card__header-border weight-500 mb-xs">Dodaj Artikal</h2>
-    <p class="success-message mb-xs text-center"></p>
     <form action="include/articles.inc.php" id="newArticle" method="POST">
         <div class="card-container">
                 <div class="card-body">
@@ -46,6 +45,7 @@ $firms = Firm::findAllByQuery('userId', $id);
                         <textarea rows="3" name="opis" id="opis"  class="form__input h-auto"></textarea>
                         <span class="registration-form__error"></span>
                     </div>  
+                    <p class="success-message mb-xs text-center"></p>
                     <button name="submit" class="btn btn-primary">Sačuvaj</button>
                 </div>
         </div>

@@ -30,7 +30,7 @@
             <span class="registration-form__error"></span>
         </div>
         <div class="mb-xs">
-            <label for="logo" class="file-label mb-xs">Logo cliente</label>
+            <label for="logo" class="file-label mb-xs">Dodaj logotip</label>
             <input type="file" name="logo" id="logo" class="form__input-file">
             <img src="<?php base(); ?>images/<?php echo $client['logo'] ?? ''; ?>" alt="" class="firm-logo d-block m-auto">
             <span class="registration-form__error"></span>

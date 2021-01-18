@@ -12,7 +12,7 @@ newArticle.addEventListener('submit', e => {
         postData(url, formData)
         .then(result => {
             if(!result) {
-                document.querySelector('.success-message').innerHTML = 'Uspješno dodat artikal';
+                document.querySelector('.success-message').innerHTML = 'Uspješno dodano';
                 document.querySelector('.success-message').style.padding = '0.5rem 1rem';
                 removeErrorTextAndBorderColor(newArticle);
                 setTimeout(function() {

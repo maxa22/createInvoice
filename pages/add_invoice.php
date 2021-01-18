@@ -86,7 +86,7 @@
                 <span class="registration-form__error"></span>
             </div>
             <div class="w-100">
-                <label for="rok">Rok plaćanja</label>
+                <label for="rok">Rok za plaćanje</label>
                 <input type="date" name="rok" id="rok" class="form__input required">
                 <span class="registration-form__error"></span>
             </div>
@@ -189,10 +189,13 @@
 </div>
 </div>
 <div class="modal-overlay-firm">
-    <div class="modal">
+    <div class="modal relative">
     <div >
         <form action="include/add_firm.inc.php" enctype="multipart/form-data" method="POST" id="addFirm">
             <h2 class="card__header text-center card__header-border weight-500 mb-xs">Dodaj firmu</h2>
+            <div class="remove__modal">
+                <i class="fas fa-times cancel p-s"></i>
+            </div>
             <div class="card-body">
                 <div class="mb-xs">
                     <label for="ime">Naziv firme</label>
@@ -200,7 +203,7 @@
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
-                    <label for="logo" class="file-label mb-xs">Logo firme</label>
+                    <label for="logo" class="file-label mb-xs">Dodaj logotip</label>
                     <input type="file"  name="logo" id="logo" class="form__input-file">
                     <img src="" alt="" class="firm-logo d-block m-auto">
                     <span class="registration-form__error"></span>
@@ -266,7 +269,7 @@
                 </div>
                 <p class="success-message mb-xs text-center"></p>
                 <button class="btn btn-primary" name="submit">Potvrdi</button>
-                <button class="btn btn-secondary cancel" name="submit">Cancel</button>
+                <button class="btn btn-secondary cancel" name="submit">Odustani</button>
             </form>
         </div>
     </div>
@@ -274,9 +277,12 @@
 </div>
 <div class="modal-overlay-client">
     <div class="modal"> 
-        <div>
+        <div> 
         <form action="include/add_client.inc.php" enctype="multipart/form-data" method="POST" id="addClient">
             <h2 class="card__header text-center card__header-border weight-500 mb-xs">Dodaj klijenta</h2>
+            <div class="remove__modal">
+                <i class="fas fa-times p-s cancel"></i>
+            </div>
             <div class="card-body">
                 <div class="mb-xs">
                     <label for="ime-client">Ime klijenta(firme ili fizičkog lica)</label>
@@ -284,7 +290,7 @@
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
-                    <label for="logo-client" class="file-label mb-xs">Logo firme</label>
+                    <label for="logo-client" class="file-label mb-xs">Dodaj logotip</label>
                     <input type="file" name="logo"   id="logo-client" class="form__input-file">
                     <img src="" alt="" class="firm-logo d-block m-auto">
                     <span class="registration-form__error"></span>
@@ -350,10 +356,11 @@
                 </div>
                 <p class="success-message mb-xs text-center"></p>
                 <button class="btn btn-primary" name="submit">Potvrdi</button>
-                <button class="btn btn-secondary cancel" name="submit">Cancel</button>
+                <button class="btn btn-secondary cancel" name="submit">Odustani</button>
             </form>
         </div>
     </div>
 </div>
+
 </main>
 <script src="<?php base(); ?>javascript/add_invoice.js"></script>

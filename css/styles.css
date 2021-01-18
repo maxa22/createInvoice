@@ -193,6 +193,7 @@ main.active {
 
 /* #### MODAL STYLING ##### */
 
+.modal-overlay,
 .modal-overlay-firm,
 .modal-overlay-client {
   position: absolute;
@@ -202,8 +203,12 @@ main.active {
   right: 0;
   z-index: -3;
   background-color: rgba(0, 0, 0, 0.9);
-  min-height: 150vh;
+  min-height: 100rem;
   display: none;
+}
+.modal-overlay {
+  position: fixed;
+  min-height: unset;
 }
 .modal {
   position: absolute;
@@ -217,6 +222,7 @@ main.active {
   width: 95%;
   padding: 2rem;
 }
+.modal-overlay.active,
 .modal-overlay-firm.active,
 .modal-overlay-client.active {
   z-index: 10;
@@ -356,7 +362,8 @@ main.active {
 
 /* #### INVOICE #### */
 
-.delete__invoice {
+.delete__invoice,
+.remove__modal {
   position: absolute;
   right: 0;
   top: 0;
@@ -519,6 +526,9 @@ td.pdf-invoice-first {
 }
 .success {
   color: var(--success);
+}
+.p-none {
+  padding: 0;
 }
 .p-s {
   padding: 2rem;
@@ -700,6 +710,27 @@ td.pdf-invoice-first {
   clear: both;
 }
 /* end of utility classes */
+
+@media screen and (min-width: 1200px) {
+  .sidebar {
+    width: 25rem;
+  }
+  .sidebar.active {
+    width: 5rem;
+  }
+  .navigation-container.active {
+    margin-left: 6rem;
+  }
+  .navigation-container {
+    margin-left: 25rem;
+  }
+  main.active {
+    margin-left: 5rem;
+  }
+  main {
+    margin-left: 25rem;
+  }
+}
 
 @media screen and (max-width: 992px) {
   main,

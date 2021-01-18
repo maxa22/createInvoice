@@ -37,7 +37,7 @@ firmForm.addEventListener('submit', e => {
         postData(url, formData)
         .then(result => {
             if(result['success']) {
-                document.querySelector('.success-message').innerHTML = 'Uspješno dodat klijent';
+                document.querySelector('.success-message').innerHTML = 'Uspješno dodano';
                 document.querySelector('.success-message').style.padding = '0.5rem 1rem';
                 removeErrorTextAndBorderColor(firmForm);
                 removeInputValues();
@@ -45,6 +45,7 @@ firmForm.addEventListener('submit', e => {
                 setTimeout(function() {
                     document.querySelector('.success-message').innerHTML = '';
                     document.querySelector('.success-message').style.padding = '0';
+                    window.location.href = 'clients';
                 }, 1000)
             } else {
                 let errorMessages = document.querySelectorAll('.registration-form__error');

@@ -42,9 +42,7 @@ firmForm.addEventListener('submit', e => {
                 setTimeout(function() {
                     document.querySelector('.success-message').innerHTML = '';
                     document.querySelector('.success-message').style.padding = '0';
-                    removeInputValues();
-                    removeImages(firmForm);
-                    removeErrorTextAndBorderColor(firmForm);
+                    window.location.href = 'firms';
                 }, 1000)
             } else {
                 let errorMessages = document.querySelectorAll('.registration-form__error');

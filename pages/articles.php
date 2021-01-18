@@ -66,9 +66,6 @@ $articles = Article::findAllWithOffset('userId', $id, $paginate->limit, $paginat
                         <span class="w-100 edit editing">
                             <i class="fas fa-edit d-iblock w-100"></i>
                         </span>
-                        <a href="<?php base(); ?>include/delete_article.inc.php?id=<?php echo $article['id']; ?>" class="w-100 danger editing">
-                            <i class="fas fa-trash d-iblock w-100"></i>
-                        </a>
                         <button class="w-100 saving success d-none btn-transparent" name="submit">
                             <i class="fas fa-check d-iblock w-100 pointer"></i>
                         </button>

@@ -60,7 +60,7 @@ $articles = InvoiceArticle::findAllByQuery('fakturaId', $id);
             <p>Datum izdavanja: <?php echo $datum ?></p>
             <p>Mjesto izdavanja: <?php echo $invoice['mjesto'] ?></p>
             <p>Način plaćanja: <?php echo $invoice['nacin'] ?></p>
-            <p>Rok plaćanja: <?php echo $rok ?></p>
+            <p>Rok za plaćanje: <?php echo $rok ?></p>
         </div>
         <div class="pdf-client-info">
             <p>Klijent: <?php echo $client['ime'] ?></p>
