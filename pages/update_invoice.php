@@ -133,27 +133,27 @@
                     <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Naziv</span>
                     <div class="d-flex">
                         <div>
-                            <input type="text" name="<?php echo $i; ?>-idArtikla" disabled class="w-100 p-xs border-none border-right form__input h-100 imeArtikla d-none required" placeholder="Šifra">
+                            <input type="text" name="<?php echo $i; ?>-idArtikla" disabled class="w-100 p-xs border-none border-right form__input h-100 imeArtikla d-none" placeholder="Šifra">
                             <span class="registration-form__error"></span>
                         </div>
                         <div>
-                            <input type="text" name="<?php echo $i; ?>-imeArtikla" disabled class="w-100 p-xs border-none form__input h-100 imeArtikla d-none required" placeholder="Naziv">
+                            <input type="text" name="<?php echo $i; ?>-imeArtikla" disabled class="w-100 p-xs border-none form__input h-100 imeArtikla d-none " placeholder="Naziv">
                             <span class="registration-form__error"></span>
                         </div>
                     </div>
-                    <select id="<?php echo $i; ?>-artikli" name="<?php echo $i; ?>-imeArtikla" class="w-100 p-xs border-none form__input h-100 imeArtikla dropdown required">
+                    <select id="<?php echo $i; ?>-artikli" name="<?php echo $i; ?>-imeArtikla" class="w-100 p-xs border-none form__input h-100 imeArtikla dropdown ">
                         <option value="<?php echo $article['ime']; ?>" selected><?php echo $article['ime']; ?></option>
                     </select>
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="w-10 border relative m-d-flex m-w-100">
                     <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Cijena</span>
-                    <input type="number" step="0.01" name="<?php echo $i; ?>-cijena-<?php echo $article['id']; ?>" class="w-100 p-xs form__input border-none h-100 cijena required" value="<?php echo $article['cijena']; ?>">
+                    <input type="number" step="0.01" name="<?php echo $i; ?>-cijena-<?php echo $article['id']; ?>" class="w-100 p-xs form__input border-none h-100 cijena" value="<?php echo $article['cijena']; ?>">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="w-10 border relative m-d-flex m-w-100">
                     <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Količina</span>
-                    <input type="number" step="0.01" name="<?php echo $i; ?>-kolicina" class="w-100 p-xs form__input border-none h-100 required kolicina" value="<?php echo $article['kolicina']; ?>">
+                    <input type="number" step="0.01" name="<?php echo $i; ?>-kolicina" class="w-100 p-xs form__input border-none h-100  kolicina" value="<?php echo $article['kolicina']; ?>">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="w-10 border relative m-d-flex m-w-100">
@@ -181,7 +181,7 @@
                     <input type="text" name="<?php echo $i; ?>-ukupno" class="w-100 p-xs form__input border-none h-100 ukupno" value="<?php echo $article['ukupno'] . 'KM'; ?>">
                     <span class="registration-form__error"></span>
                 </div>
-                <div class="w-5 border remove d-flex jc-c ai-c m-d-flex pointer m-w-100">
+                <div class="w-5 border remove d-flex jc-c ai-c m-d-flex pointer m-p-xs m-w-100">
                     <i class="fas fa-times remove-icon"></i>
                 </div>
             </div>
@@ -189,7 +189,7 @@
             
         <?php } ?>
         </div>
-        <div class="w-30 m-w-100 mt-s card ml-auto">
+        <div class="w-40 m-w-100 mt-s card ml-auto">
             <div class="card-body">
                 <h4 class="d-flex jc-sb ai-c <?php echo $invoiceFirm['pdv'] !== '0' ? '' : 'd-none'; ?>"><span>Ukupno bez PDV:</span> <span class="ukupnoBezPdv"></span> </h4>
                 <h4 class="d-flex jc-sb ai-c <?php echo $invoiceFirm['pdv'] !== '0' ? '' : 'd-none'; ?>"><span>PDV:</span> <span class="ukupnoPDV"></span> </h4>

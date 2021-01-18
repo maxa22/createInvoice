@@ -72,7 +72,6 @@ addFirm.addEventListener('submit', e => {
     let inputs = document.querySelectorAll('#ime');
     let errorArray = [];
     isEmpty(inputs, errorArray);
-    //###########################################################################
 
     if(errorArray.length < 1) {
         postData(url, formData)
@@ -89,7 +88,7 @@ addFirm.addEventListener('submit', e => {
                     firma.selectedIndex = 0;
                 }, 1000)
             } else {
-                showErrorsFromServerOnSubmit();
+                showErrorsFromServerOnSubmit(result);
             }
         });
     }
@@ -233,14 +232,14 @@ addArticlesField.addEventListener('click', e => {
         <div class="w-10 border m-d-flex m-w-100">
             <span class="w-100 d-none p-x btn-primary weight-600 d-none m-w-45 m-d-block">Cijena</span>
             <div> 
-                <input type="number" name="${numberOfArticles}-cijena" step="0.01" class="w-100 p-xs form__input border-none h-100 required cijena">
+                <input type="number" name="${numberOfArticles}-cijena" step="0.01" class="w-100 p-xs form__input border-none h-100 cijena">
                 <span class="registration-form__error"></span>
             </div>
         </div>
         <div class="w-10 border m-d-flex m-w-100">
             <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">Količina</span>
             <div> 
-                <input type="number" name="${numberOfArticles}-kolicina" step="0.01" class="w-100 p-xs form__input border-none h-100 required kolicina" >
+                <input type="number" name="${numberOfArticles}-kolicina" step="0.01" class="w-100 p-xs form__input border-none h-100 kolicina" >
                 <span class="registration-form__error"></span>
             </div>
         </div>
@@ -275,7 +274,7 @@ addArticlesField.addEventListener('click', e => {
             <span class="registration-form__error"></span>
             </div>
         </div>
-        <div class="w-5 border remove d-flex jc-c ai-c m-d-flex pointer m-w-100">
+        <div class="w-5 border remove d-flex jc-c ai-c m-d-flex pointer m-p-xs m-w-100">
             <i class="fas fa-times remove-icon"></i>
         </div>
     `;
@@ -289,7 +288,7 @@ addArticlesField.addEventListener('click', e => {
 
 
 // ###########################################
-// HANDLING FORM SUBMIT FOR ADDING INVOICE
+// HANDLING FORM SUBMIT FOR ADDING INVOICE 
 // ###########################################
 
 const invoiceForm = document.querySelector('form');
@@ -362,7 +361,7 @@ addClient.addEventListener('submit', e => {
                     removeClassActive();
                 }, 1000)
             } else {
-                showErrorsFromServerOnSubmit();
+                showErrorsFromServerOnSubmit(result);
             }
         });
     }
@@ -384,16 +383,17 @@ for(let input of radioFirm) {
         if(input.checked && input.value == '1') {
             pib.parentElement.style.display = 'block';
             pib.removeAttribute('disabled');
-            disablePdvAndRemoveValue();
-            disableBezPdvAndRemoveValue()
-            hiddingTotalsNotUsed();
-        } else {
-            pib.parentElement.style.display = 'none';
-            pib.setAttribute('disabled', 'true');
             showTotals();
             setTaxesAndPriceWithoutTaxes();
             let taxInputsAndWithoutTaxInput = document.querySelectorAll('.bezPDV, .PDV');
             removeAttributeDisabled(taxInputsAndWithoutTaxInput);
+        } else {
+            pib.parentElement.style.display = 'none';
+            pib.setAttribute('disabled', 'true');
+            disablePdvAndRemoveValue();
+            disableBezPdvAndRemoveValue()
+            hiddingTotalsNotUsed();
+
         }
     });
 }
@@ -478,7 +478,7 @@ function getTotalValue() {
     let totalInputs = document.querySelectorAll('.ukupno');
     let total = 0;
     for(let totalInput of totalInputs) {
-        let value = totalInput.value;
+        let value = totalInput.value ? totalInput.value : '0KM';
         value = value.substring(0, value.length - 2);
         const container = totalInput.parentElement.parentElement.parentElement;
         if(container.style.display !== 'none') {
@@ -494,7 +494,7 @@ function getTotalTax() {
     let totalInputs = document.querySelectorAll('.PDV');
     let total = 0;
     for(let totalInput of totalInputs) {
-        let value = totalInput.value;
+        let value = totalInput.value ? totalInput.value : '0KM';
         value = value.substring(0, value.length - 2);
         const container = totalInput.parentElement.parentElement.parentElement;
         if(container.style.display !== 'none') {
@@ -510,7 +510,7 @@ function getTotalWithoutTaxes() {
     let totalInputs = document.querySelectorAll('.bezPDV');
     let total = 0;
     for(let totalInput of totalInputs) {
-        let value = totalInput.value;
+        let value = totalInput.value ? totalInput.value : '0KM';
         value = value.substring(0, value.length - 2);
         const container = totalInput.parentElement.parentElement.parentElement;
         if(container.style.display !== 'none') {
@@ -644,7 +644,7 @@ function disableBezPdvAndRemoveValue() {
     setAttributeDisabled(bezPDV);
 }
 
-function showErrorsFromServerOnSubmit() {
+function showErrorsFromServerOnSubmit(result) {
     let errorMessages = document.querySelectorAll('.registration-form__error');
     for(let errorMessage of errorMessages) {
         errorMessage.innerHTML = '';

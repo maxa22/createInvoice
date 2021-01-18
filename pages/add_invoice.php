@@ -174,7 +174,7 @@
                 </div>
             </div>
         </div>
-        <div class="w-30 m-w-100 mt-s card ml-auto">
+        <div class="w-40 m-w-100 mt-s card ml-auto">
             <div class="card-body">    
                 <h4 class="d-flex jc-sb ai-c"><span>Ukupno bez PDV:</span> <span class="ukupnoBezPdv"></span> </h4>
                 <h4 class="d-flex jc-sb ai-c"><span>PDV:</span> <span class="ukupnoPDV"></span> </h4>

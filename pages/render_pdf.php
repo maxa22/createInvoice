@@ -175,15 +175,15 @@ td.pdf-invoice-first {
 </div>
 <div class="pdf-client-info">
     <p>Klijent: <?php echo $client['ime'] ?></p>
-    <?php if($client['adresa']) ?>
-        <p><?php echo $client['adresa']; ?></p>
-    <?php ?>
-    <?php if($client['jib']) ?>
-        <p><?php echo $client['jib']; ?></p>
-    <?php ?>
-    <?php if($client['telefon']) ?>
-        <p><?php echo $client['telefon']; ?></p>
-    <?php ?>
+    <?php if($client['adresa']) { ?>
+        <p>Adresa: <?php echo $client['adresa']; ?></p>
+    <?php } ?>
+    <?php if($client['jib']) { ?>
+        <p>JIB: <?php echo $client['jib']; ?></p>
+    <?php } ?>
+    <?php if($client['telefon']) { ?>
+        <p>Telefon: <?php echo $client['telefon']; ?></p>
+    <?php } ?>
 </div>
 <div class="pdf-invoice-number">
     <h2><?php echo $invoice['tip'] . ' broj: ' . $invoice['broj']; ?></h2>

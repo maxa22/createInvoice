@@ -45,13 +45,13 @@ $articles = InvoiceArticle::findAllByQuery('fakturaId', $id);
             <div class="pdf-header__info">
                 <p><?php echo $firm['ime']; ?></p>
                 <?php if($firm['adresa']) { ?>
-                    <p><?php echo $firm['adresa']; ?></p>
+                    <p>Adresa: <?php echo $firm['adresa']; ?></p>
                 <?php } ?>
                 <?php if($firm['jib']) { ?>
-                    <p><?php echo $firm['jib']; ?></p>
+                    <p>JIB: <?php echo $firm['jib']; ?></p>
                 <?php } ?>
                 <?php if($firm['telefon']) { ?>
-                    <p><?php echo $firm['telefon']; ?></p>
+                    <p>Telefon: <?php echo $firm['telefon']; ?></p>
                 <?php } ?>
             </div>
         </div>
@@ -64,15 +64,15 @@ $articles = InvoiceArticle::findAllByQuery('fakturaId', $id);
         </div>
         <div class="pdf-client-info">
             <p>Klijent: <?php echo $client['ime'] ?></p>
-            <?php if($client['adresa']) ?>
-                <p><?php echo $client['adresa']; ?></p>
-            <?php ?>
-            <?php if($client['jib']) ?>
-                <p><?php echo $client['jib']; ?></p>
-            <?php ?>
-            <?php if($client['telefon']) ?>
-                <p><?php echo $client['telefon']; ?></p>
-            <?php ?>
+            <?php if($client['adresa']) { ?>
+                <p>Adresa: <?php echo $client['adresa']; ?></p>
+            <?php } ?>
+            <?php if($client['jib']) { ?>
+                <p>JIB: <?php echo $client['jib']; ?></p>
+            <?php } ?>
+            <?php if($client['telefon']) { ?>
+                <p>Telefon: <?php echo $client['telefon']; ?></p>
+            <?php } ?>
         </div>
         <div class="pdf-invoice-number">
             <h2><?php echo $invoice['tip'] . ' broj: ' . $invoice['broj']; ?></h2>

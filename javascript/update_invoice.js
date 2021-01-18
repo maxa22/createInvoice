@@ -127,15 +127,15 @@ addArticle.addEventListener('click', e => {
             <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Naziv</span>
             <div class="d-flex"> 
                 <div> 
-                    <input type="text" name="${numberOfArticles}-idArtikla" disabled class="w-100 p-xs border-none border-right d-none h-100 imeArtikla required" placeholder="Šifra">
+                    <input type="text" name="${numberOfArticles}-idArtikla" disabled class="w-100 form__input p-xs border-none border-right d-none h-100 imeArtikla" placeholder="Šifra">
                     <span class="registration-form__error"></span>
                 </div>
                 <div> 
-                    <input type="text" name="${numberOfArticles}-imeArtikla-new" disabled class="w-100 p-xs border-none d-none h-100 imeArtikla required" placeholder="Naziv">
+                    <input type="text" name="${numberOfArticles}-imeArtikla-new" disabled class="w-100 form__input p-xs border-none d-none h-100 imeArtikla" placeholder="Naziv">
                     <span class="registration-form__error"></span>
                 </div>
             </div>
-            <select id="${numberOfArticles}-artikli" name="${numberOfArticles}-imeArtikla-new" class="dropdown w-100 p-xs form__input border-none h-100 imeArtikla required">
+            <select id="${numberOfArticles}-artikli" name="${numberOfArticles}-imeArtikla-new" class="dropdown w-100 p-xs form__input border-none h-100 imeArtikla">
                 ${displayNewArticleOptions(articles)}
             </select>
             <span class="registration-form__error"></span>
@@ -173,7 +173,7 @@ addArticle.addEventListener('click', e => {
             <input type="text" name="${numberOfArticles}-ukupno" class="w-100 p-xs border-none form__input h-100 ukupno" >
             <span class="registration-form__error"></span>
         </div>
-        <div class="w-5 border remove d-flex jc-c ai-c m-d-flex pointer m-w-100">
+        <div class="w-5 border remove d-flex jc-c ai-c m-d-flex pointer m-p-xs m-w-100">
             <i class="fas fa-times remove-icon"></i>
         </div>
     `;
@@ -383,7 +383,7 @@ function getTotalValue() {
     let totalInputs = document.querySelectorAll('.ukupno');
     let total = 0;
     for(let totalInput of totalInputs) {
-        let value = totalInput.value;
+        let value = totalInput.value ? totalInput.value : '0KM';
         value = value.substring(0, value.length - 2);
         const container = totalInput.parentElement.parentElement;
         if(container.style.display !== 'none') {
@@ -399,7 +399,7 @@ function getTotalTax() {
     let totalInputs = document.querySelectorAll('.PDV');
     let total = 0;
     for(let totalInput of totalInputs) {
-        let value = totalInput.value;
+        let value = totalInput.value ? totalInput.value : '0KM';
         value = value.substring(0, value.length - 2);
         const container = totalInput.parentElement.parentElement;
         if(container.style.display !== 'none') {
@@ -415,7 +415,7 @@ function getTotalWithoutTaxes() {
     let totalInputs = document.querySelectorAll('.bezPDV');
     let total = 0;
     for(let totalInput of totalInputs) {
-        let value = totalInput.value;
+        let value = totalInput.value ? totalInput.value : '0KM';
         value = value.substring(0, value.length - 2);
         const container = totalInput.parentElement.parentElement;
         if(container.style.display !== 'none') {
