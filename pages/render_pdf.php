@@ -143,6 +143,9 @@ td.pdf-invoice-first {
 .text-right {
     text-align: right;
 }
+.w-40 {
+    width: 30%;
+}
 </style>
 <div class="pdf-header">
     <div class="pdf-header__logo">
@@ -188,10 +191,10 @@ td.pdf-invoice-first {
 <table class="pdf-invoice-articles">
     <tr>
         <td class="pdf-invoice-first">Redni broj</td>
-        <td class="text-left">Naziv robe</td>
+        <td class="text-left w-40">Naziv robe</td>
         <td>Količina</td>
         <td>Cijena</td>
-        <td>Rabat</td>
+        <td>Popust</td>
         <?php if($firm['pdv'] == '1') { ?>
             <td>Ukupno bez PDV</td>
             <td>PDV</td>
@@ -207,7 +210,7 @@ td.pdf-invoice-first {
     ?>
     <tr>
         <td class="pdf-invoice-first"><?php echo $i; ?></td>
-        <td class="text-left"><?php echo $article['ime']; ?></td>
+        <td class="text-left w-40"><?php echo $article['ime']; ?></td>
         <td><?php echo $article['kolicina']; ?></td>
         <td><?php echo $article['cijena']; ?>KM</td>
         <td><?php echo $article['rabat']; ?>%</td>
@@ -260,4 +263,4 @@ $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
 
 // Output the generated PDF to Browser
-$dompdf->stream($pdfName, array('Attachment' => 0));
+$dompdf->stream($pdfName);

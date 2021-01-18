@@ -32,7 +32,7 @@ articleContainer.addEventListener('click', e => {
         
         let container = e.target.parentElement.parentElement;
         let inputs = container.querySelectorAll('input');
-        let input = e.target;
+        let input = container.querySelector('select.imeArtikla');
         input.addEventListener("change", function(ev){
             ev.stopImmediatePropagation();
             if(ev.target.value == 'noviArtikal') {
@@ -63,6 +63,24 @@ articleContainer.addEventListener('click', e => {
 
         });
     }
+    if(e.target.classList.contains('remove')) {
+        let inputFieldsContainer =  e.target.parentElement;
+        inputFieldsContainer.style.display = 'none';
+        let imeArtiklaInput = inputFieldsContainer.querySelectorAll('.imeArtikla');
+        for(let imeArtikla of imeArtiklaInput) {
+            imeArtikla.name += '-none';
+        }
+        settingTotalValues();
+    }
+    if(e.target.classList.contains('remove-icon')) {
+        let inputFieldsContainer = e.target.parentElement.parentElement;
+        inputFieldsContainer.style.display = 'none';
+        let imeArtiklaInput = inputFieldsContainer.querySelectorAll('.imeArtikla');
+        for(let imeArtikla of imeArtiklaInput) {
+            imeArtikla.name += '-none';
+        }
+        settingTotalValues()
+    }
 });
 
 
@@ -83,7 +101,6 @@ if(ukupnoBezPdv) {
 articleContainer.addEventListener('input', e => {
     // change event on price, quantity
     if(e.target.classList.contains('cijena') || e.target.classList.contains('kolicina') || e.target.classList.contains('rabat')) {
-        // e.target.addEventListener('input', event => {
         e.stopPropagation();
         let container = e.target.parentElement.parentElement; 
         setValueForRowTotal(container);
@@ -114,11 +131,11 @@ addArticle.addEventListener('click', e => {
                     <span class="registration-form__error"></span>
                 </div>
                 <div> 
-                    <input type="text" name="${numberOfArticles}-imeArtikla" disabled class="w-100 p-xs border-none d-none h-100 imeArtikla required" placeholder="Naziv">
+                    <input type="text" name="${numberOfArticles}-imeArtikla-new" disabled class="w-100 p-xs border-none d-none h-100 imeArtikla required" placeholder="Naziv">
                     <span class="registration-form__error"></span>
                 </div>
             </div>
-            <select id="${numberOfArticles}-artikli" name="${numberOfArticles}-imeArtikla" class="dropdown w-100 p-xs form__input border-none h-100 imeArtikla required">
+            <select id="${numberOfArticles}-artikli" name="${numberOfArticles}-imeArtikla-new" class="dropdown w-100 p-xs form__input border-none h-100 imeArtikla required">
                 ${displayNewArticleOptions(articles)}
             </select>
             <span class="registration-form__error"></span>
@@ -141,20 +158,23 @@ addArticle.addEventListener('click', e => {
             </select>
             <span class="registration-form__error"></span>
         </div>
-            <div class="w-20 border m-d-flex m-w-100">
+        <div class="w-15 border m-d-flex m-w-100">
             <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Cijena bez PDV</span>
-            <input type="text" name="${numberOfArticles}-bezPdv" class="w-100 p-xs form__input border-none h-100 bezPDV" >
+            <input type="text" name="${numberOfArticles}-bezPdv" ${pdv == '1' ? '' : 'disabled'} class="w-100 p-xs form__input border-none h-100 bezPDV" >
             <span class="registration-form__error"></span>
         </div>
         <div class="w-10 border m-d-flex m-w-100">
             <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">PDV</span>
-            <input type="text" name="${numberOfArticles}-pdv" class="w-100 p-xs border-none form__input h-100 PDV" >
+            <input type="text" name="${numberOfArticles}-pdv" ${pdv == '1' ? '' : 'disabled'} class="w-100 p-xs border-none form__input h-100 PDV" >
             <span class="registration-form__error"></span>
         </div>
         <div class="w-10 border m-d-flex m-w-100">
             <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Ukupno</span>
             <input type="text" name="${numberOfArticles}-ukupno" class="w-100 p-xs border-none form__input h-100 ukupno" >
             <span class="registration-form__error"></span>
+        </div>
+        <div class="w-5 border remove d-flex jc-c ai-c m-d-flex pointer m-w-100">
+            <i class="fas fa-times remove-icon"></i>
         </div>
     `;
     container.append(div);
@@ -359,12 +379,16 @@ function setTaxesAndPriceWithoutTaxes() {
 
     }
 }
-
 function getTotalValue() {
-    let values = document.querySelectorAll('.ukupno');
+    let totalInputs = document.querySelectorAll('.ukupno');
     let total = 0;
-    for(let value of values) {
-        total += parseFloat(value.value);
+    for(let totalInput of totalInputs) {
+        let value = totalInput.value;
+        value = value.substring(0, value.length - 2);
+        const container = totalInput.parentElement.parentElement;
+        if(container.style.display !== 'none') {
+            total += parseFloat(value);
+        }
     }
     total = total.toFixed(2);
     total += ' KM';
@@ -372,10 +396,15 @@ function getTotalValue() {
 }
 
 function getTotalTax() {
-    let values = document.querySelectorAll('.PDV');
+    let totalInputs = document.querySelectorAll('.PDV');
     let total = 0;
-    for(let value of values) {
-        total += parseFloat(value.value);
+    for(let totalInput of totalInputs) {
+        let value = totalInput.value;
+        value = value.substring(0, value.length - 2);
+        const container = totalInput.parentElement.parentElement;
+        if(container.style.display !== 'none') {
+            total += parseFloat(value);
+        }
     }
     total = total.toFixed(2);
     total += ' KM';
@@ -383,10 +412,15 @@ function getTotalTax() {
 }
 
 function getTotalWithoutTaxes() {
-    let values = document.querySelectorAll('.bezPDV');
+    let totalInputs = document.querySelectorAll('.bezPDV');
     let total = 0;
-    for(let value of values) {
-        total += parseFloat(value.value);
+    for(let totalInput of totalInputs) {
+        let value = totalInput.value;
+        value = value.substring(0, value.length - 2);
+        const container = totalInput.parentElement.parentElement;
+        if(container.style.display !== 'none') {
+            total += parseFloat(value);
+        }
     }
     total = total.toFixed(2);
     total += ' KM';
@@ -395,12 +429,14 @@ function getTotalWithoutTaxes() {
 
 function settingTotalValues() {
     ukupnoSve.innerHTML = getTotalValue();
-    ukupnoPDV.parentElement.style.display = 'flex';
-    ukupnoPDV.innerHTML = getTotalTax();
-    ukupnoBezPdv.parentElement.style.display = 'flex';
-    ukupnoBezPdv.innerHTML = getTotalWithoutTaxes();
-    
+    if(pdv != '0') {
+        ukupnoPDV.parentElement.style.display = 'flex';
+        ukupnoPDV.innerHTML = getTotalTax();
+        ukupnoBezPdv.parentElement.style.display = 'flex';
+        ukupnoBezPdv.innerHTML = getTotalWithoutTaxes();
+    }
 }
+
 
 function setValueForRowTotal(container) {
     let cijena = container.querySelector('.cijena');

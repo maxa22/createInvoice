@@ -1,4 +1,9 @@
 let articles = '';
+let pdv = '1';
+let ukupnoBezPdv = document.querySelector('.ukupnoBezPdv');
+let ukupnoPDV = document.querySelector('.ukupnoPDV');
+let ukupnoSve = document.querySelector('.ukupnoSve');
+
 window.addEventListener('DOMContentLoaded', () => {
     formDataTwo = new FormData();
     formDataTwo.append('submit', '');
@@ -10,9 +15,12 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// ################
+// GETTING FIRM
+// ################
+
 
 let firma = document.getElementById('firma');
-let pdv = '';
 
 firma.addEventListener('change', e => {
     if(e.currentTarget.value !== 'dodajFirmu' && e.currentTarget.value !== '') {
@@ -21,16 +29,8 @@ firma.addEventListener('change', e => {
         .then(result => {
             pdv = result['pdv'];
             if(result['pdv'] === '0') {
-                let bezPDV = document.querySelectorAll('.bezPDV');
-                for(let bez of bezPDV) {
-                    bez.value = '';
-                }
-                setAttributeDisabled(bezPDV);
-                let pdvs = document.querySelectorAll('.PDV');
-                for(let pdv of pdvs) {
-                    pdv.value = '';
-                }
-                setAttributeDisabled(pdvs);
+                disablePdvAndRemoveValue();
+                disableBezPdvAndRemoveValue()
                 hiddingTotalsNotUsed();
             } else {
                 showTotals();
@@ -52,12 +52,9 @@ firma.addEventListener('change', e => {
         });
     }
     if(e.currentTarget.value == 'dodajFirmu') {
-        let inputsToDisable = document.querySelectorAll('input, select');
-        setAttributeDisabled(inputsToDisable);
         let modal = document.querySelector('.modal-overlay-firm');
         modal.classList.add('active');
-        let modalInputs = modal.querySelectorAll('input, select');
-        removeAttributeDisabled(modalInputs)
+
     }
 });
 
@@ -66,6 +63,7 @@ firma.addEventListener('change', e => {
 // ####################
 
 let addFirm = document.getElementById('addFirm');
+
 addFirm.addEventListener('submit', e => {
     e.preventDefault();
     let formData = new FormData(addFirm);
@@ -74,34 +72,24 @@ addFirm.addEventListener('submit', e => {
     let inputs = document.querySelectorAll('#ime');
     let errorArray = [];
     isEmpty(inputs, errorArray);
+    //###########################################################################
+
     if(errorArray.length < 1) {
         postData(url, formData)
         .then(result => {
             if(result['success']) {
-                document.querySelector('.success-message').innerHTML = 'Uspješno ste dodali firmu';
-                document.querySelector('.success-message').style.padding = '0.5rem 1rem';
+                showSuccessMessage(addFirm);
                 let option = document.createElement('option');
                 option.value = result['success'];
                 option.innerHTML = result['ime'];
                 firma.add(option, firma[0]);
                 setTimeout(function() {
-                    disableModalInputFieldsEnableOthers();
+                    hideSuccessMessage(addFirm);
+                    removeClassActive();
                     firma.selectedIndex = 0;
                 }, 1000)
             } else {
-                let errorMessages = document.querySelectorAll('.registration-form__error');
-                for(let errorMessage of errorMessages) {
-                    errorMessage.innerHTML = '';
-                }
-                let inputs = document.querySelectorAll('input');
-                for(let input of inputs) {
-                    input.style.borderColor = '#ced4da';
-                }
-                for(const [key, value] of Object.entries(result)) {
-                    field =    document.querySelector(`input[name="${key}"]`);
-                    field.style.borderColor = '#a94442';
-                    field.parentElement.querySelector('.registration-form__error').innerHTML = value;
-                }
+                showErrorsFromServerOnSubmit();
             }
         });
     }
@@ -112,7 +100,9 @@ let cancels = document.querySelectorAll('.cancel');
 for(let cancel of cancels) {
     cancel.addEventListener('click', e => {
         e.preventDefault();
-        disableModalInputFieldsEnableOthers();
+        // disableModalInputFieldsEnableOthers();
+        document.querySelector('.modal-overlay-firm').classList.remove('active');
+        document.querySelector('.modal-overlay-client').classList.remove('active');
     });
 }
     
@@ -135,7 +125,8 @@ articleContainer.addEventListener('click', e => {
     if(e.target.classList.contains('imeArtikla')) {
         let container = e.target.parentElement.parentElement.parentElement;
         let inputs = container.querySelectorAll('input');
-        let input = e.target;
+        let input = container.querySelector('select.imeArtikla');
+        // let input = e.target;
         input.addEventListener("change", function(ev){
             ev.stopImmediatePropagation();
             if(ev.target.value == 'noviArtikal') {
@@ -166,6 +157,25 @@ articleContainer.addEventListener('click', e => {
 
         });
     }
+    // hide input article row
+    if(e.target.classList.contains('remove')) {
+        let inputFieldsContainer =  e.target.parentElement;
+        inputFieldsContainer.style.display = 'none';
+        let imeArtiklaInput = inputFieldsContainer.querySelectorAll('.imeArtikla');
+        for(let imeArtikla of imeArtiklaInput) {
+            imeArtikla.name += '-none';
+        }
+        settingTotalValues();
+    }
+    if(e.target.classList.contains('remove-icon')) {
+        let inputFieldsContainer = e.target.parentElement.parentElement;
+        inputFieldsContainer.style.display = 'none';
+        let imeArtiklaInput = inputFieldsContainer.querySelectorAll('.imeArtikla');
+        for(let imeArtikla of imeArtiklaInput) {
+            imeArtikla.name += '-none';
+        }
+        settingTotalValues()
+    }
 });
 
 // ##################
@@ -173,25 +183,22 @@ articleContainer.addEventListener('click', e => {
 // LISTENING FOR CHANGE EVENT IN FIELDS RABAT, KOLICINA, CIJENA
 // ##################
 
-let ukupnoBezPdv = document.querySelector('.ukupnoBezPdv');
-let ukupnoPDV = document.querySelector('.ukupnoPDV');
-let ukupnoSve = document.querySelector('.ukupnoSve');
 
 articleContainer.addEventListener('input', e => {
-    // change event on price, quantity
     if(e.target.classList.contains('cijena') || e.target.classList.contains('kolicina') || e.target.classList.contains('rabat')) {
-        // e.target.addEventListener('input', event => {
         e.stopPropagation();
         let container = e.target.parentElement.parentElement.parentElement; 
         setValueForRowTotal(container);
     }
 });
 
-// #########################
+// ############################################
 // ADDING NEW ARTICLE
-// #########################
-let add = document.querySelector('.add');
-add.addEventListener('click', e => {
+// ############################################
+
+let addArticlesField = document.querySelector('.add');
+
+addArticlesField.addEventListener('click', e => {
     e.preventDefault();
     let div = document.createElement('div');
     div.classList.add('d-flex');
@@ -208,16 +215,16 @@ add.addEventListener('click', e => {
             <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">Naziv</span>
             <div class="d-flex"> 
                 <div> 
-                    <input type="text" name="${numberOfArticles}-idArtikla" disabled class="w-100 p-xs border-none border-right d-none h-100 imeArtikla required" placeholder="Šifra">
+                    <input type="text" name="${numberOfArticles}-idArtikla" disabled class="w-100 p-xs border-none border-right form__input d-none h-100 imeArtikla" placeholder="Šifra">
                     <span class="registration-form__error"></span>
                 </div>
                 <div> 
-                    <input type="text" name="${numberOfArticles}-imeArtikla" disabled class="w-100 p-xs border-none d-none h-100 imeArtikla  required" placeholder="Naziv">
+                    <input type="text" name="${numberOfArticles}-imeArtikla" disabled class="w-100 p-xs border-none form__input d-none h-100 imeArtikla " placeholder="Naziv">
                     <span class="registration-form__error"></span>
                 </div>
             </div>
             <div>
-                <select id="${numberOfArticles}-artikli" name="${numberOfArticles}-imeArtikla" class="dropdown w-100 p-xs form__input border-none h-100 imeArtikla required">
+                <select id="${numberOfArticles}-artikli" name="${numberOfArticles}-imeArtikla" class="dropdown w-100 p-xs form__input border-none h-100 imeArtikla">
                 ${displayArticleOptions(articles)}
                 </select>
                 <span class="registration-form__error"></span>
@@ -247,17 +254,17 @@ add.addEventListener('click', e => {
                 <span class="registration-form__error"></span>
             </div>
         </div>
-        <div class="w-20 border m-d-flex m-w-100">
+        <div class="w-15 border m-d-flex m-w-100">
             <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">Cijena bez PDV</span>
             <div>
-                <input type="text" name="${numberOfArticles}-bezPdv" class="w-100 p-xs form__input border-none h-100 bezPDV" >
+                <input type="text" name="${numberOfArticles}-bezPdv" ${pdv == '1' ? '' : "disabled='true'"} class="w-100 p-xs form__input border-none h-100 bezPDV" >
                 <span class="registration-form__error"></span>
             </div>
         </div>
         <div class="w-10 border m-d-flex m-w-100">
             <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">PDV</span>
             <div> 
-                <input type="text" name="${numberOfArticles}-pdv" class="w-100 p-xs border-none form__input h-100 PDV" >
+                <input type="text" name="${numberOfArticles}-pdv" ${pdv == '1' ? '' : "disabled='true'"} class="w-100 p-xs border-none form__input h-100 PDV" >
                 <span class="registration-form__error"></span>
             </div>
         </div>
@@ -267,6 +274,9 @@ add.addEventListener('click', e => {
             <input type="text" name="${numberOfArticles}-ukupno" class="w-100 p-xs border-none form__input h-100 ukupno" >
             <span class="registration-form__error"></span>
             </div>
+        </div>
+        <div class="w-5 border remove d-flex jc-c ai-c m-d-flex pointer m-w-100">
+            <i class="fas fa-times remove-icon"></i>
         </div>
     `;
     container.append(div);
@@ -278,9 +288,9 @@ add.addEventListener('click', e => {
 
 
 
-// ######################
+// ###########################################
 // HANDLING FORM SUBMIT FOR ADDING INVOICE
-// ######################
+// ###########################################
 
 const invoiceForm = document.querySelector('form');
 
@@ -289,7 +299,6 @@ invoiceForm.addEventListener('submit', e => {
     let formData = new FormData(invoiceForm);
     formData.append('submit', '');
     const url = 'include/add_invoice.inc.php';
-    let inputs = document.querySelectorAll('input, select');
     let requiredInputs = document.querySelectorAll('.required');
     let errorArray = [];
     isEmpty(requiredInputs, errorArray);
@@ -299,50 +308,34 @@ invoiceForm.addEventListener('submit', e => {
             if(result['success']) {
                 window.location.href = "pdf_preview/" + result['success'];
             } else {
-                let errorMessages = document.querySelectorAll('.registration-form__error');
-                for(let errorMessage of errorMessages) {
-                    errorMessage.innerHTML = '';
-                }
-                let container = document.getElementById('articles');
-                let articleInputs = container.querySelectorAll('input');
-                for(let articleInput of articleInputs) {
-                    articleInput.classList.add('h-100');
-                }
-                let inputs = document.querySelectorAll('input');
-                for(let input of inputs) {
-                    input.style.borderColor = '#ced4da';
-                }
-                for(const [key, value] of Object.entries(result)) {
-                    field =    document.querySelector(`input[name="${key}"]`);
-                    field.style.borderColor = '#a94442';
-                    field.classList.remove('h-100');
-                    field.parentElement.querySelector('.registration-form__error').innerHTML = value;
-                }
+                addClassHeight100ToArticleFields();
+                showErrorsFromServerOnSubmit();
             }
         });
     }
 }); 
 
 
-// ###################
+// #####################
 // END OF FORM SUBMIT 
-// ###################
+// #####################
 
-// ###################
+// #####################################
 // MODAL FOR ADD CLIENT
-// ###################
+// ####################################
 
 let client = document.getElementById('kupac');
+
 client.addEventListener('change', e => {
     if(e.currentTarget.value == 'dodajKlijenta') {
-        let inputsToDisable = document.querySelectorAll('input, select');
-        setAttributeDisabled(inputsToDisable);
         let modal = document.querySelector('.modal-overlay-client');
         modal.classList.add('active');
-        let modalInputs = modal.querySelectorAll('input, select');
-        removeAttributeDisabled(modalInputs)
     }
 })
+
+// #####################################
+// FORM ADD CLIENT
+// ####################################
 
 let addClient = document.getElementById('addClient');
 
@@ -351,40 +344,25 @@ addClient.addEventListener('submit', e => {
     let formData = new FormData(addClient);
     formData.append('submit', '');
     const url = 'include/add_client.inc.php';
-    let inputs = document.querySelectorAll('#ime');
+    let inputs = document.querySelectorAll('#ime-client');
     let errorArray = [];
     isEmpty(inputs, errorArray);
     if(errorArray.length < 1) {
         postData(url, formData)
         .then(result => {
             if(result['success']) {
-                document.querySelector('.success-message').innerHTML = 'Uspješno dodat klijent';
-                document.querySelector('.success-message').style.padding = '0.5rem 1rem';
+               showSuccessMessage(addClient);
                 let option = document.createElement('option');
                 option.value = result['success'];
                 option.innerHTML = result['ime'];
                 client.add(option, client[0]);
                 setTimeout(function() {
-                    document.querySelector('.success-message').innerHTML = '';
-                    document.querySelector('.success-message').style.padding = '0';
-                    let option = document.createElement('option');
-                    disableModalInputFieldsEnableOthers();
                     client.selectedIndex = 0;
+                    hideSuccessMessage(addClient);
+                    removeClassActive();
                 }, 1000)
             } else {
-                let errorMessages = document.querySelectorAll('.registration-form__error');
-                for(let errorMessage of errorMessages) {
-                    errorMessage.innerHTML = '';
-                }
-                let inputs = document.querySelectorAll('input');
-                for(let input of inputs) {
-                    input.style.borderColor = '#ced4da';
-                }
-                for(const [key, value] of Object.entries(result)) {
-                    field =    document.querySelector(`input[name="${key}"]`);
-                    field.style.borderColor = '#a94442';
-                    field.parentElement.querySelector('.registration-form__error').innerHTML = value;
-                }
+                showErrorsFromServerOnSubmit();
             }
         });
     }
@@ -406,9 +384,16 @@ for(let input of radioFirm) {
         if(input.checked && input.value == '1') {
             pib.parentElement.style.display = 'block';
             pib.removeAttribute('disabled');
+            disablePdvAndRemoveValue();
+            disableBezPdvAndRemoveValue()
+            hiddingTotalsNotUsed();
         } else {
             pib.parentElement.style.display = 'none';
             pib.setAttribute('disabled', 'true');
+            showTotals();
+            setTaxesAndPriceWithoutTaxes();
+            let taxInputsAndWithoutTaxInput = document.querySelectorAll('.bezPDV, .PDV');
+            removeAttributeDisabled(taxInputsAndWithoutTaxInput);
         }
     });
 }
@@ -440,7 +425,7 @@ function isEmpty(inputs, errorArray) {
         articleInput.classList.add('h-100');
     }
     for(let input of inputs) {
-        if(input.value.length == 0 && !input.disabled) {
+        if(input.value.length == 0 && input.disabled !== 'true') {
             input.style.borderColor = '#a94442';
             input.classList.remove('h-100');
             input.parentElement.querySelector('.registration-form__error').innerHTML = 'Polje ne smije biti prazno';
@@ -490,10 +475,15 @@ function displayOptionsBetweenOneAndHundred(){
 }
 
 function getTotalValue() {
-    let values = document.querySelectorAll('.ukupno');
+    let totalInputs = document.querySelectorAll('.ukupno');
     let total = 0;
-    for(let value of values) {
-        total += parseFloat(value.value);
+    for(let totalInput of totalInputs) {
+        let value = totalInput.value;
+        value = value.substring(0, value.length - 2);
+        const container = totalInput.parentElement.parentElement.parentElement;
+        if(container.style.display !== 'none') {
+            total += parseFloat(value);
+        }
     }
     total = total.toFixed(2);
     total += ' KM';
@@ -501,10 +491,15 @@ function getTotalValue() {
 }
 
 function getTotalTax() {
-    let values = document.querySelectorAll('.PDV');
+    let totalInputs = document.querySelectorAll('.PDV');
     let total = 0;
-    for(let value of values) {
-        total += parseFloat(value.value);
+    for(let totalInput of totalInputs) {
+        let value = totalInput.value;
+        value = value.substring(0, value.length - 2);
+        const container = totalInput.parentElement.parentElement.parentElement;
+        if(container.style.display !== 'none') {
+            total += parseFloat(value);
+        }
     }
     total = total.toFixed(2);
     total += ' KM';
@@ -512,10 +507,15 @@ function getTotalTax() {
 }
 
 function getTotalWithoutTaxes() {
-    let values = document.querySelectorAll('.bezPDV');
+    let totalInputs = document.querySelectorAll('.bezPDV');
     let total = 0;
-    for(let value of values) {
-        total += parseFloat(value.value);
+    for(let totalInput of totalInputs) {
+        let value = totalInput.value;
+        value = value.substring(0, value.length - 2);
+        const container = totalInput.parentElement.parentElement.parentElement;
+        if(container.style.display !== 'none') {
+            total += parseFloat(value);
+        }
     }
     total = total.toFixed(2);
     total += ' KM';
@@ -524,10 +524,12 @@ function getTotalWithoutTaxes() {
 
 function settingTotalValues() {
     ukupnoSve.innerHTML = getTotalValue();
-    ukupnoPDV.parentElement.style.display = 'flex';
-    ukupnoPDV.innerHTML = getTotalTax();
-    ukupnoBezPdv.parentElement.style.display = 'flex';
-    ukupnoBezPdv.innerHTML = getTotalWithoutTaxes();
+    if(pdv != '0') {
+        ukupnoPDV.parentElement.style.display = 'flex';
+        ukupnoPDV.innerHTML = getTotalTax();
+        ukupnoBezPdv.parentElement.style.display = 'flex';
+        ukupnoBezPdv.innerHTML = getTotalWithoutTaxes();
+    }
 }
 
 function hiddingTotalsNotUsed() {
@@ -574,22 +576,6 @@ function removeAttributeDisabled(inputs) {
     }
 }
 
-function disableModalInputFieldsEnableOthers() {
-    document.querySelector('.modal-overlay-firm').classList.remove('active');
-    document.querySelector('.modal-overlay-client').classList.remove('active');
-    let inputsToEnable = document.querySelectorAll('input, select');
-    for(let inputToEnable of inputsToEnable) {
-        if(!inputToEnable.classList.contains('d-none')) {
-            inputToEnable.removeAttribute('disabled');
-        }
-    }
-    let modalFirm = document.querySelector('.modal-overlay-firm');
-    let modalInputsFirm = modalFirm.querySelectorAll('input, select');
-    let modalClient = document.querySelector('.modal-overlay-client');
-    let modalInputsClient = modalClient.querySelectorAll('input, select');
-    setAttributeDisabled(modalInputsFirm);
-    setAttributeDisabled(modalInputsClient);
-}
 
 function setImage(inputField, img) {
     img.src = URL.createObjectURL(inputField.files[0]);
@@ -635,4 +621,60 @@ function setValueForRowTotal(container) {
             hiddingTotalsNotUsed();
         }
     }
+}
+
+function removeClassActive() {
+    document.querySelector('.modal-overlay-firm').classList.remove('active');
+    document.querySelector('.modal-overlay-client').classList.remove('active');
+}
+
+function disablePdvAndRemoveValue() {
+    let pdvs = document.querySelectorAll('.PDV');
+    for(let pdv of pdvs) {
+        pdv.value = '';
+    }
+    setAttributeDisabled(pdvs);
+}
+
+function disableBezPdvAndRemoveValue() {
+    let bezPDV = document.querySelectorAll('.bezPDV');
+    for(let bez of bezPDV) {
+        bez.value = '';
+    }
+    setAttributeDisabled(bezPDV);
+}
+
+function showErrorsFromServerOnSubmit() {
+    let errorMessages = document.querySelectorAll('.registration-form__error');
+    for(let errorMessage of errorMessages) {
+        errorMessage.innerHTML = '';
+    }
+    let inputs = document.querySelectorAll('input');
+    for(let input of inputs) {
+        input.style.borderColor = '#ced4da';
+    }
+    for(const [key, value] of Object.entries(result)) {
+        field =    document.querySelector(`input[name="${key}"]`);
+        field.style.borderColor = '#a94442';
+        field.classList.remove('h-100');
+        field.parentElement.querySelector('.registration-form__error').innerHTML = value;
+    }
+}
+
+function addClassHeight100ToArticleFields() {
+    let container = document.getElementById('articles');
+    let articleInputs = container.querySelectorAll('input');
+    for(let articleInput of articleInputs) {
+        articleInput.classList.add('h-100');
+    }
+}
+
+function showSuccessMessage(container) {
+    container.querySelector('.success-message').innerHTML = 'Uspješno dodat klijent';
+    container.querySelector('.success-message').style.padding = '0.5rem 1rem';
+}
+
+function hideSuccessMessage(container) {
+    container.querySelector('.success-message').innerHTML = '';
+    container.querySelector('.success-message').style.padding = '0';
 }

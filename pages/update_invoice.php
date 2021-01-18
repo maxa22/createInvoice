@@ -120,10 +120,10 @@
                 <span class="w-30 p-x border weight-500 hidden mm-d-none">Naziv</span>
                 <span class="w-10 p-x border weight-500 hidden mm-d-none">Jed. cijena</span>
                 <span class="w-10 p-x border weight-500 hidden mm-d-none">Količina</span>
-                <span class="w-10 p-x border weight-500 hidden mm-d-none">Rabat</span>
-                <span class="w-20 p-x border weight-500 hidden mm-d-none">Cijena bez PDV</span>
+                <span class="w-10 p-x border weight-500 hidden mm-d-none">Popust</span>
+                <span class="w-15 p-x border weight-500 hidden mm-d-none">Cijena bez PDV</span>
                 <span class="w-10 p-x border weight-500 hidden mm-d-none">PDV</span>
-                <span class="w-10 p-x border weight-500 hidden mm-d-none">Ukupno</span>
+                <span class="w-15 p-x border weight-500 hidden mm-d-none">Ukupno</span>
             </div>
             <?php foreach($articles as $article) { 
                 $i++;    
@@ -157,7 +157,7 @@
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="w-10 border relative m-d-flex m-w-100">
-                    <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Rabat</span>
+                    <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Popust</span>
                     <select name="<?php echo $i; ?>-rabat" class="w-100 p-xs border-none h-100 rabat form__input rabat required">
                         <option value="<?php echo $article['rabat']; ?>" selected><?php echo $article['rabat']; ?>%</option>
                         <?php for($j = 0; $j <= 100; $j++ ) { ?>
@@ -166,7 +166,7 @@
                     </select>
                     <span class="registration-form__error"></span>
                 </div>
-                <div class="w-20 border m-d-flex m-w-100">
+                <div class="w-15 border m-d-flex m-w-100">
                     <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Cijena bez PDV</span>
                     <input type="text" name="<?php echo $i; ?>-bezPdv" <?php echo $invoiceFirm['pdv'] !== '0' ? '' : 'disabled' ?> class="w-100 p-xs form__input border-none h-100 bezPDV" value="<?php echo $invoiceFirm['pdv'] !== '0' ? $article['bezPdv'] . 'KM' : ''; ?>">
                     <span class="registration-form__error"></span>
@@ -180,6 +180,9 @@
                     <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Ukupno</span>
                     <input type="text" name="<?php echo $i; ?>-ukupno" class="w-100 p-xs form__input border-none h-100 ukupno" value="<?php echo $article['ukupno'] . 'KM'; ?>">
                     <span class="registration-form__error"></span>
+                </div>
+                <div class="w-5 border remove d-flex jc-c ai-c m-d-flex pointer m-w-100">
+                    <i class="fas fa-times remove-icon"></i>
                 </div>
             </div>
             <?php } ?>

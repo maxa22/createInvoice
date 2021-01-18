@@ -97,26 +97,26 @@
                 <span class="w-30 p-x border weight-500 hidden mm-d-none">Artikal</span>
                 <span class="w-10 p-x border weight-500 hidden mm-d-none">Jed. cijena</span>
                 <span class="w-10 p-x border weight-500 hidden mm-d-none">Količina</span>
-                <span class="w-10 p-x border weight-500 hidden mm-d-none">Rabat</span>
-                <span class="w-20 p-x border weight-500 hidden mm-d-none">Cijena bez PDV</span>
+                <span class="w-10 p-x border weight-500 hidden mm-d-none">Popust</span>
+                <span class="w-15 p-x border weight-500 hidden mm-d-none">Cijena bez PDV</span>
                 <span class="w-10 p-x border weight-500 hidden mm-d-none">PDV</span>
-                <span class="w-10 p-x border weight-500 hidden mm-d-none">Ukupno</span>
+                <span class="w-15 p-x border weight-500 hidden mm-d-none">Ukupno</span>
             </div>
             <div class="d-flex articlesNumber m-w-100 m-flex-column m-card m-mb-m" id="articlesBody">
                 <div class="w-30 border relative m-d-flex m-w-100">
                     <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">Artikal</span>
                     <div class="d-flex">
                         <div>
-                            <input type="text" name="1-idArtikla" disabled class="w-100 p-xs border-none border-right form__input h-100 imeArtikla d-none required" placeholder="Šifra">
+                            <input type="text" name="1-idArtikla" disabled="true" class="w-100 p-xs border-none border-right form__input h-100 imeArtikla d-none" placeholder="Šifra">
                             <span class="registration-form__error"></span>
                         </div>
                         <div>
-                            <input type="text" name="1-imeArtikla" disabled class="w-100 p-xs border-none form__input h-100 imeArtikla d-none required" placeholder="Naziv">
+                            <input type="text" name="1-imeArtikla" disabled="true" class="w-100 p-xs border-none form__input h-100 imeArtikla d-none" placeholder="Naziv">
                             <span class="registration-form__error"></span>
                         </div>
                     </div>
                     <div>
-                    <select id="1-artikli" name="1-imeArtikla" class="w-100 p-xs border-none form__input h-100 imeArtikla dropdown required">
+                    <select id="1-artikli" name="1-imeArtikla" class="w-100 p-xs border-none form__input h-100 imeArtikla dropdown">
                     
                     </select>
                     <span class="registration-form__error"></span>
@@ -137,7 +137,7 @@
                     </div>
                 </div>
                 <div class="w-10 border m-d-flex m-w-100">
-                    <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">Rabat</span>
+                    <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">Popust</span>
                     <div>
                         <select name="1-rabat" class="w-100 p-xs border-none h-100 rabat form__input required">
                             <option value="0" selected>0%</option>
@@ -148,7 +148,7 @@
                         <span class="registration-form__error"></span>
                     </div>
                 </div>
-                <div class="w-20 border m-d-flex m-w-100">
+                <div class="w-15 border m-d-flex m-w-100">
                     <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">Cijena bez PDV</span>
                     <div>
                         <input type="text" name="1-bezPdv" class="w-100 p-xs form__input border-none h-100 bezPDV" >
@@ -166,10 +166,11 @@
                 <div class="w-10 border m-d-flex m-w-100">
                     <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">Ukupno</span>
                     <div>
-
                         <input type="text" name="1-ukupno" class="w-100 p-xs form__input border-none h-100 ukupno" >
                         <span class="registration-form__error"></span>
                     </div>
+                </div>
+                <div class="w-5 border m-d-flex m-w-100">
                 </div>
             </div>
         </div>
@@ -195,29 +196,29 @@
             <div class="card-body">
                 <div class="mb-xs">
                     <label for="ime">Naziv firme</label>
-                    <input type="text" name="ime" disabled id="ime"  class="form__input">
+                    <input type="text" name="ime"  id="ime"  class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <label for="logo" class="file-label mb-xs">Logo firme</label>
-                    <input type="file" disabled name="logo" id="logo" class="form__input-file">
+                    <input type="file"  name="logo" id="logo" class="form__input-file">
                     <img src="" alt="" class="firm-logo d-block m-auto">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <label for="jib">Jedinstveni identifikacioni broj</label>
-                    <input type="text" disabled name="jib" id="jib"  class="form__input">
+                    <input type="text"  name="jib" id="jib"  class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <p class="mb-xs">Da li je firma u sistemu PDV-a?</p>
                     <div class="d-flex">
                         <div class="mb-xs w-100">
-                            <input type="radio" disabled name="pdv" id="pdv-da" value="1">
+                            <input type="radio"  name="pdv" id="pdv-da" value="1">
                             <label for="pdv-da">Da</label>
                         </div>
                         <div class="w-100">
-                            <input type="radio" disabled checked name="pdv" id="pdv-ne" value="0">
+                            <input type="radio"  checked name="pdv" id="pdv-ne" value="0">
                             <label for="pdv-ne">Ne</label>
                         </div>
                     </div>
@@ -225,42 +226,42 @@
                 </div>
                 <div class="mb-xs d-none">
                     <label for="pib">Poreski identifikacioni broj</label>
-                    <input type="text" name="pib" disabled id="pib" disabled class="form__input pib">
+                    <input type="text" name="pib"  id="pib"  class="form__input pib">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <label for="vlasnik">Ime vlasnika</label>
-                    <input type="text" name="vlasnik" disabled id="vlasnik" class="form__input">
+                    <input type="text" name="vlasnik"  id="vlasnik" class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <label for="adresa">Adresa firme</label>
-                    <input type="text" name="adresa" disabled id="adresa" class="form__input">
+                    <input type="text" name="adresa"  id="adresa" class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <label for="broj">Broj telefona</label>
-                    <input type="text" name="telefon" disabled id="broj" class="form__input">
+                    <input type="text" name="telefon"  id="broj" class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <label for="email">Email adresa</label>
-                    <input type="text" name="email" disabled id="email" class="form__input">
+                    <input type="text" name="email"  id="email" class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <label for="mjesto">Mjesto</label>
-                    <input type="text" name="mjesto" disabled id="mjesto" class="form__input">
+                    <input type="text" name="mjesto"  id="mjesto" class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-s">
                     <label for="racun">Žiro račun firme</label>
-                    <input type="text" name="racun" disabled id="racun" class="form__input">
+                    <input type="text" name="racun"  id="racun" class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-s">
                     <label for="banka">Ime banke</label>
-                    <input type="text" name="banka" disabled id="banka" class="form__input">
+                    <input type="text" name="banka"  id="banka" class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <p class="success-message mb-xs text-center"></p>
@@ -279,29 +280,29 @@
             <div class="card-body">
                 <div class="mb-xs">
                     <label for="ime-client">Ime klijenta(firme ili fizičkog lica)</label>
-                    <input type="text" name="ime" disabled id="ime-client"  class="form__input">
+                    <input type="text" name="ime"  id="ime-client"  class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <label for="logo-client" class="file-label mb-xs">Logo firme</label>
-                    <input type="file" name="logo"  disabled id="logo-client" class="form__input-file">
+                    <input type="file" name="logo"   id="logo-client" class="form__input-file">
                     <img src="" alt="" class="firm-logo d-block m-auto">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <label for="jib-client">Jedinstveni identifikacioni broj/JMBG</label>
-                    <input type="text" name="jib" disabled id="jib-client"  class="form__input">
+                    <input type="text" name="jib"  id="jib-client"  class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <p class="mb-xs">Da li je firma u sistemu PDV-a?</p>
                     <div class="d-flex">
                         <div class="mb-xs w-100">
-                            <input type="radio" name="pdv" disabled id="pdv-da-client" value="1">
+                            <input type="radio" name="pdv"  id="pdv-da-client" value="1">
                             <label for="pdv-da-client">Da</label>
                         </div>
                         <div class="w-100">
-                            <input type="radio" checked name="pdv" disabled id="pdv-ne-client" value="0">
+                            <input type="radio" checked name="pdv"  id="pdv-ne-client" value="0">
                             <label for="pdv-ne-client">Ne</label>
                         </div>
                     </div>
@@ -309,42 +310,42 @@
                 </div>
                 <div class="mb-xs d-none">
                     <label for="pib-client">Poreski identifikacioni broj</label>
-                    <input type="text" name="pib" id="pib-client" disabled class="form__input pib">
+                    <input type="text" name="pib" id="pib-client"  class="form__input pib">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <label for="vlasnik-client">Ime vlasnika</label>
-                    <input type="text" name="vlasnik" disabled id="vlasnik-client" class="form__input">
+                    <input type="text" name="vlasnik"  id="vlasnik-client" class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <label for="adresa-client">Adresa firme</label>
-                    <input type="text" name="adresa" disabled id="adresa-client" class="form__input">
+                    <input type="text" name="adresa"  id="adresa-client" class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <label for="mjesto-client">Mjesto</label>
-                    <input type="text" name="mjesto" disabled id="mjesto-client" class="form__input">
+                    <input type="text" name="mjesto"  id="mjesto-client" class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <label for="broj-client">Broj telefona</label>
-                    <input type="text" name="telefon" disabled id="broj-client" class="form__input">
+                    <input type="text" name="telefon"  id="broj-client" class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-xs">
                     <label for="email-client">Email adresa</label>
-                    <input type="text" name="email" disabled id="email-client" class="form__input">
+                    <input type="text" name="email"  id="email-client" class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-s">
                     <label for="racun-client">Žiro račun</label>
-                    <input type="text" name="racun" disabled id="racun-client" class="form__input">
+                    <input type="text" name="racun"  id="racun-client" class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <div class="mb-s">
                     <label for="banka-client">Ime banke</label>
-                    <input type="text" name="banka" disabled id="banka-client" class="form__input">
+                    <input type="text" name="banka"  id="banka-client" class="form__input">
                     <span class="registration-form__error"></span>
                 </div>
                 <p class="success-message mb-xs text-center"></p>

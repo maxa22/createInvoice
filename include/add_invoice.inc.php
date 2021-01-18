@@ -50,33 +50,37 @@
             Message::addError('rok', 'Polje ne smije biti prazno');
         }
 
-        $i = 1;
-        while(isset($_POST[$i . '-imeArtikla'])) {
-            $articleArgs[$i]['ime'] = Sanitize::sanitizeString($_POST[$i . '-imeArtikla']);
-            Validate::validateString($i . '-imeArtikla',$_POST[$i . '-imeArtikla']);
-            $articleArgs[$i]['cijena'] = Sanitize::sanitizeString($_POST[$i . '-cijena']);
-            Validate::validateNumber($i . '-cijena',$_POST[$i . '-cijena']);
-            $articleArgs[$i]['kolicina'] = Sanitize::sanitizeString($_POST[$i . '-kolicina']);
-            Validate::validateNumber($i . '-kolicina',$_POST[$i . '-kolicina']);
-            $articleArgs[$i]['rabat'] = Sanitize::sanitizeString($_POST[$i . '-rabat']);
-            Validate::validateNumber($i . '-rabat',$_POST[$i . '-rabat']);
-            $articleArgs[$i]['ukupno'] = Sanitize::sanitizeString(substr($_POST[$i . '-ukupno'], 0, -2));
-            Validate::validateNumber($i . '-ukupno',$articleArgs[$i]['ukupno']);
-            if(isset($_POST[$i . '-pdv'])) {
-                $articleArgs[$i]['pdv'] = Sanitize::sanitizeString(substr($_POST[$i . '-pdv'], 0, -2));
-                Validate::validateNumber($i . '-pdv',$articleArgs[$i]['pdv']);
-                $articleArgs[$i]['bezPdv'] = Sanitize::sanitizeString(substr($_POST[$i . '-bezPdv'], 0, -2));
-                Validate::validateNumber($i . '-bezPdv',$articleArgs[$i]['bezPdv']);
+        // $i = 1;
+        // while(isset($_POST[$i . '-imeArtikla'])) {
+        foreach($_POST as $key => $value) {
+            if(strpos($key, '-imeArtikla') && !strpos($key, 'none')) {
+                $i = explode('-', $key)[0];
+                $articleArgs[$i]['ime'] = Sanitize::sanitizeString($_POST[$i . '-imeArtikla']);
+                Validate::validateString($i . '-imeArtikla',$_POST[$i . '-imeArtikla']);
+                $articleArgs[$i]['cijena'] = Sanitize::sanitizeString($_POST[$i . '-cijena']);
+                Validate::validateNumber($i . '-cijena',$_POST[$i . '-cijena']);
+                $articleArgs[$i]['kolicina'] = Sanitize::sanitizeString($_POST[$i . '-kolicina']);
+                Validate::validateNumber($i . '-kolicina',$_POST[$i . '-kolicina']);
+                $articleArgs[$i]['rabat'] = Sanitize::sanitizeString($_POST[$i . '-rabat']);
+                Validate::validateNumber($i . '-rabat',$_POST[$i . '-rabat']);
+                $articleArgs[$i]['ukupno'] = Sanitize::sanitizeString(substr($_POST[$i . '-ukupno'], 0, -2));
+                Validate::validateNumber($i . '-ukupno',$articleArgs[$i]['ukupno']);
+                if(isset($_POST[$i . '-pdv'])) {
+                    $articleArgs[$i]['pdv'] = Sanitize::sanitizeString(substr($_POST[$i . '-pdv'], 0, -2));
+                    Validate::validateNumber($i . '-pdv',$articleArgs[$i]['pdv']);
+                    $articleArgs[$i]['bezPdv'] = Sanitize::sanitizeString(substr($_POST[$i . '-bezPdv'], 0, -2));
+                    Validate::validateNumber($i . '-bezPdv',$articleArgs[$i]['bezPdv']);
+                }
+                if(isset($_POST[$i . '-idArtikla'])) {
+                    $newArticleArgs[$i]['ime'] = Sanitize::sanitizeString($_POST[$i . '-imeArtikla']);
+                    $newArticleArgs[$i]['cijena'] = Sanitize::sanitizeString($_POST[$i . '-cijena']);
+                    $newArticleArgs[$i]['idArtikla'] = Sanitize::sanitizeString($_POST[$i . '-idArtikla']);
+                    $newArticleArgs[$i]['firmaId'] = Sanitize::sanitizeString($args['firmaId']);
+                    $newArticleArgs[$i]['opis'] = '';
+                    $newArticleArgs[$i]['userId'] = Sanitize::sanitizeString($_SESSION['id']);
+                }
+                // $i++;
             }
-            if(isset($_POST[$i . '-idArtikla'])) {
-                $newArticleArgs[$i]['ime'] = Sanitize::sanitizeString($_POST[$i . '-imeArtikla']);
-                $newArticleArgs[$i]['cijena'] = Sanitize::sanitizeString($_POST[$i . '-cijena']);
-                $newArticleArgs[$i]['idArtikla'] = Sanitize::sanitizeString($_POST[$i . '-idArtikla']);
-                $newArticleArgs[$i]['firmaId'] = Sanitize::sanitizeString($args['firmaId']);
-                $newArticleArgs[$i]['opis'] = '';
-                $newArticleArgs[$i]['userId'] = Sanitize::sanitizeString($_SESSION['id']);
-            }
-            $i++;
         }
 
         $error = Message::getError();

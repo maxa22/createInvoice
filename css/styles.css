@@ -591,6 +591,9 @@ td.pdf-invoice-first {
 .flex-column {
   flex-direction: column;
 }
+.w-5 {
+  width: 5%;
+}
 .w-10 {
   width: 10%;
 }
@@ -608,6 +611,9 @@ td.pdf-invoice-first {
 }
 .w-30 {
   width: 30%;
+}
+.w-35 {
+  width: 35%;
 }
 .w-40 {
   width: 40%;
