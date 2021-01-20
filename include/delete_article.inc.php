@@ -12,20 +12,19 @@
         $id = Sanitize::sanitizeString($id);
         $error = Message::getError();
         if($error) {
-            header('Location: ../articles/' . $firmId);
+            echo json_encode($error);
             exit();
         }
-        $billArguments = Bill::findById($id);
-        if($billArguments['userId'] != $_SESSION['id']) {
-            header('Location: ../firms');
+        $articleArguments = InvoiceArticle::findById($id);
+        $invoice = Invoice::findById($articleArguments['fakturaId']);
+
+        if($invoice['userId'] != $_SESSION['id']) {
+            echo json_encode(array('error'=> 'Nemate odoborenje za ovu radnju'));
             exit();
         }
-        $bill = new Bill($billArguments);
-        $bill->delete();
-        if($bill->slika) {
-            unlink('../images/' . $bill->slika);
-        }
-        header('Location: ../bills');
+        $article = new InvoiceArticle($articleArguments);
+        $article->delete();
+        echo json_encode($error);
         exit();
     } else {
         header('Location: ../index');

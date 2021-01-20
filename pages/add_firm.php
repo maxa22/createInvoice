@@ -3,6 +3,8 @@
         header('Location: login');
         exit();
     }
+    require_once('section/town_array.php');
+    require_once('section/bank_list.php');
 ?>
 <main>
 <div class="wrapper">
@@ -76,8 +78,13 @@
             <span class="registration-form__error"></span>
         </div>
         <div class="mb-s">
-            <label for="banka">Ime banke</label>
-            <input type="text" name="banka" id="banka" class="form__input">
+            <label for="banka">Banka</label>
+            <select name="banka" id="banka" class="form__input">
+                <option value=""></option>
+                <?php foreach($bankArray as $bank) { ?>
+                    <option value="<?php echo $bank ?>"><?php echo $bank ?></option>
+                <?php } ?>
+            </select>
             <span class="registration-form__error"></span>
         </div>
         <p class="success-message mb-xs text-center"></p>
@@ -87,4 +94,4 @@
 </div>
 </main>
 
-<script src="<?php base(); ?>javascript/add_firm.js"></script>
+<!-- <script src="<?php base(); ?>javascript/add_firm.js"></script> -->

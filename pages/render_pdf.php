@@ -37,8 +37,14 @@ if($invoice['userId'] !== $_SESSION['id']) {
     exit();
 }
 
+if($invoice['fiskalni']) {
+    $bill = Bill::findById($invoice['fiskalni']);
+    $billDate = strtotime($bill['datum']);
+    $billDate = date('d.m.Y', $billDate);
+}
 $firm = Firm::findById($invoice['firmaId']);
 $client = Client::findById($invoice['kupacId']);
+
 
 $date = strtotime($invoice['datum']);
 $datum = date('d.m.Y', $date);
@@ -50,13 +56,36 @@ if($firm['logo']) {
     $data = file_get_contents($path);
     $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
 }
+if(isset($bill)) {
+    $path = base() . 'images/' . $bill['slika'];
+    $type = pathinfo($path, PATHINFO_EXTENSION);
+    $data = file_get_contents($path);
+    $fiskalniImage = 'data:image/' . $type . ';base64,' . base64_encode($data);
+}
 
 $pdfName = $firm['ime'] . '-' . $invoice['broj'] . '-' . $datum;
 $pdfName = str_replace(' ', '_', $pdfName); 
 $pdfName = str_replace(['/', '?'], '', $pdfName);
 
 $articles = InvoiceArticle::findAllByQuery('fakturaId', $id);
+$articlesWithDescription = array();
 
+for($redniBroj = 0; $redniBroj < count($articles); $redniBroj++) {
+    $foundArticle = Article::findAllByQuery2('ime', $articles[$redniBroj]['ime'], 'userId', $invoice['userId']);
+    if($foundArticle['opis']) {
+        $articlesWithDescription[$redniBroj] = $foundArticle;
+        $articlesWithDescription[$redniBroj]['redniBroj'] = $redniBroj + 1;
+    }
+}
+
+
+$popust = 0;
+foreach($articles as $article) {
+    if($article['rabat'] != '0') {
+        $popust += 1;
+        break;
+    }
+}
 
 ob_start();
 ?>
@@ -142,6 +171,9 @@ td.pdf-invoice-first {
 .pdf-total-info td {
   padding: 0 5px;
 }
+.text-center {
+    text-align: center;
+}
 .text-left {
     text-align: left;
 }
@@ -151,6 +183,19 @@ td.pdf-invoice-first {
 .w-30 {
     width: 30%;
 }
+.mb-s {
+    margin-bottom: 20px;
+}
+.mb-m {
+    margin-bottom: 40px;
+}
+.page-break {
+    page-break-before: always;
+}
+.fiskalni__image {
+    max-height: 300px;
+    max-width: 90%;
+}
 </style>
 <div class="pdf-header">
     <div class="pdf-header__logo">
@@ -159,15 +204,31 @@ td.pdf-invoice-first {
         <?php } ?>
     </div>
     <div class="pdf-header__info">
-        <p><?php echo $firm['ime']; ?></p>
+        <p>Firma: <?php echo $firm['ime']; ?></p>      
         <?php if($firm['adresa']) { ?>
-            <p><?php echo $firm['adresa']; ?></p>
-        <?php } ?>
-        <?php if($firm['jib']) { ?>
-            <p><?php echo $firm['jib']; ?></p>
+            <p>Adresa: <?php echo $firm['adresa']; ?>
+            <?php if($firm['mjesto']) { ?>
+                <?php echo ', ' . $firm['mjesto']; ?>
+            <?php } ?>
+            </p>
         <?php } ?>
         <?php if($firm['telefon']) { ?>
-            <p><?php echo $firm['telefon']; ?></p>
+            <p>Telefon: <?php echo $firm['telefon']; ?></p>
+        <?php } ?>
+        <?php if($firm['email']) { ?>
+            <p>Email: <?php echo $firm['email']; ?></p>
+        <?php } ?>
+        <?php if($firm['jib']) { ?>
+            <p>JIB: <?php echo $firm['jib']; ?></p>
+        <?php } ?>
+        <?php if($firm['pib']) { ?>
+            <p>PIB: <?php echo $firm['pib']; ?></p>
+        <?php } ?>
+        <?php if($firm['racun']) { ?>
+            <p>TR: <?php echo $firm['racun'] ?></p>
+            <?php if($firm['banka']) { ?>
+                <p>Banka: <?php echo $firm['banka']; ?></p>
+            <?php } ?>
         <?php } ?>
     </div>
 </div>
@@ -181,13 +242,29 @@ td.pdf-invoice-first {
 <div class="pdf-client-info">
     <p>Klijent: <?php echo $client['ime'] ?></p>
     <?php if($client['adresa']) { ?>
-        <p>Adresa: <?php echo $client['adresa']; ?></p>
+        <p>Adresa: <?php echo $client['adresa']; ?>
+            <?php if($client['mjesto']) { ?>
+                <?php echo ', ' . $client['mjesto']; ?>
+            <?php } ?>
+        </p>
+    <?php } ?>
+    <?php if($client['telefon']) { ?>
+        <p>Telefon: <?php echo $client['telefon']; ?></p>
+    <?php } ?>
+    <?php if($client['email']) { ?>
+        <p>Email: <?php echo $client['email']; ?></p>
     <?php } ?>
     <?php if($client['jib']) { ?>
         <p>JIB: <?php echo $client['jib']; ?></p>
     <?php } ?>
-    <?php if($client['telefon']) { ?>
-        <p>Telefon: <?php echo $client['telefon']; ?></p>
+    <?php if($client['pib']) { ?>
+        <p>PIB: <?php echo $client['pib']; ?></p>
+    <?php } ?>
+    <?php if($client['racun']) { ?>
+        <p>Račun: <?php echo $client['racun']; ?></p>
+        <?php if($client['banka']) { ?>
+            <p>Banka: <?php echo $firm['banka']; ?></p>
+        <?php } ?>
     <?php } ?>
 </div>
 <div class="pdf-invoice-number">
@@ -199,7 +276,9 @@ td.pdf-invoice-first {
         <td class="text-left w-30">Naziv robe</td>
         <td>Količina</td>
         <td>Cijena</td>
-        <td>Popust</td>
+        <?php if($popust > 0) { ?>
+            <td>Popust</td>
+        <?php } ?>
         <?php if($firm['pdv'] == '1') { ?>
             <td>Ukupno bez PDV</td>
             <td>PDV</td>
@@ -218,7 +297,9 @@ td.pdf-invoice-first {
         <td class="text-left w-30"><?php echo $article['ime']; ?></td>
         <td><?php echo $article['kolicina']; ?></td>
         <td><?php echo $article['cijena']; ?>KM</td>
-        <td><?php echo $article['rabat']; ?>%</td>
+        <?php if($popust > 0) { ?>
+            <td><?php echo $article['rabat']; ?>%</td>
+        <?php } ?>
         <?php if($firm['pdv'] == '1') { ?>
             <td><?php echo $article['bezPdv']; ?>KM</td>
             <td><?php echo $article['pdv']; ?>KM</td>
@@ -249,10 +330,31 @@ td.pdf-invoice-first {
     <?php }?>
     <tr>
         <td>Ukupno:</td>
-        <td class="text-right" {><?php echo sprintf("%.2f", $ukupno) . 'KM'; ?></td>
+        <td class="text-right" ><?php echo sprintf("%.2f", $ukupno) . 'KM'; ?></td>
     </tr>
-</tab }le>
+</table>
 </div>
+<?php if($invoice['fiskalni']) { ?>
+<div class="page-break"></div>
+<div class="fiskalni">
+    <h2 class="mb-m text-center">Fiskalni račun</h2>
+    <p class="mb-s">Broj fiskalnog računa: <?php echo $bill['broj']; ?></p>
+    <p class="mb-s">Datum fiskalnog računa: <?php echo $billDate; ?></p>
+    <img src="<?php echo $fiskalniImage; ?>" class="fiskalni__image" alt="">
+</div>
+<?php } ?>
+<?php if($invoice['fiskalni']) { ?>
+<div class="page-break"></div>
+<h2 class="mb-m text-center">Opisi artikala</h2>
+<?php foreach($articlesWithDescription as $article) { ?>
+<div class="article-description mb-s">
+    <p class="mb-s">Redni broj artikla: <?php echo $article['redniBroj']; ?></p>
+    <p class="mb-s">Naziv artikla: <?php echo $article['ime']; ?></p>
+    <p class="mb-s">Opis artikla: <?php echo $article['opis']; ?></p>
+</div>
+<?php } ?>
+<?php } ?>
+
 <?php 
 $html = ob_get_clean();
 

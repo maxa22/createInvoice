@@ -30,7 +30,7 @@
                 Message::addError($key, 'Polje ne smije biti prazno');
                 return;
             }
-            if(!preg_match('/^[a-zA-Z\p{L}0-9\-\/\s\.\?]*$/u', $string)) {
+            if(!preg_match('/^[a-zA-Z\p{L}0-9\-\/\s,\.\?]*$/u', $string)) {
                 Message::addError($key, 'Polje može da sadrži slova, brojeve, razmake i specijalne karaktere . / ? -');
                 return;
             }

@@ -29,6 +29,13 @@ $datum = date('d.m.Y', $date);
 $rok = strtotime($invoice['rok']);
 $rok = date('d.m.Y', $rok);
 $articles = InvoiceArticle::findAllByQuery('fakturaId', $id);
+$popust = 0;
+foreach($articles as $article) {
+    if($article['rabat'] != '0') {
+        $popust += 1;
+        break;
+    }
+}
 ?>
 
 <main>
@@ -43,15 +50,32 @@ $articles = InvoiceArticle::findAllByQuery('fakturaId', $id);
                 <?php } ?>
             </div>
             <div class="pdf-header__info">
-                <p><?php echo $firm['ime']; ?></p>
+                <p>Firma: <?php echo $firm['ime']; ?></p>
+                
                 <?php if($firm['adresa']) { ?>
-                    <p>Adresa: <?php echo $firm['adresa']; ?></p>
+                    <p>Adresa: <?php echo $firm['adresa']; ?>
+                    <?php if($firm['mjesto']) { ?>
+                        <?php echo ', ' . $firm['mjesto']; ?>
+                    <?php } ?>
+                </p>
+                <?php } ?>
+                <?php if($firm['telefon']) { ?>
+                    <p>Telefon: <?php echo $firm['telefon']; ?></p>
+                <?php } ?>
+                <?php if($firm['email']) { ?>
+                    <p>Email: <?php echo $firm['email']; ?></p>
                 <?php } ?>
                 <?php if($firm['jib']) { ?>
                     <p>JIB: <?php echo $firm['jib']; ?></p>
                 <?php } ?>
-                <?php if($firm['telefon']) { ?>
-                    <p>Telefon: <?php echo $firm['telefon']; ?></p>
+                <?php if($firm['pib']) { ?>
+                    <p>PIB: <?php echo $firm['pib']; ?></p>
+                <?php } ?>
+                <?php if($firm['racun']) { ?>
+                    <p>TR: <?php echo $firm['racun'] ?></p>
+                    <?php if($firm['banka']) { ?>
+                        <p>Banka: <?php echo $firm['banka']; ?></p>
+                    <?php } ?>
                 <?php } ?>
             </div>
         </div>
@@ -65,13 +89,29 @@ $articles = InvoiceArticle::findAllByQuery('fakturaId', $id);
         <div class="pdf-client-info">
             <p>Klijent: <?php echo $client['ime'] ?></p>
             <?php if($client['adresa']) { ?>
-                <p>Adresa: <?php echo $client['adresa']; ?></p>
+                <p>Adresa: <?php echo $client['adresa'] ?>
+                <?php if($client['mjesto']) { ?>
+                    <?php echo ', ' . $client['mjesto']; ?>
+                <?php } ?>
+                </p>
+            <?php } ?>
+            <?php if($client['telefon']) { ?>
+                <p>Telefon: <?php echo $client['telefon']; ?></p>
+            <?php } ?>
+            <?php if($client['email']) { ?>
+                <p>Email: <?php echo $client['email']; ?></p>
             <?php } ?>
             <?php if($client['jib']) { ?>
                 <p>JIB: <?php echo $client['jib']; ?></p>
             <?php } ?>
-            <?php if($client['telefon']) { ?>
-                <p>Telefon: <?php echo $client['telefon']; ?></p>
+            <?php if($client['pib']) { ?>
+                <p>PIB: <?php echo $client['pib']; ?></p>
+            <?php } ?>
+            <?php if($client['racun']) { ?>
+                <p>Račun: <?php echo $client['racun']; ?></p>
+                <?php if($client['banka']) { ?>
+                    <p>Banka: <?php echo $firm['banka']; ?></p>
+                <?php } ?>
             <?php } ?>
         </div>
         <div class="pdf-invoice-number">
@@ -83,7 +123,9 @@ $articles = InvoiceArticle::findAllByQuery('fakturaId', $id);
                 <td class="text-left w-30">Naziv robe</td>
                 <td>Količina</td>
                 <td>Cijena</td>
-                <td>Popust</td>
+                <?php if($popust > 0) { ?>
+                    <td>Popust</td>
+                <?php } ?>
                 <?php if($firm['pdv'] == '1') { ?>
                     <td>Ukupno bez PDV</td>
                     <td>PDV</td>
@@ -102,7 +144,9 @@ $articles = InvoiceArticle::findAllByQuery('fakturaId', $id);
                 <td class="text-left w-30"><?php echo $article['ime']; ?></td>
                 <td><?php echo $article['kolicina']; ?></td>
                 <td><?php echo $article['cijena']; ?>KM</td>
-                <td><?php echo $article['rabat']; ?>%</td>
+                <?php if($popust > 0) { ?>
+                    <td><?php echo $article['rabat']; ?>%</td>
+                <?php } ?>
                 <?php if($firm['pdv'] == '1') { ?>
                     <td><?php echo $article['bezPdv']; ?>KM</td>
                     <td><?php echo $article['pdv']; ?>KM</td>

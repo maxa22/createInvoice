@@ -23,4 +23,4 @@
     </form>
 </div>
 </div>
-<script src="<?php base(); ?>javascript/login.js"></script>
+<!-- <script src="<?php base(); ?>javascript/login.js"></script> -->

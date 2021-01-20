@@ -1,27 +1,19 @@
 let articles = '';
 let pdv = '';
-window.addEventListener('DOMContentLoaded', () => {
-    formDataTwo = new FormData();
-    formDataTwo.append('submit', '');
-    let firmId = document.getElementById('firma').value;
-    formDataTwo.append('id', firmId);
-    urlTwo = '../include/get_articles.inc.php';
-    postData(urlTwo, formDataTwo)
-    .then(result => {
-        articles = result;
-        let articleOptions = document.querySelectorAll('.imeArtikla');
-        for(let articleOption of articleOptions) {
-            articleOption.innerHTML += displayArticleOptions(result);
-        }
-    });
+let firma = document.getElementById('firma');
+let ukupnoBezPdv = document.querySelector('.ukupnoBezPdv');
+let ukupnoPDV = document.querySelector('.ukupnoPDV');
+let ukupnoSve = document.querySelector('.ukupnoSve');
 
-    let url = '../include/get_firm.inc.php?id=' + document.getElementById('firma').value;
-    getData(url)
-    .then(result => {
-        pdv = result['pdv'];
-    });
+url = '../include/get_articles.inc.php';
+fetchArticlesForCurrentUser(url);
+let firmId = firma.value;
+let urlTwo = '../include/get_firm.inc.php?id=' + firmId;
+getData(urlTwo)
+.then(result => {
+    pdv = result['pdv'];
+    setTotalValues();
 });
-
 
 let articleContainer = document.getElementById('articles');
 
@@ -37,24 +29,17 @@ articleContainer.addEventListener('click', e => {
             ev.stopImmediatePropagation();
             if(ev.target.value == 'noviArtikal') {
                 // if user selects noviArtikal disable select and enable input fields
-                let parent = ev.currentTarget.parentElement;
-                let inputFields = parent.querySelectorAll('input');
-                let selectField = parent.querySelector('select');
-                for(let inputField of inputFields) {
-                    inputField.style.display = 'unset';
-                    inputField.removeAttribute('disabled');
+                let articleModal = document.querySelector('.modal-overlay-article');
+                articleModal.classList.add('active');
+                let articleFirm = document.getElementById('firma-artikla');
+                if(firma.value !== '' && firma.value !== 'dodajFirmu') {
+                    createAndSelectNewOption(firma.value, firma.options[firma.selectedIndex].text, articleFirm);
                 }
-                inputFields[0].focus();
-                inputFields[0].parentElement.parentElement.classList.add('m-w-200');
-                selectField.style.display = 'none';
-                selectField.setAttribute('disabled', 'true');
-                inputs[2].value = '';
-                inputs[3].value = '';
             } else {
                 for(let item of articles) {
                     if(item['ime'] == ev.target.value) {
-                        inputs[2].value = item['cijena'];
-                        inputs[3].focus();
+                        inputs[0].value = item['cijena'];
+                        inputs[1].focus();
                         break;
                     }
                 }
@@ -63,25 +48,81 @@ articleContainer.addEventListener('click', e => {
 
         });
     }
-    if(e.target.classList.contains('remove')) {
-        let inputFieldsContainer =  e.target.parentElement;
-        inputFieldsContainer.style.display = 'none';
-        let imeArtiklaInput = inputFieldsContainer.querySelectorAll('.imeArtikla');
-        for(let imeArtikla of imeArtiklaInput) {
-            imeArtikla.name += '-none';
-        }
-        settingTotalValues();
-    }
+
     if(e.target.classList.contains('remove-icon')) {
-        let inputFieldsContainer = e.target.parentElement.parentElement;
-        inputFieldsContainer.style.display = 'none';
-        let imeArtiklaInput = inputFieldsContainer.querySelectorAll('.imeArtikla');
-        for(let imeArtikla of imeArtiklaInput) {
-            imeArtikla.name += '-none';
+        let inputFieldsContainer = e.target.parentElement;
+        const deleteArticles = inputFieldsContainer.querySelectorAll('.deleteArticle');
+        removeArticlesModal(inputFieldsContainer);
+        for(let deleteArticle of deleteArticles) {
+            deleteArticle.addEventListener('click', event => {
+                event.preventDefault();
+                let url = event.currentTarget.getAttribute('href');
+                let modal = event.currentTarget.parentElement.parentElement.parentElement;
+                getData(url)
+                .then(result => {
+                    if(!result) {
+                        inputFieldsContainer.remove();
+                        modal.classList.remove('active');
+                        setTotalValues();
+                    } else {
+                        modal.classList.remove('active');
+                        setTotalValues();
+                    }
+                });
+            });
         }
-        settingTotalValues()
+        setTotalValues();
     }
 });
+
+
+
+// #########################
+// ADD ARTICLE FORM
+// #########################
+
+const newArticleForm = document.getElementById('newArticle');
+
+newArticleForm.addEventListener('submit', e =>{
+    e.preventDefault();
+    let formData = new FormData(newArticleForm);
+    formData.append('submit', '');
+    const url = '../include/articles.inc.php';
+    let inputs = newArticle.querySelectorAll('input, select');
+    let errorArray = [];
+    isEmpty(inputs, errorArray);
+    if(errorArray.length < 1) {
+        postData(url, formData)
+        .then(result => {
+            if(!result) {
+                showSuccessMessage(newArticleForm);
+                const articles = document.querySelectorAll('.imeArtikla');
+                let option = document.createElement('option');
+                let optionValue = newArticleForm.querySelector('#ime-artikla').value;
+                let optionPriceValue = newArticleForm.querySelector('#cijena-artikla').value;
+                option.value = optionValue;
+                option.innerHTML = optionValue;
+                for(let article of articles) {
+                    if(article.value == 'noviArtikal') {
+                        article.add(option, article[0]);
+                        let price = article.parentElement.parentElement.querySelector('.cijena');
+                        price.value = optionPriceValue;
+                        article.selectedIndex = 0;
+                        break;
+                    }
+                }
+                setTimeout(function() {
+                    hideSuccessMessage(newArticleForm);
+                    document.querySelector('.modal-overlay-article').classList.remove('active');
+                }, 1000);
+            } else {
+                showErrorsFromServerOnSubmit(result, newArticleForm);
+            }
+        });
+    }
+});
+
+
 
 
 // ##################
@@ -89,14 +130,6 @@ articleContainer.addEventListener('click', e => {
 // LISTENING FOR CHANGE EVENT IN FIELDS RABAT, KOLICINA, CIJENA
 // ##################
 
-let ukupnoBezPdv = document.querySelector('.ukupnoBezPdv');
-let ukupnoPDV = document.querySelector('.ukupnoPDV');
-let ukupnoSve = document.querySelector('.ukupnoSve');
-ukupnoSve.innerHTML = getTotalValue();
-if(ukupnoBezPdv) {
-    ukupnoBezPdv.innerHTML = getTotalWithoutTaxes();
-    ukupnoPDV.innerHTML = getTotalTax();
-}
 
 articleContainer.addEventListener('input', e => {
     // change event on price, quantity
@@ -108,76 +141,14 @@ articleContainer.addEventListener('input', e => {
 });
 
 
+let numberOfArticles = document.querySelectorAll('.articlesNumber').length;
 let addArticle = document.querySelector('.add');
 
 addArticle.addEventListener('click', e => {
     e.preventDefault();
-    let div = document.createElement('div');
-    div.classList.add('d-flex');
-    div.classList.add('articlesNumber');
-    div.classList.add('m-w-100');
-    div.classList.add('m-flex-column');
-    div.classList.add('m-card');
-    div.classList.add('m-mb-m');
-    let container = document.getElementById('articles');
-    let numberOfArticles = container.querySelectorAll('.articlesNumber').length + 1;
-    
-    div.innerHTML = `
-        <div class="w-30 border relative m-d-flex m-w-100">
-            <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Naziv</span>
-            <div class="d-flex"> 
-                <div> 
-                    <input type="text" name="${numberOfArticles}-idArtikla" disabled class="w-100 form__input p-xs border-none border-right d-none h-100 imeArtikla" placeholder="Šifra">
-                    <span class="registration-form__error"></span>
-                </div>
-                <div> 
-                    <input type="text" name="${numberOfArticles}-imeArtikla-new" disabled class="w-100 form__input p-xs border-none d-none h-100 imeArtikla" placeholder="Naziv">
-                    <span class="registration-form__error"></span>
-                </div>
-            </div>
-            <select id="${numberOfArticles}-artikli" name="${numberOfArticles}-imeArtikla-new" class="dropdown w-100 p-xs form__input border-none h-100 imeArtikla">
-                ${displayNewArticleOptions(articles)}
-            </select>
-            <span class="registration-form__error"></span>
-        </div>
-        <div class="w-10 border relative m-d-flex m-w-100">
-            <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Cijena</span>
-            <input type="number" name="${numberOfArticles}-cijena" step="0.01" class="w-100 p-xs form__input cijena border-none h-100">
-            <span class="registration-form__error"></span>
-        </div>
-        <div class="w-10 border relative m-d-flex m-w-100">
-            <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Količina</span>
-            <input type="number" name="${numberOfArticles}-kolicina" step="0.01" class="w-100 p-xs form__input kolicina border-none h-100" >
-            <span class="registration-form__error"></span>
-        </div>
-        <div class="w-10 border m-d-flex m-w-100">
-            <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Rabat</span>
-            <select name="${numberOfArticles}-rabat" class="w-100 p-xs form__input border-none rabat h-100 rabat">
-                <option value="0" selected>0%</option>
-                ${displayOptionsBetweenOneAndHundred()}
-            </select>
-            <span class="registration-form__error"></span>
-        </div>
-        <div class="w-15 border m-d-flex m-w-100">
-            <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Cijena bez PDV</span>
-            <input type="text" name="${numberOfArticles}-bezPdv" ${pdv == '1' ? '' : 'disabled'} class="w-100 p-xs form__input border-none h-100 bezPDV" >
-            <span class="registration-form__error"></span>
-        </div>
-        <div class="w-10 border m-d-flex m-w-100">
-            <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">PDV</span>
-            <input type="text" name="${numberOfArticles}-pdv" ${pdv == '1' ? '' : 'disabled'} class="w-100 p-xs border-none form__input h-100 PDV" >
-            <span class="registration-form__error"></span>
-        </div>
-        <div class="w-10 border m-d-flex m-w-100">
-            <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Ukupno</span>
-            <input type="text" name="${numberOfArticles}-ukupno" class="w-100 p-xs border-none form__input h-100 ukupno" >
-            <span class="registration-form__error"></span>
-        </div>
-        <div class="w-5 border remove d-flex jc-c ai-c m-d-flex pointer m-p-xs m-w-100">
-            <i class="fas fa-times remove-icon"></i>
-        </div>
-    `;
-    container.append(div);
+    ++numberOfArticles;
+    let div = createArticleDiv();
+    articleContainer.append(div);
 });
 
 
@@ -195,33 +166,13 @@ invoiceForm.addEventListener('submit', e => {
         postData(url, formData)
         .then(result => {
             if(!result) {
-                document.querySelector('.success-message').innerHTML = 'Uspješno izmijenjeno';
-                document.querySelector('.success-message').style.padding = '0.5rem 1rem';
+               showSuccessMessage(invoiceForm);
                 setTimeout(function() {
-                    document.querySelector('.success-message').innerHTML = '';
-                    document.querySelector('.success-message').style.padding = '0';
+                    hideSuccessMessage(invoiceForm);
                     window.location.href = '../invoices';
                 }, 1000);
             } else {
-                let errorMessages = document.querySelectorAll('.registration-form__error');
-                for(let errorMessage of errorMessages) {
-                    errorMessage.innerHTML = '';
-                }
-                let container = document.getElementById('articles');
-                let articleInputs = container.querySelectorAll('input');
-                for(let articleInput of articleInputs) {
-                    articleInput.classList.add('h-100');
-                }
-                let inputs = document.querySelectorAll('input');
-                for(let input of inputs) {
-                    input.style.borderColor = '#ced4da';
-                }
-                for(const [key, value] of Object.entries(result)) {
-                    field =    document.querySelector(`input[name="${key}"]`);
-                    field.style.borderColor = '#a94442';
-                    field.classList.remove('h-100');
-                    field.parentElement.querySelector('.registration-form__error').innerHTML = value;
-                }
+                showErrorsFromServerOnSubmit(result, invoiceForm);
             }
         });
     }
@@ -229,7 +180,6 @@ invoiceForm.addEventListener('submit', e => {
 
 
 
-let firma = document.getElementById('firma');
 
 firma.addEventListener('change', e => {
     if(e.currentTarget.value !== '') {
@@ -238,17 +188,9 @@ firma.addEventListener('change', e => {
         .then(result => {
             pdv = result['pdv'];
             if(result['pdv'] === '0') {
-                let bezPDV = document.querySelectorAll('.bezPDV');
-                for(let bez of bezPDV) {
-                    bez.value = '';
-                }
-                setAttributeDisabled(bezPDV);
-                let pdvs = document.querySelectorAll('.PDV');
-                for(let pdv of pdvs) {
-                    pdv.value = '';
-                }
-                setAttributeDisabled(pdvs);
-                hiddingTotalsNotUsed();
+                disablePdvAndRemoveValue();
+                disableBezPdvAndRemoveValue()
+                hideTotalsNotUsed();
             } else {
                 showTotals();
                 setTaxesAndPriceWithoutTaxes();
@@ -259,15 +201,73 @@ firma.addEventListener('change', e => {
             }
         });
     }
-    let url2 = '../include/get_articles.inc.php';
-    let formData = new FormData();
-    formData.append('submit', '');
-    formData.append('id', e.currentTarget.value);
-    postData(url2, formData)
-    .then(result => {
-        articles = result;
-    });
+    fetchArticlesForCurrentUser('../include/get_articles.inc.php');
 });
+
+
+
+// ##############################
+// ADD BILL
+// ##############################
+
+let addNewBill = document.getElementById('fiskalni');
+
+addNewBill.addEventListener('change', e => {
+    if(addNewBill.value == 'dodajFiskalni') {
+        let billModal = document.querySelector('.modal-overlay-bill');
+        billModal.classList.add('active');
+    }
+});
+
+let addBillForm = document.getElementById('add-bill-form');
+
+addBillForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const url = '../include/add_bill.inc.php';
+    insertDataToDatabase(url, addBillForm, addNewBill);
+}); 
+
+// ################################
+// INVOICE TYPE
+// #################################
+let selectInvoiceType = document.getElementById('tip');
+
+selectInvoiceType.addEventListener('change', e => {
+    checkType(selectInvoiceType);
+});
+
+checkType(selectInvoiceType);
+
+let cancelButtons = document.querySelectorAll('.cancel');
+const modalArticle = document.querySelector('.modal-overlay-article');
+const modalFirm = document.querySelector('.modal-overlay-firm');
+const modalClient = document.querySelector('.modal-overlay-client');
+const modalBill = document.querySelector('.modal-overlay-bill');
+
+for(let cancel of cancelButtons) {
+    cancel.addEventListener('click', e => {
+        e.preventDefault();
+         if(modalBill.classList.contains('active')) {
+            modalBill.classList.remove('active');
+            addNewBill.selectedIndex = 0;
+        } else {
+            modalArticle.classList.remove('active');
+            let articles = document.querySelectorAll('.imeArtikla');
+            for(let article of articles) {
+                if(article.value == 'noviArtikal') {
+                    article.selectedIndex = 0;
+                }
+            }
+        }
+    });
+}
+
+// ### IMAGE PREVIEW ###
+
+const fileUploads = document.querySelectorAll('.form__input-file');
+showImagePreviewOnChange(fileUploads);
+
+
 
 function isEmpty(inputs, errorArray) {
     let container = document.getElementById('articles');
@@ -315,7 +315,7 @@ function displayOptionsBetweenOneAndHundred(){
     return list;
 }
 
-function displayArticleOptions(articles) {
+function displayArticleOptionsOnFirmChange(articles) {
     list = '<option value="noviArtikal"> Dodajte novi artikal </option>';
     for(let item of articles) {
         list += `<option value="${item['ime']}"> ${item['ime']} </option>`;
@@ -323,9 +323,17 @@ function displayArticleOptions(articles) {
     return list;
 }
 
-function displayNewArticleOptions(articles) {
+function displayArticleOptions(articles) {
     list = '<option value="">Izaberite artikal</option>';
     list += '<option value="noviArtikal"> Dodajte novi artikal </option>';
+    for(let item of articles) {
+        list += `<option value="${item['ime']}"> ${item['ime']} </option>`;
+    }
+    return list;
+}
+
+function displayArticleOptionsOnFirmChange() {
+    list = '<option value="noviArtikal"> Dodajte novi artikal </option>'
     for(let item of articles) {
         list += `<option value="${item['ime']}"> ${item['ime']} </option>`;
     }
@@ -427,7 +435,7 @@ function getTotalWithoutTaxes() {
     return total;
 }
 
-function settingTotalValues() {
+function setTotalValues() {
     ukupnoSve.innerHTML = getTotalValue();
     if(pdv != '0') {
         ukupnoPDV.parentElement.style.display = 'flex';
@@ -453,7 +461,7 @@ function setValueForRowTotal(container) {
                 let bezPDV = container.querySelector('.bezPDV');
                 let bezPDVValue = (ukupnoValue - pdvValue).toFixed(2);
                 bezPDV.value = bezPDVValue + 'KM';
-                settingTotalValues();
+                setTotalValues();
             } else {
                 let bezPDV = container.querySelector('.bezPDV');
                 bezPDV.value = '';
@@ -463,4 +471,227 @@ function setValueForRowTotal(container) {
                 hiddingTotalsNotUsed();
             }
         }
+}
+
+function showErrorsFromServerOnSubmit(result, form) {
+    let errorMessages = document.querySelectorAll('.registration-form__error');
+    for(let errorMessage of errorMessages) {
+        errorMessage.innerHTML = '';
+    }
+    let inputs = document.querySelectorAll('input, textarea');
+    for(let input of inputs) {
+        input.style.borderColor = '#ced4da';
+    }
+    for(const [key, value] of Object.entries(result)) {
+        field =     form.querySelector(`input[name="${key}"]`) ?
+                    form.querySelector(`input[name="${key}"]`) 
+                  : form.querySelector(`select[name="${key}"]`) ?
+                    form.querySelector(`select[name="${key}"]`)
+                  : form.querySelector(`textarea[name="${key}"]`) ;
+        field.style.borderColor = '#a94442';
+        field.classList.remove('h-100');
+        field.parentElement.querySelector('.registration-form__error').innerHTML = value;
+    }
+}
+function showSuccessMessage(container) {
+    container.querySelector('.success-message').innerHTML = 'Uspješno sačuvano';
+    container.querySelector('.success-message').style.padding = '0.5rem 1rem';
+}
+
+function hideSuccessMessage(container) {
+    container.querySelector('.success-message').innerHTML = '';
+    container.querySelector('.success-message').style.padding = '0';
+}
+
+function checkType(selectInvoiceType) {
+    if(selectInvoiceType.value !== 'Faktura') {
+        addNewBill.setAttribute('disabled', 'true');
+        addNewBill.parentElement.style.display = 'none';
+    } else {
+        addNewBill.removeAttribute('disabled');
+        addNewBill.parentElement.style.display = 'block';
+    }
+}
+
+function setImage(inputField, img) {
+    img.src = URL.createObjectURL(inputField.files[0]);
+    img.onload = function() {
+        URL.revokeObjectURL(img.src);
+    }
+}
+
+
+function showImagePreviewOnChange(fileUploads) {
+    for(let fileUpload of fileUploads) {
+        fileUpload.addEventListener('change', e => {
+            const container = e.target.parentElement;
+            let img = container.querySelector('img');
+            setImage(fileUpload, img);
+        });
+    }
+}
+
+function fetchArticlesForCurrentUser(url) {
+    formData = new FormData();
+    formData.append('submit', '');
+    let firmId = document.getElementById('firma').value;
+    if(firmId != '') {
+        formData.append('id', firmId);
+    }
+    postData(url, formData)
+    .then(result => {
+        articles = result;
+        addArticleOptionsToArticleFields(result);
+    });
+}
+
+function addArticleOptionsToArticleFields(result) {
+    let articleOptions = document.querySelectorAll('.imeArtikla');
+    for(let articleOption of articleOptions) {
+        if(articleOption.value == '') {
+            articleOption.innerHTML = displayArticleOptions(result);
+        } else {
+            let currentArticleOption = `<option value="${articleOption.value}" selected>${articleOption.value}</option>`;
+            articleOption.innerHTML = currentArticleOption + displayArticleOptionsOnFirmChange(result) ;
+        }
+    }
+}
+
+
+function insertDataToDatabase(url, data, selectField) {
+    let formData = new FormData(data);
+    formData.append('submit', '');
+      postData(url, formData)
+      .then(result => {
+          if(result['success']) {
+              showSuccessMessage(data);
+              createAndSelectNewOption(result['success'], result['ime'], selectField);
+              setTimeout(function() {
+                  hideSuccessMessage(data);
+                  removeClassActive();
+              }, 1000)
+          } else {
+              showErrorsFromServerOnSubmit(result, data);
+          }
+      });
+  }
+  
+  
+  function createAndSelectNewOption (value,innerText, select) {
+    let option = document.createElement('option');
+    option.value = value;
+    option.innerHTML = innerText;
+    select.add(option, select[0]);
+    select.selectedIndex = 0;
+  }
+
+function createArticleDiv(numberOfArticles) {
+    let div = document.createElement('div');
+    div.classList.add('d-flex');
+    div.classList.add('articlesNumber');
+    div.classList.add('m-w-100');
+    div.classList.add('m-flex-column');
+    div.classList.add('m-card');
+    div.classList.add('m-mb-m');
+     
+    div.innerHTML = `
+        <div class="w-30 border relative m-d-flex m-w-100">
+            <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">Naziv</span>
+            <select id="${numberOfArticles}-artikli" name="${numberOfArticles}-imeArtikla" class="dropdown w-100 p-xs form__input border-none h-100 imeArtikla">
+            ${displayArticleOptions(articles)}
+            </select>
+            <span class="registration-form__error"></span>
+        </div>
+        <div class="w-10 border m-d-flex m-w-100">
+            <span class="w-100 d-none p-x btn-primary weight-600 d-none m-w-100 m-d-block">Cijena</span>
+            <input type="number" name="${numberOfArticles}-cijena" step="0.01" class="w-100 p-xs form__input border-none h-100 cijena">
+            <span class="registration-form__error"></span>
+        </div>
+        <div class="w-10 border m-d-flex m-w-100">
+            <span class="w-100 p-x btn-primary weight-600 d-none m-w-100 m-d-block">Količina</span>
+            <input type="number" name="${numberOfArticles}-kolicina" step="0.01" class="w-100 p-xs form__input border-none h-100 kolicina" >
+            <span class="registration-form__error"></span>
+        </div>
+        <div class="w-10 border m-d-flex m-w-100">
+            <span class="w-100 p-x btn-primary weight-600 d-none m-w-100 m-d-block">Rabat</span>
+            <select name="${numberOfArticles}-rabat" class="w-100 p-xs form__input border-none h-100 rabat">
+            <option value="0" selected>0%</option>
+            ${displayOptionsBetweenOneAndHundred()}
+            </select>
+            <span class="registration-form__error"></span>
+        </div>
+        <div class="w-15 border m-d-flex m-w-100">
+            <span class="w-100 p-x btn-primary weight-600 d-none m-w-100 m-d-block">Cijena bez PDV</span>
+            <input type="text" name="${numberOfArticles}-bezPdv" ${pdv == '1' ? '' : "disabled='true'"} class="w-100 p-xs form__input border-none h-100 bezPDV" >
+            <span class="registration-form__error"></span>
+        </div>
+        <div class="w-10 border m-d-flex m-w-100">
+            <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">PDV</span>
+            <input type="text" name="${numberOfArticles}-pdv" ${pdv == '1' ? '' : "disabled='true'"} class="w-100 p-xs border-none form__input h-100 PDV" >
+            <span class="registration-form__error"></span>
+        </div>
+        <div class="w-10 border m-d-flex m-w-100">
+            <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">Ukupno</span>
+            <input type="text" name="${numberOfArticles}-ukupno" class="w-100 p-xs border-none form__input h-100 ukupno" >
+            <span class="registration-form__error"></span>
+        </div>
+        <i class="fas fa-times remove-icon w-5 border d-flex jc-c ai-c m-d-flex pointer m-p-xs m-w-100"></i>
+        <div class="modal-overlay">
+            <div class="modal">
+                <div class="modal__heading">
+                    <h3>POTVRDA O BRISANJU</h3>
+                </div>
+                <div class="modal__warning">
+                    <p>Da li ste sigurni da želite da izbrišete artiakl?</p>
+                </div>
+                <div class="modal__button mt-s text-right p-xs">
+                    <span class="btn btn-danger removeArticle">Izbriši</span>
+                    <span class="btn btn-secondary cancelRemoveArticle">Odustani</span>
+                </div>
+            </div>
+        </div>
+    `;
+    return div;
+}
+
+
+function removeArticlesModal(inputFieldsContainer) {
+    const deleteArticles = inputFieldsContainer.querySelectorAll('.removeArticle');
+    const cancelButtons = inputFieldsContainer.querySelectorAll('.cancelRemoveArticle');
+
+    let modal = inputFieldsContainer.querySelector('.modal-overlay');
+    modal.classList.add('active');
+
+    for(let cancel of cancelButtons) {
+        cancel.addEventListener('click', e => {
+            let modal = e.currentTarget.parentElement.parentElement.parentElement;
+            modal.classList.remove('active');
+        });
+    }
+    for(let deleteArticle of deleteArticles) {
+        deleteArticle.addEventListener('click', () => {
+            inputFieldsContainer.remove();
+        });
+    }
+}
+
+function disablePdvAndRemoveValue() {
+    let pdvs = document.querySelectorAll('.PDV');
+    for(let pdv of pdvs) {
+        pdv.value = '';
+    }
+    setAttributeDisabled(pdvs);
+}
+
+function disableBezPdvAndRemoveValue() {
+    let bezPDV = document.querySelectorAll('.bezPDV');
+    for(let bez of bezPDV) {
+        bez.value = '';
+    }
+    setAttributeDisabled(bezPDV);
+}
+
+function removeClassActive() {
+    document.querySelector('.modal-overlay-bill').classList.remove('active');
+    document.querySelector('.modal-overlay-article').classList.remove('active');
 }

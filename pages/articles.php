@@ -100,4 +100,4 @@ $articles = Article::findAllWithOffset('userId', $id, $paginate->limit, $paginat
         <a href="<?php base(); ?>add_article" class="btn btn-primary mt-s">Dodaj artikal</a>
     </div>
 </main>
-<script src="<?php base(); ?>javascript/articles.js"></script>
+<!-- <script src="<?php base(); ?>javascript/articles.js"></script> -->

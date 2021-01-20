@@ -17,15 +17,17 @@
             Validate::validateString($key, $args[$key]);
             $args[$key] = Sanitize::sanitizeString($value);
         }
-
+        
         $args['datum'] = $_POST['datum'];
         list($year, $month, $day) = explode('-',$_POST['datum']);
         if(!checkdate($month, $day, $year)) {
-            // Message::addError('datum', 'Please provide valid date');
-            Message::addError('datum', $_POST['datum']);
+            Message::addError('datum', 'Izaberite validan datum');
         }
 
         $args['slika'] = 'slika';
+        if($_FILES['slika']['error'] == 4) {
+            Message::addError('slika', 'Polje ne smije biti prazno');
+        }
         Validate::validateFile('slika', 'slika');
         $error = Message::getError();
 
@@ -36,6 +38,10 @@
         $bill = new Bill($args);
         $bill->save();
         $error = Message::getError(); 
+        if(!$error) {
+            $error['success'] = $bill->getId();
+            $error['ime'] = $bill->broj;
+        }
         echo json_encode($error);
         exit();
     } else {

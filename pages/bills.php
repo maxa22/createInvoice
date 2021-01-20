@@ -15,7 +15,7 @@ if(!isset($_SESSION['id'])) {
     require_once('include/autoloader.php');
 
     $id = $_SESSION['id'];
-    $bills = Bill::findAllByQuery('userId', $id);
+    $bills = Bill::findAllByQuery('userId', $id, 'DESC');
     if(count($bills) > 0) { ?>
         <div class="d-flex gap-m wrap s-flex-column">
         <?php
@@ -63,4 +63,4 @@ if(!isset($_SESSION['id'])) {
 </div>
 </main>
 
-<script src="<?php base(); ?>javascript/bills.js"></script>
+<!-- <script src="<?php base(); ?>javascript/bills.js"></script> -->

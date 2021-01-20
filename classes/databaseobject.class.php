@@ -136,12 +136,15 @@
          * @param [mixed] $id
          * @return array
          */
-        public static function findAllByQuery($placeholder,  $id) {
+        public static function findAllByQuery($placeholder,  $id, $order = 'ASC') {
             try 
             {
+                if(!in_array($order, array('ASC', 'DESC'))) {
+                    exit();
+                }
                 $database = Database::instance();
                 $connection = $database->connect();
-                $sql = "SELECT * FROM " . static::$dbTable . " WHERE $placeholder = ? ORDER BY id DESC;";
+                $sql = "SELECT * FROM " . static::$dbTable . " WHERE $placeholder = ? ORDER BY id $order;";
                 $stmt = $connection->prepare($sql);
                 $stmt->bindParam('1', $id);
                 $stmt->execute();

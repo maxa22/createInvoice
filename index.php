@@ -22,8 +22,7 @@
     } 
     ?>
 
-<?php if(isset($_SESSION['id'])) { ?>
-    <script src="<?php base(); ?>javascript/sidebar_toggle.js"></script>
-<?php } ?>
+<script src="<?php base(); ?>javascript/script.js"></script>
+
 </body>
 </html>

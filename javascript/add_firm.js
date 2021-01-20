@@ -37,7 +37,7 @@ firmForm.addEventListener('submit', e => {
         postData(url, formData)
         .then(result => {
             if(result['success']) {
-                document.querySelector('.success-message').innerHTML = 'Uspješno ste dodali firmu';
+                document.querySelector('.success-message').innerHTML = 'Uspješno dodano';
                 document.querySelector('.success-message').style.padding = '0.5rem 1rem';
                 setTimeout(function() {
                     document.querySelector('.success-message').innerHTML = '';

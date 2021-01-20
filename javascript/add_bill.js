@@ -10,13 +10,13 @@ firmForm.addEventListener('submit', e => {
     let formData = new FormData(firmForm);
     formData.append('submit', '');
     const url = 'include/add_bill.inc.php';
-    let inputs = document.querySelectorAll('input[type="text"]');
+    let inputs = document.querySelectorAll('input');
     let errorArray = [];
     isEmpty(inputs, errorArray);
     if(errorArray.length < 1) {
         postData(url, formData)
         .then(result => {
-            if(!result) {
+            if(result['success']) {
                 document.querySelector('.success-message').innerHTML = 'Uspješno dodano';
                 document.querySelector('.success-message').style.padding = '0.5rem 1rem';
                 removeInputValues();

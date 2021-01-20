@@ -27,6 +27,10 @@
     $firms = Firm::findAllByQuery('userId', $_SESSION['id']);
     $invoiceFirm = Firm::findById($invoice['firmaId']);
     $articles = InvoiceArticle::findAllByQuery('fakturaId', $id);
+    $bills = Bill::findAllByQuery('userId', $_SESSION['id']);
+
+
+    require_once('section/town_array.php');
 ?>
 <main>
 <div class="wrapper">
@@ -49,9 +53,9 @@
                 <label for="tip">Tip fakture</label>
                 <select name="tip" id="tip" class="form__input required">
                     <option value="<?php echo $invoice['tip']; ?>" selected><?php echo $invoice['tip']; ?></option>
-                    <option value="faktura">Faktura</option>
-                    <option value="predracun">Predračun</option>
-                    <option value="avansni">Avansni predračun</option>
+                    <option value="Faktura">Faktura</option>
+                    <option value="Predracun">Predračun</option>
+                    <option value="Avansni predračun">Avansni predračun</option>
                 </select>
                 <span class="registration-form__error"></span>
             </div>
@@ -60,16 +64,25 @@
                 <input type="text" name="<?php echo $invoice['id']; ?>-broj" id="broj"  class="form__input required" value="<?php echo $invoice['broj']; ?>">
                 <span class="registration-form__error"></span>
             </div>
+        </div>
+        <div class="d-flex gap-s mb-s m-flex-column">
             <div class="w-100">
                 <label for="datum">Datum izdavanja</label>
                 <input type="date" name="datum" id="datum" class="form__input required" value="<?php echo $invoice['datum']; ?>">
                 <span class="registration-form__error"></span>
             </div>
-        </div>
-        <div class="d-flex gap-s mb-s m-flex-column">
             <div class="w-100">
                 <label for="mjesto">Mjesto izdvananja</label>
-                <input type="text" name="mjesto" id="mjesto" class="form__input required" value="<?php echo $invoice['mjesto']; ?>">
+                <select name="mjesto" id="mjesto" class="form__input required">
+                        <option value="<?php echo $invoice['mjesto']; ?>"><?php echo $invoice['mjesto']; ?></option>
+                        <?php foreach($town_array as $town) { 
+                            if(!is_numeric($town[0])) { ?>
+                                <option value="" disabled class="info"><?php echo $town ?></option>
+                        <?php } else {?>
+                            <option value="<?php echo $town ?>">&nbsp;<?php echo $town ?></option>
+                            <?php } ?>
+                        <?php } ?>
+                </select>
                 <span class="registration-form__error"></span>
             </div>
             <div class="w-100 relative">
@@ -77,12 +90,14 @@
                 <select name="kupac" id="kupac" class="form__input required">
                     <?php if(count($clients) > 0) {
                         foreach($clients as $client) {?>
-                            <option value="<?php echo $client['id']; ?>"><?php echo $client['ime'] . ' ' . $client['mjesto']; ?></option>
+                            <option value="<?php echo $client['id']; ?>"><?php echo $client['ime']; ?></option>
                     <?php  }
                     } ?>
                 </select>
                 <span class="registration-form__error"></span>
             </div>
+        </div>
+        <div class="d-flex gap-s mb-s m-flex-column">
             <div class="w-100">
                 <label for="nacin">Način plaćanja</label>
                 <select name="nacin" class="form__input" id="nacin">
@@ -95,9 +110,6 @@
                 </select>
                 <span class="registration-form__error"></span>
             </div>
-            
-        </div>
-        <div class="d-flex gap-s mb-s m-flex-column">
             <div class="w-100">
                 <label for="fakturista">Fakturisao</label>
                 <input type="text" name="fakturista" id="fakturista" class="form__input required" value="<?php echo $invoice['fakturista']; ?>">
@@ -108,12 +120,23 @@
                 <input type="date" name="rok" id="rok" class="form__input required" value="<?php echo $invoice['rok']; ?>">
                 <span class="registration-form__error"></span>
             </div>
+        </div>
+        <div class="d-flex gap-s mb-s m-flex-column">
+            <div class="w-100">
+            <label for="fiskalni">Broj fiskalnog računa</label>
+                <select name="fiskalni" id="fiskalni" class="form__input">
+                    <option value="<?php echo $invoice['fiskalni'] ?? ''; ?>"><?php echo $invoice['fiskalni'] ?? ''; ?></option>
+                    <option value="dodajFiskalni">Dodaj novi fiskalni račun</option>
+                    <?php foreach($bills as $bill) { ?>
+                        <option value="<?php echo $bill['id']; ?>"><?php echo $bill['broj'] ?></option>
+                    <?php } ?>
+                </select>
+                <span class="registration-form__error"></span>
+            </div>
+            <div class="w-100"></div>
             <div class="w-100"></div>
         </div>
         <div id="articles">
-        <?php if(count($articles) > 0) { 
-                $i = 0;
-        ?>
 
             <div class="d-flex btn-primary">
                 <span class="w-30 p-x border weight-500 hidden mm-d-none">Naziv</span>
@@ -124,22 +147,15 @@
                 <span class="w-10 p-x border weight-500 hidden mm-d-none">PDV</span>
                 <span class="w-15 p-x border weight-500 hidden mm-d-none">Ukupno</span>
             </div>
+        <?php if(count($articles) > 0) { 
+                $i = 0;
+        ?>
             <?php foreach($articles as $article) { 
                 $i++;    
             ?>
             <div class="d-flex articlesNumber m-w-100 m-flex-column m-card m-mb-m">
                 <div class="w-30 border relative m-d-flex m-w-100">
                     <span class="w-100 p-x btn-primary weight-600 d-none m-d-block">Naziv</span>
-                    <div class="d-flex">
-                        <div>
-                            <input type="text" name="<?php echo $i; ?>-idArtikla" disabled class="w-100 p-xs border-none border-right form__input h-100 imeArtikla d-none" placeholder="Šifra">
-                            <span class="registration-form__error"></span>
-                        </div>
-                        <div>
-                            <input type="text" name="<?php echo $i; ?>-imeArtikla" disabled class="w-100 p-xs border-none form__input h-100 imeArtikla d-none " placeholder="Naziv">
-                            <span class="registration-form__error"></span>
-                        </div>
-                    </div>
                     <select id="<?php echo $i; ?>-artikli" name="<?php echo $i; ?>-imeArtikla" class="w-100 p-xs border-none form__input h-100 imeArtikla dropdown ">
                         <option value="<?php echo $article['ime']; ?>" selected><?php echo $article['ime']; ?></option>
                     </select>
@@ -180,8 +196,20 @@
                     <input type="text" name="<?php echo $i; ?>-ukupno" class="w-100 p-xs form__input border-none h-100 ukupno" value="<?php echo $article['ukupno'] . 'KM'; ?>">
                     <span class="registration-form__error"></span>
                 </div>
-                <div class="w-5 border remove d-flex jc-c ai-c m-d-flex pointer m-p-xs m-w-100">
-                    <i class="fas fa-times remove-icon"></i>
+                    <i class="fas fa-times remove-icon w-5 border d-flex jc-c ai-c m-d-flex pointer m-p-xs m-w-100"></i>
+                <div class="modal-overlay">
+                    <div class="modal">
+                        <div class="modal__heading">
+                            <h3>POTVRDA O BRISANJU</h3>
+                        </div>
+                        <div class="modal__warning">
+                            <p>Da li ste sigurni da želite da izbrišete artikal?</p>
+                        </div>
+                        <div class="modal__button mt-s text-right p-xs">
+                            <a href="<?php base(); ?>include/delete_article.inc.php?id=<?php echo $article['id']; ?>" class="btn btn-danger deleteArticle">Izbriši</a>
+                            <span class="btn btn-secondary cancelRemoveArticle">Odustani</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <?php } ?>
@@ -198,11 +226,89 @@
         <p class="success-message mb-xs text-center"></p>
         <div class="mt-m">
             <button class="btn btn-primary add">Dodaj artikal</button>
-            <button class="btn btn-primary" name="submit">Potvrdi</button>
+            <button class="btn btn-primary" name="submit">Sačuvaj</button>
         </div>
     </form>
 </div>
 </div>
+<div class="modal-overlay-article">
+<div class="modal">
+<form action="include/articles.inc.php" id="newArticle" method="POST">
+    <div class="card-container">
+    <h2 class="card__header text-center card__header-border weight-500 mb-xs">Dodaj Artikal</h2>
+        <div class="remove__modal">
+                <i class="fas fa-times cancel"></i>
+            </div>
+            <div class="card-body">
+                <div class="mb-xs">
+                    <label for="firma-artikla">Firma</label>
+                    <select name="firma" class="form__input" id="firma-artikla">
+                    
+                        <?php foreach($firms as $firm) { ?>
+                            <option value="<?php echo $firm['id']; ?>"><?php echo $firm['ime']; ?></option>
+                        <?php } ?>
+                    </select>
+                    <span class="registration-form__error"></span>
+                </div>
+                <div class="mb-xs">
+                    <label for="sifra">Šifra</label>
+                    <input type="text" name="idArtikla" id="sifra" class="form__input">
+                    <span class="registration-form__error"></span>
+                </div>
+                <div class="mb-xs">
+                    <label for="ime-artikla">Naziv</label>
+                    <input type="text" name="ime" id="ime-artikla" class="form__input">
+                    <span class="registration-form__error"></span>
+                </div>
+                <div class="mb-xs">
+                    <label for="cijena-artikla">Cijena</label>
+                    <input type="number" step="0.01" name="cijena" id="cijena-artikla"  class="form__input">
+                    <span class="registration-form__error"></span>
+                </div>
+                <div class="mb-xs">
+                    <label for="opis">Opis</label>
+                    <textarea rows="3" name="opis" id="opis"  class="form__input h-auto"></textarea>
+                    <span class="registration-form__error"></span>
+                </div>  
+                <p class="success-message mb-xs text-center"></p>
+                <button name="submit" class="btn btn-primary">Sačuvaj</button>
+                <button class="btn btn-secondary cancel">Odustani</button>
+            </div>
+    </div>
+</form>
+</div>
+</div>
+<div class="modal-overlay-bill">
+<div class="modal">
+<form action="include/add_bill.inc.php" enctype="multipart/form-data"  method="POST" id="add-bill-form">
+    <h2 class="card__header text-center card__header-border weight-500 mb-xs">Dodaj fiskalni račun</h2>
+    <div class="remove__modal">
+        <i class="fas fa-times cancel pointer"></i>
+    </div>
+    <div class="card-body">
+        <div class="mb-xs">
+            <label for="broj-fiskalnog">Broj fiskalnog računa</label>
+            <input type="text" name="broj" id="broj-fiskalnog"  class="form__input">
+            <span class="registration-form__error"></span>
+        </div>
+        <div class="mb-xs">
+            <label for="datum-fiskalnog">Datum izdavanja računa</label>
+            <input type="date" name="datum" id="datum-fiskalnog"  class="form__input" value="<?php echo date('Y-m-d'); ?>">
+            <span class="registration-form__error"></span>
+        </div>
+        <div class="mb-xs">
+            <label for="logo-fiskalnog" class="file-label mb-xs">Slika računa</label>
+            <input type="file" name="slika" id="logo-fiskalnog" class="form__input-file">
+            <img src="" alt="" class="firm-logo d-block m-auto">
+            <span class="registration-form__error"></span>
+        </div>
+        <p class="success-message mb-xs text-center"></p>
+        <button class="btn btn-primary" name="submit">Sačuvaj</button>
+        <button class="btn btn-secondary cancel">Odustani</button>
+    </div>
+</form>
+</div>
+</div>
 </main>
 
-<script src="<?php base(); ?>javascript/update_invoice.js"></script>
+<!-- <script src="<?php base(); ?>javascript/update_invoice.js"></script> -->

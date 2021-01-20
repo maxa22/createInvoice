@@ -25,7 +25,7 @@ newArticle.addEventListener('submit', e => {
                 for(let errorMessage of errorMessages) {
                     errorMessage.innerHTML = '';
                 }
-                let inputs = document.querySelectorAll('input textarea');
+                let inputs = document.querySelectorAll('input, textarea');
                 for(let input of inputs) {
                     input.style.borderColor = '#ced4da';
                 }

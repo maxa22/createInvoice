@@ -36,4 +36,4 @@
         </form>
     </div>
 </div>
-<script src="<?php base(); ?>javascript/register.js"></script>
+<!-- <script src="<?php base(); ?>javascript/register.js"></script> -->

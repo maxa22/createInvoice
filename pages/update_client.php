@@ -17,6 +17,8 @@
         header('Location: ../clients');
         exit();
     }
+    require_once('section/town_array.php');
+    require_once('section/bank_list.php');
 ?>
 <main>
 <div class="wrapper">
@@ -79,7 +81,7 @@
         </div>
         <div class="mb-xs">
             <label for="mjesto">Mjesto</label>
-            <input type="text" name="mjesto" id="mjesto" class="form__input"  value="<?php echo $client['mjesto']; ?>">
+            <input type="text" name="mjesto" id="mjesto" class="form__input" value="<?php echo $client['mjesto']; ?>">                
             <span class="registration-form__error"></span>
         </div>
         <div class="mb-xs">
@@ -99,7 +101,12 @@
         </div>
         <div class="mb-s">
             <label for="banka">Ime banke</label>
-            <input type="text" name="banka" id="banka" class="form__input"  value="<?php echo $client['racun']; ?>">
+            <select name="banka" id="banka" class="form__input">
+                <option value="<?php echo $client['banka']; ?>"><?php echo $client['banka']; ?></option>
+                <?php foreach($bankArray as $bank) { ?>
+                    <option value="<?php echo $bank ?>"><?php echo $bank ?></option>
+                <?php } ?>
+            </select>
             <span class="registration-form__error"></span>
         </div>
         <p class="success-message mb-xs text-center"></p>
@@ -109,4 +116,4 @@
 </div>
 </main>
 
-<script src="<?php base(); ?>javascript/update_client.js"></script>
+<!-- <script src="<?php base(); ?>javascript/update_client.js"></script> -->

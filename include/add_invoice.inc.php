@@ -23,10 +23,16 @@
             $args[$key] = Sanitize::sanitizeString($value);
         }
 
-        $args['nacin'] = $_POST['nacin'];
+        $args['nacin'] = $_POST['nacin'] ?? '';
         if($args['nacin']) {
             Validate::validateString('nacin', $args['nacin']);
             $args['nacin'] = Sanitize::sanitizeString($args['nacin']);
+        }
+
+        $args['fiskalni'] = $_POST['fiskalni'] ?? '';
+        if($args['fiskalni']) {
+            Validate::validateString('fiskalni', $args['fiskalni']);
+            $args['fiskalni'] = Sanitize::sanitizeString($args['fiskalni']);
         }
         
         $args['rok'] = $_POST['rok'];
@@ -70,14 +76,6 @@
                     Validate::validateNumber($i . '-pdv',$articleArgs[$i]['pdv']);
                     $articleArgs[$i]['bezPdv'] = Sanitize::sanitizeString(substr($_POST[$i . '-bezPdv'], 0, -2));
                     Validate::validateNumber($i . '-bezPdv',$articleArgs[$i]['bezPdv']);
-                }
-                if(isset($_POST[$i . '-idArtikla'])) {
-                    $newArticleArgs[$i]['ime'] = Sanitize::sanitizeString($_POST[$i . '-imeArtikla']);
-                    $newArticleArgs[$i]['cijena'] = Sanitize::sanitizeString($_POST[$i . '-cijena']);
-                    $newArticleArgs[$i]['idArtikla'] = Sanitize::sanitizeString($_POST[$i . '-idArtikla']);
-                    $newArticleArgs[$i]['firmaId'] = Sanitize::sanitizeString($args['firmaId']);
-                    $newArticleArgs[$i]['opis'] = '';
-                    $newArticleArgs[$i]['userId'] = Sanitize::sanitizeString($_SESSION['id']);
                 }
                 // $i++;
             }

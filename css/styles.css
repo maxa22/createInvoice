@@ -195,7 +195,9 @@ main.active {
 
 .modal-overlay,
 .modal-overlay-firm,
-.modal-overlay-client {
+.modal-overlay-client,
+.modal-overlay-article,
+.modal-overlay-bill {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -206,7 +208,9 @@ main.active {
   min-height: 100rem;
   display: none;
 }
-.modal-overlay {
+.modal-overlay,
+.modal-overlay-article,
+.modal-overlay-bill {
   position: fixed;
   min-height: unset;
 }
@@ -220,11 +224,12 @@ main.active {
   text-align: left;
   max-width: 54rem;
   width: 95%;
-  padding: 2rem;
 }
 .modal-overlay.active,
 .modal-overlay-firm.active,
-.modal-overlay-client.active {
+.modal-overlay-client.active,
+.modal-overlay-article.active,
+.modal-overlay-bill.active {
   z-index: 10;
   display: block;
 }
@@ -370,6 +375,10 @@ main.active {
   font-size: 2rem;
   z-index: 2;
 }
+.remove__modal {
+  right: 1rem;
+  top: 0.5rem;
+}
 
 /* #### END INVOICE #### */
 
@@ -393,7 +402,6 @@ main.active {
 }
 .pdf-header__info {
   float: right;
-  font-size: 15px;
 }
 .pdf-line {
   clear: both;
@@ -729,6 +737,12 @@ td.pdf-invoice-first {
   }
   main {
     margin-left: 25rem;
+  }
+  #sidebar-toggle {
+    transform: rotate(180deg);
+  }
+  #sidebar-toggle.active {
+    transform: rotate(0deg);
   }
 }
 

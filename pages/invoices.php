@@ -6,7 +6,7 @@ if(!isset($_SESSION['id'])) {
 }
 
 require_once('include/autoloader.php');
-$invoices = Invoice::findAllByQuery('userId', $_SESSION['id']);
+$invoices = Invoice::findAllByQuery('userId', $_SESSION['id'], 'DESC');
 ?>
 
 <main>
@@ -49,7 +49,7 @@ $invoices = Invoice::findAllByQuery('userId', $_SESSION['id']);
                         <h3>POTVRDA O BRISANJU</h3>
                     </div>
                     <div class="modal__warning">
-                        <p>Are you sure you want to delete calculator?</p>
+                        <p>Da li ste sigurni da želite da izbrišete fakturu?</p>
                     </div>
                     <div class="modal__button mt-s text-right p-xs">
                         <a href="<?php base(); ?>include/delete_invoice.inc.php?id=<?php echo $invoice['id']; ?>" class="btn btn-danger">Izbriši</a>
@@ -67,4 +67,4 @@ $invoices = Invoice::findAllByQuery('userId', $_SESSION['id']);
 </div>
 </main>
 
-<script src="<?php base(); ?>javascript/invoices.js"></script>
+<!-- <script src="<?php base(); ?>javascript/invoices.js"></script> -->

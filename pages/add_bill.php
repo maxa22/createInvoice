@@ -17,7 +17,7 @@
         </div>
         <div class="mb-xs">
             <label for="datum">Datum izdavanja računa</label>
-            <input type="date" name="datum" id="datum"  class="form__input" placeholder="datum.mjesec.godina npr. 02.07.2020">
+            <input type="date" name="datum" id="datum"  class="form__input" value="<?php echo date('Y-m-d'); ?>">
             <span class="registration-form__error"></span>
         </div>
         <div class="mb-xs">
@@ -28,9 +28,10 @@
         </div>
         <p class="success-message mb-xs text-center"></p>
         <button class="btn btn-primary" name="submit">Potvrdi</button>
-    </form>
+    </div>
+</form>
 </div>
 </div>
 </main>
 
-<script src="<?php base(); ?>javascript/add_bill.js"></script>
+<!-- <script src="<?php base(); ?>javascript/add_bill.js"></script> -->
