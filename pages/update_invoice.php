@@ -311,4 +311,3 @@
 </div>
 </main>
 
-<!-- <script src="<?php base(); ?>javascript/update_invoice.js"></script> -->

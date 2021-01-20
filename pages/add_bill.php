@@ -34,4 +34,3 @@
 </div>
 </main>
 
-<!-- <script src="<?php base(); ?>javascript/add_bill.js"></script> -->

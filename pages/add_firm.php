@@ -94,4 +94,3 @@
 </div>
 </main>
 
-<!-- <script src="<?php base(); ?>javascript/add_firm.js"></script> -->

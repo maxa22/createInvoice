@@ -343,7 +343,7 @@ td.pdf-invoice-first {
     <img src="<?php echo $fiskalniImage; ?>" class="fiskalni__image" alt="">
 </div>
 <?php } ?>
-<?php if($invoice['fiskalni']) { ?>
+<?php if($articlesWithDescription) { ?>
 <div class="page-break"></div>
 <h2 class="mb-m text-center">Opisi artikala</h2>
 <?php foreach($articlesWithDescription as $article) { ?>

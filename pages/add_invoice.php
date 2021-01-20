@@ -452,4 +452,3 @@
 </div>
 </div>
 </main>
-<!-- <script src="<?php base(); ?>javascript/add_invoice.js"></script> -->

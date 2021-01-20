@@ -67,4 +67,3 @@ $invoices = Invoice::findAllByQuery('userId', $_SESSION['id'], 'DESC');
 </div>
 </main>
 
-<!-- <script src="<?php base(); ?>javascript/invoices.js"></script> -->

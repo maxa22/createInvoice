@@ -23,4 +23,3 @@
     </form>
 </div>
 </div>
-<!-- <script src="<?php base(); ?>javascript/login.js"></script> -->

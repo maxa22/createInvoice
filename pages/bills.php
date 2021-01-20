@@ -63,4 +63,3 @@ if(!isset($_SESSION['id'])) {
 </div>
 </main>
 
-<!-- <script src="<?php base(); ?>javascript/bills.js"></script> -->

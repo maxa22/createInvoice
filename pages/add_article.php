@@ -53,4 +53,3 @@ $firms = Firm::findAllByQuery('userId', $id);
     </div>
     </div>
 </main>
-<!-- <script src="<?php base(); ?>javascript/add_article.js"></script> -->

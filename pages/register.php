@@ -36,4 +36,3 @@
         </form>
     </div>
 </div>
-<!-- <script src="<?php base(); ?>javascript/register.js"></script> -->
