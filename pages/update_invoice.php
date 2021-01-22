@@ -28,7 +28,7 @@
     $invoiceFirm = Firm::findById($invoice['firmaId']);
     $articles = InvoiceArticle::findAllByQuery('fakturaId', $id);
     $bills = Bill::findAllByQuery('userId', $_SESSION['id']);
-
+    $currentBill = Bill::findById($invoice['fiskalni']);
 
     require_once('section/town_array.php');
 ?>
@@ -125,7 +125,7 @@
             <div class="w-100">
             <label for="fiskalni">Broj fiskalnog računa</label>
                 <select name="fiskalni" id="fiskalni" class="form__input">
-                    <option value="<?php echo $invoice['fiskalni'] ?? ''; ?>"><?php echo $invoice['fiskalni'] ?? ''; ?></option>
+                    <option value="<?php echo $invoice['fiskalni'] ?? ''; ?>"><?php echo $currentBill['broj'] ?? ''; ?></option>
                     <option value="dodajFiskalni">Dodaj novi fiskalni račun</option>
                     <?php foreach($bills as $bill) { ?>
                         <option value="<?php echo $bill['id']; ?>"><?php echo $bill['broj'] ?></option>
