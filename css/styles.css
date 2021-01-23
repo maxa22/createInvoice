@@ -985,13 +985,12 @@ td.pdf-invoice-first {
     margin-left: 0;
   }
   .sidebar {
-    width: 0;
-  }
-  .sidebar.active {
     top: 0;
     bottom: 0;
     height: 100%;
+    width: 0;
   }
+
   .sidebar-overlay {
     position: absolute;
     top: 0;
