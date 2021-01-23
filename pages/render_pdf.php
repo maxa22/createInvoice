@@ -5,7 +5,7 @@ if(!isset($_SESSION['id'])) {
     exit();
 }
 function base() {
-    echo str_replace('index.php', '',$_SERVER['PHP_SELF']);
+    return str_replace('index.php', '',$_SERVER['PHP_SELF']);
 }
 // include autoloader
 require_once 'dompdf/autoload.inc.php';
@@ -45,19 +45,19 @@ if($invoice['fiskalni']) {
 $firm = Firm::findById($invoice['firmaId']);
 $client = Client::findById($invoice['kupacId']);
 
-
+$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . base();
 $date = strtotime($invoice['datum']);
 $datum = date('d.m.Y', $date);
 $rok = strtotime($invoice['rok']);
 $rok = date('d.m.Y', $rok);
 if($firm['logo']) {
-    $path = base() . 'images/' . $firm['logo'];
+    $path = $actual_link . 'images/' . $firm['logo'];
     $type = pathinfo($path, PATHINFO_EXTENSION);
     $data = file_get_contents($path);
     $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
 }
 if(isset($bill)) {
-    $path = base() . 'images/' . $bill['slika'];
+    $path = $actual_link . 'images/' . $bill['slika'];
     $type = pathinfo($path, PATHINFO_EXTENSION);
     $data = file_get_contents($path);
     $fiskalniImage = 'data:image/' . $type . ';base64,' . base64_encode($data);
@@ -189,6 +189,9 @@ td.pdf-invoice-first {
 .mb-m {
     margin-bottom: 40px;
 }
+.mr-m {
+    margin-right: 40px;
+}
 .page-break {
     page-break-before: always;
 }
@@ -238,6 +241,9 @@ td.pdf-invoice-first {
     <p>Mjesto izdavanja: <?php echo $invoice['mjesto'] ?></p>
     <p>Način plaćanja: <?php echo $invoice['nacin'] ?></p>
     <p>Rok za plaćanje: <?php echo $rok ?></p>
+    <?php if($invoice['fiskalni']) { ?>
+        <p> Fiskalni račun broj: <?php echo $bill['broj']; ?></p>
+    <?php }?>
 </div>
 <div class="pdf-client-info">
     <p>Klijent: <?php echo $client['ime'] ?></p>
@@ -268,7 +274,7 @@ td.pdf-invoice-first {
     <?php } ?>
 </div>
 <div class="pdf-invoice-number">
-    <h2><?php echo $invoice['tip'] . ' broj: ' . $invoice['broj']; ?></h2>
+        <h2><?php echo $invoice['tip'] . ' broj: ' . $invoice['broj']; ?></h2>
 </div>
 <table class="pdf-invoice-articles">
     <tr>
@@ -334,7 +340,7 @@ td.pdf-invoice-first {
     </tr>
 </table>
 </div>
-<?php if($invoice['fiskalni']) { ?>
+<?php if(isset($bill['slika']) && $bill['slika']) { ?>
 <div class="page-break"></div>
 <div class="fiskalni">
     <h2 class="mb-m text-center">Fiskalni račun</h2>

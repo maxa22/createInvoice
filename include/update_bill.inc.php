@@ -16,6 +16,7 @@
         }
 
         $args['userId'] = $_SESSION['id'];
+        $args['firmaId'] = $_POST['firmaId'];
         
         
         foreach($args as $key => $value) {
@@ -29,18 +30,13 @@
             Message::addError('datum', 'Please provide valid date');
         }
 
+        $args['slika'] = 'slika';
         $oldBill = Bill::findById($args['id']);
-
-        if($_FILES['slika']['error'] == 4) {
-            // if user doesen't upload image, don't update image path
-            $args['slika'] = $oldBill['slika'];
-        } else {
-            if($oldBill['slika']) {
-                $args['slika'] = 'slika';
-                unlink('../images/' . $oldBill['slika']);
-                Validate::validateFile('slika', $args['slika']);
-            }
+        if($oldBill['slika']) {
+            unlink('../images/' . $oldBill['slika']);
         }
+        Validate::validateFile('slika', $args['slika']);
+
 
         $error = Message::getError();
 

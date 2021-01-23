@@ -8,9 +8,9 @@
 <nav>
     <div class="index-wrapper">
         <div class="navigation d-flex jc-sb ai-c">
-            <div class="logo">
-                <a href="<?php base(); ?>index">Logo</a>
-            </div>
+            <a href="index d-flex jc-c ai-c">
+                <img src="<?php base(); ?>images/logo.png" class="logo__image" alt="Lab387 logo">
+            </a>
             <ul class="navigation__menu">
                 <li><a href="<?php base(); ?>index" class="navigation__link">Početna</a></li>            
                 <li><a href="<?php base(); ?>login" class="navigation__link">Prijava</a></li>

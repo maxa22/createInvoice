@@ -130,7 +130,7 @@ function add_bill() {
         let formData = new FormData(firmForm);
         formData.append('submit', '');
         const url = 'include/add_bill.inc.php';
-        let inputs = document.querySelectorAll('input');
+        let inputs = document.querySelectorAll('input[type="text"], select');
         let errorArray = [];
         isEmpty(inputs, errorArray);
         if(errorArray.length < 1) {
@@ -189,24 +189,6 @@ function add_bill() {
         }
     }
 
-
-    function setImage(inputField, img) {
-        img.src = URL.createObjectURL(inputField.files[0]);
-        img.onload = function() {
-            URL.revokeObjectURL(img.src);
-        }
-    }
-
-
-    function showImagePreviewOnChange(fileUploads) {
-        for(let fileUpload of fileUploads) {
-            fileUpload.addEventListener('change', e => {
-                const container = e.target.parentElement;
-                let img = container.querySelector('img');
-                setImage(fileUpload, img);
-            });
-        }
-    }
 
     function removeInputValues() {
         let inputs = document.querySelectorAll('input, textarea');
@@ -326,25 +308,6 @@ function add_client() {
                 input.style.borderColor = '#ced4da';
                 input.parentElement.querySelector('.registration-form__error').innerHTML = '';
             }
-        }
-    }
-
-
-    function setImage(inputField, img) {
-        img.src = URL.createObjectURL(inputField.files[0]);
-        img.onload = function() {
-            URL.revokeObjectURL(img.src);
-        }
-    }
-
-
-    function showImagePreviewOnChange(fileUploads) {
-        for(let fileUpload of fileUploads) {
-            fileUpload.addEventListener('change', e => {
-                const container = e.target.parentElement;
-                let img = container.querySelector('img');
-                setImage(fileUpload, img);
-            });
         }
     }
 
@@ -469,24 +432,6 @@ function add_firm() {
         }
     }
 
-
-    function setImage(inputField, img) {
-        img.src = URL.createObjectURL(inputField.files[0]);
-        img.onload = function() {
-            URL.revokeObjectURL(img.src);
-        }
-    }
-
-
-    function showImagePreviewOnChange(fileUploads) {
-        for(let fileUpload of fileUploads) {
-            fileUpload.addEventListener('change', e => {
-                const container = e.target.parentElement;
-                let img = container.querySelector('img');
-                setImage(fileUpload, img);
-            });
-        }
-    }
 
     function removeInputValues() {
         let inputs = document.querySelectorAll('input, textarea');
@@ -675,7 +620,7 @@ function bills() {
     for(let editButton of editButtons) {
         editButton.addEventListener('click', e => {
             let container = e.currentTarget.parentElement.parentElement;
-            let inputs = container.querySelectorAll('input');
+            let inputs = container.querySelectorAll('input, select');
             enableInputFields(inputs);
             let images = container.querySelectorAll('img');
             let imgArray = [];
@@ -684,7 +629,7 @@ function bills() {
             let inputValueArray = getInputValues(inputText);
             let editingBtns = document.querySelectorAll('.editing');
             hideFields(editingBtns);
-            let saveBtn= container.querySelectorAll('.btn');
+            let saveBtn= container.querySelectorAll('.hide-buttons');
             showFields(saveBtn);
             let cancel = container.querySelector('.cancel');
             cancel.addEventListener('click', () => {
@@ -732,6 +677,24 @@ function bills() {
                 });
             }
         })
+    }
+
+    const deleteBills = document.querySelectorAll('.delete__bill');
+    const cancelButtons = document.querySelectorAll('.cancel-modal');
+
+    for (let deleteBill of deleteBills) {
+        deleteBill.addEventListener('click', e => {
+            let container = e.currentTarget.parentElement.parentElement.parentElement;
+            let modal = container.querySelector('.modal-overlay');
+            modal.classList.add('active');
+        });
+    }
+
+    for (let cancel of cancelButtons) {
+        cancel.addEventListener('click', e => {
+            let modal = e.currentTarget.parentElement.parentElement.parentElement;
+            modal.classList.remove('active');
+        });
     }
 
     // ## FUNCTIONS ###
@@ -810,24 +773,6 @@ function bills() {
         }
     }
 
-
-    function setImage(inputField, img) {
-        img.src = URL.createObjectURL(inputField.files[0]);
-        img.onload = function() {
-            URL.revokeObjectURL(img.src);
-        }
-    }
-
-
-    function showImagePreviewOnChange(fileUploads) {
-        for(let fileUpload of fileUploads) {
-            fileUpload.addEventListener('change', e => {
-                const container = e.target.parentElement;
-                let img = container.querySelector('img');
-                setImage(fileUpload, img);
-            });
-        }
-    }
 
 
     function getImageValues(images, array) {
@@ -1071,24 +1016,6 @@ function update_client() {
     }
 
 
-    function setImage(inputField, img) {
-        img.src = URL.createObjectURL(inputField.files[0]);
-        img.onload = function() {
-            URL.revokeObjectURL(img.src);
-        }
-    }
-
-
-    function showImagePreviewOnChange(fileUploads) {
-        for(let fileUpload of fileUploads) {
-            fileUpload.addEventListener('change', e => {
-                const container = e.target.parentElement;
-                let img = container.querySelector('img');
-                setImage(fileUpload, img);
-            });
-        }
-    }
-
     function removeErrorTextAndBorderColor(container) {
         let errorMessages = container.querySelectorAll('.registration-form__error');
         for(let errorMessage of errorMessages) {
@@ -1189,25 +1116,6 @@ function update_firm() {
                 input.style.borderColor = '#ced4da';
                 input.parentElement.querySelector('.registration-form__error').innerHTML = '';
             }
-        }
-    }
-
-
-    function setImage(inputField, img) {
-        img.src = URL.createObjectURL(inputField.files[0]);
-        img.onload = function() {
-            URL.revokeObjectURL(img.src);
-        }
-    }
-
-
-    function showImagePreviewOnChange(fileUploads) {
-        for(let fileUpload of fileUploads) {
-            fileUpload.addEventListener('change', e => {
-                const container = e.target.parentElement;
-                let img = container.querySelector('img');
-                setImage(fileUpload, img);
-            });
         }
     }
 
@@ -1441,6 +1349,7 @@ function update_invoice() {
     // ##############################
 
     let addNewBill = document.getElementById('fiskalni');
+    let addBillForm = document.getElementById('add-bill-form');
 
     addNewBill.addEventListener('change', e => {
         if(addNewBill.value == 'dodajFiskalni') {
@@ -1449,7 +1358,6 @@ function update_invoice() {
         }
     });
 
-    let addBillForm = document.getElementById('add-bill-form');
 
     addBillForm.addEventListener('submit', e => {
         e.preventDefault();
@@ -1546,7 +1454,7 @@ function update_invoice() {
     }
 
     function displayArticleOptionsOnFirmChange(articles) {
-        list = '<option value="noviArtikal"> Dodajte novi artikal </option>';
+        list = '<option value="noviArtikal"> dodaj novi artikal </option>';
         for(let item of articles) {
             list += `<option value="${item['ime']}"> ${item['ime']} </option>`;
         }
@@ -1555,7 +1463,7 @@ function update_invoice() {
 
     function displayArticleOptions(articles) {
         list = '<option value="">Izaberite artikal</option>';
-        list += '<option value="noviArtikal"> Dodajte novi artikal </option>';
+        list += '<option value="noviArtikal"> dodaj novi artikal </option>';
         for(let item of articles) {
             list += `<option value="${item['ime']}"> ${item['ime']} </option>`;
         }
@@ -1563,7 +1471,7 @@ function update_invoice() {
     }
 
     function displayArticleOptionsOnFirmChange() {
-        list = '<option value="noviArtikal"> Dodajte novi artikal </option>'
+        list = '<option value="noviArtikal"> dodaj novi artikal </option>'
         for(let item of articles) {
             list += `<option value="${item['ime']}"> ${item['ime']} </option>`;
         }
@@ -1602,18 +1510,27 @@ function update_invoice() {
 
             let ukupno = container.querySelector('.ukupno');
             let ukupnoValue = (cijena.value * kolicina.value - (cijena.value * kolicina.value * rabat.value / 100)).toFixed(2);
-            ukupno.value = ukupnoValue != 0 ? ukupnoValue : '';
-            ukupno.innerHTML = ukupnoValue != 0 ? ukupnoValue + ' KM' : '';
+            if(selectInvoiceType.value == 'Storno faktura') {
+                ukupno.value = ukupnoValue != 0 ? '-' + ukupnoValue + ' KM' : '';
+            } else {
+                ukupno.value = ukupnoValue != 0 ? ukupnoValue + ' KM' : '';
+            }
 
             let pdv = container.querySelector('.PDV');
             let pdvValue = (ukupnoValue * 14.53 / 100).toFixed(2); 
-            pdv.value = pdvValue != 0 ? pdvValue : '';
-            pdv.innerHTML = pdvValue != 0 ? pdvValue + ' KM' : '';
+            if (selectInvoiceType.value == 'Storno faktura') {
+                pdv.value = pdvValue != 0 ? '-' + pdvValue + ' KM' : '';
+            } else {
+                pdv.value = pdvValue != 0 ? pdvValue + ' KM' : '';
+            }
 
             let bezPDV = container.querySelector('.bezPDV');
             let bezPDVValue = (ukupnoValue - pdvValue).toFixed(2);
-            bezPDV.value = bezPDVValue != 0 ? bezPDVValue : '';
-            bezPDV.innerHTML = bezPDVValue != 0 ? bezPDVValue + ' KM' : '';
+            if (selectInvoiceType.value == 'Storno faktura') {
+                bezPDV.value = bezPDVValue != 0 ? '-' + bezPDVValue + ' KM' : '';
+            } else {
+                bezPDV.value = bezPDVValue != 0 ? bezPDVValue + ' KM' : '';
+            }
 
         }
     }
@@ -1622,13 +1539,20 @@ function update_invoice() {
         let total = 0;
         for(let totalInput of totalInputs) {
             let value = totalInput.value ? totalInput.value : '0KM';
-            value = value.substring(0, value.length - 2);
+            if(selectInvoiceType.value == 'Storno faktura') {
+                value = value.substring(1, value.length - 2);
+            } else {
+                value = value.substring(0, value.length - 2);
+            }
             const container = totalInput.parentElement.parentElement;
             if(container.style.display !== 'none') {
                 total += parseFloat(value);
             }
         }
         total = total.toFixed(2);
+        if (selectInvoiceType.value == 'Storno faktura') {
+            total = '-' + total;
+        }
         total += ' KM';
         return total;
     }
@@ -1638,13 +1562,20 @@ function update_invoice() {
         let total = 0;
         for(let totalInput of totalInputs) {
             let value = totalInput.value ? totalInput.value : '0KM';
-            value = value.substring(0, value.length - 2);
+            if (selectInvoiceType.value == 'Storno faktura') {
+                value = value.substring(1, value.length - 2);
+            } else {
+                value = value.substring(0, value.length - 2);
+            }
             const container = totalInput.parentElement.parentElement;
             if(container.style.display !== 'none') {
                 total += parseFloat(value);
             }
         }
         total = total.toFixed(2);
+        if (selectInvoiceType.value == 'Storno faktura') {
+            total = '-' + total;
+        }
         total += ' KM';
         return total;
     }
@@ -1654,13 +1585,20 @@ function update_invoice() {
         let total = 0;
         for(let totalInput of totalInputs) {
             let value = totalInput.value ? totalInput.value : '0KM';
-            value = value.substring(0, value.length - 2);
+            if (selectInvoiceType.value == 'Storno faktura') {
+                value = value.substring(1, value.length - 2);
+            } else {
+                value = value.substring(0, value.length - 2);
+            }
             const container = totalInput.parentElement.parentElement;
             if(container.style.display !== 'none') {
                 total += parseFloat(value);
             }
         }
         total = total.toFixed(2);
+        if (selectInvoiceType.value == 'Storno faktura') {
+            total = '-' + total;
+        }
         total += ' KM';
         return total;
     }
@@ -1683,14 +1621,27 @@ function update_invoice() {
             if(cijena.value !== '' && kolicina.value !== '') {
                 let ukupno = container.querySelector('.ukupno');
                 let ukupnoValue = (cijena.value * kolicina.value - (cijena.value * kolicina.value * rabat.value / 100)).toFixed(2);
-                ukupno.value = ukupnoValue + 'KM';
+                if (selectInvoiceType.value == 'Storno faktura') {
+                    ukupno.value = '-' + ukupnoValue + 'KM';
+                } else {
+                    ukupno.value = ukupnoValue + 'KM';
+                }
+
                 if(pdv !== '0') {
                     let pdv = container.querySelector('.PDV');
                     let pdvValue = (ukupnoValue * 14.53 / 100).toFixed(2); 
-                    pdv.value = pdvValue + 'KM';
+                    if (selectInvoiceType.value == 'Storno faktura') {
+                        pdv.value = '-' + pdvValue + 'KM';
+                    } else {
+                        pdv.value = pdvValue + 'KM';
+                    }
                     let bezPDV = container.querySelector('.bezPDV');
                     let bezPDVValue = (ukupnoValue - pdvValue).toFixed(2);
-                    bezPDV.value = bezPDVValue + 'KM';
+                    if(selectInvoiceType.value == 'Storno faktura') {
+                        bezPDV.value = '-' + bezPDVValue + 'KM';
+                    } else {
+                        bezPDV.value = bezPDVValue + 'KM';
+                    }
                     setTotalValues();
                 } else {
                     let bezPDV = container.querySelector('.bezPDV');
@@ -1734,24 +1685,6 @@ function update_invoice() {
             addNewBill.parentElement.style.display = 'block';
         }
     }
-
-    function setImage(inputField, img) {
-        img.src = URL.createObjectURL(inputField.files[0]);
-        img.onload = function() {
-            URL.revokeObjectURL(img.src);
-        }
-    }
-
-
-    function showImagePreviewOnChange(fileUploads) {
-        for(let fileUpload of fileUploads) {
-            fileUpload.addEventListener('change', e => {
-                const container = e.target.parentElement;
-                let img = container.querySelector('img');
-                setImage(fileUpload, img);
-            });
-        }
-    } 
 
     function hideTotalsNotUsed() {
         ukupnoBezPdv.parentElement.style.display = 'none';
@@ -1862,48 +1795,47 @@ function update_invoice() {
         div.classList.add('articlesNumber');
         div.classList.add('m-w-100');
         div.classList.add('m-flex-column');
-        div.classList.add('m-card');
         div.classList.add('m-mb-m');
         
         div.innerHTML = `
-            <div class="w-30 border relative m-d-flex m-w-100">
-                <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">Naziv</span>
-                <select id="${numberOfArticles}-artikli" name="${numberOfArticles}-imeArtikla" class="dropdown w-100 p-xs form__input border-none h-100 imeArtikla">
+            <div class="w-30 border relative m-d-flex m-w-100 m-mb-xs m-border-none">
+                <span class="w-30 p-x d-none m-d-block">Naziv</span>
+                <select id="${numberOfArticles}-artikli" name="${numberOfArticles}-imeArtikla" class="dropdown w-100 p-xs m-border-input form__input border-none h-100 imeArtikla">
                 ${displayArticleOptions(articles)}
                 </select>
                 <span class="registration-form__error"></span>
             </div>
-            <div class="w-10 border m-d-flex m-w-100">
-                <span class="w-100 d-none p-x btn-primary weight-600 d-none m-w-100 m-d-block">Cijena</span>
-                <input type="number" name="${numberOfArticles}-cijena" step="0.01" class="w-100 p-xs form__input border-none h-100 cijena">
+            <div class="w-10 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                <span class="w-30 d-none p-x d-none m-d-block">Cijena</span>
+                <input type="number" name="${numberOfArticles}-cijena" step="0.01" class="w-100 p-xs m-border-input form__input border-none h-100 cijena">
                 <span class="registration-form__error"></span>
             </div>
-            <div class="w-10 border m-d-flex m-w-100">
-                <span class="w-100 p-x btn-primary weight-600 d-none m-w-100 m-d-block">Količina</span>
-                <input type="number" name="${numberOfArticles}-kolicina" step="0.01" class="w-100 p-xs form__input border-none h-100 kolicina" >
+            <div class="w-10 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                <span class="w-30 p-x d-none  m-d-block">Količina</span>
+                <input type="number" name="${numberOfArticles}-kolicina" step="0.01" class="w-100 p-xs m-border-input form__input border-none h-100 kolicina" >
                 <span class="registration-form__error"></span>
             </div>
-            <div class="w-10 border m-d-flex m-w-100">
-                <span class="w-100 p-x btn-primary weight-600 d-none m-w-100 m-d-block">Rabat</span>
-                <select name="${numberOfArticles}-rabat" class="w-100 p-xs form__input border-none h-100 rabat">
+            <div class="w-10 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                <span class="w-30 p-x d-none m-d-block">Rabat</span>
+                <select name="${numberOfArticles}-rabat" class="w-100 p-xs m-border-input form__input border-none h-100 rabat">
                 <option value="0" selected>0%</option>
                 ${displayOptionsBetweenOneAndHundred()}
                 </select>
                 <span class="registration-form__error"></span>
             </div>
-            <div class="w-15 border m-d-flex m-w-100">
-                <span class="w-100 p-x btn-primary weight-600 d-none m-w-100 m-d-block">Cijena bez PDV</span>
-                <input type="text" name="${numberOfArticles}-bezPdv" ${pdv == '1' ? '' : "disabled='true'"} class="w-100 p-xs form__input border-none h-100 bezPDV" >
+            <div class="w-15 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                <span class="w-30 p-x d-none m-d-block">Cijena bez PDV</span>
+                <input type="text" name="${numberOfArticles}-bezPdv" ${pdv == '1' ? '' : "disabled='true'"} class="w-100 p-xs m-border-input form__input border-none h-100 bezPDV" >
                 <span class="registration-form__error"></span>
             </div>
-            <div class="w-10 border m-d-flex m-w-100">
-                <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">PDV</span>
-                <input type="text" name="${numberOfArticles}-pdv" ${pdv == '1' ? '' : "disabled='true'"} class="w-100 p-xs border-none form__input h-100 PDV" >
+            <div class="w-10 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                <span class="w-30 p-x d-none m-d-block">PDV</span>
+                <input type="text" name="${numberOfArticles}-pdv" ${pdv == '1' ? '' : "disabled='true'"} class="w-100 p-xs m-border-input border-none form__input h-100 PDV" >
                 <span class="registration-form__error"></span>
             </div>
-            <div class="w-10 border m-d-flex m-w-100">
-                <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">Ukupno</span>
-                <input type="text" name="${numberOfArticles}-ukupno" class="w-100 p-xs border-none form__input h-100 ukupno" >
+            <div class="w-10 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                <span class="w-30 p-x d-none m-d-block">Ukupno</span>
+                <input type="text" name="${numberOfArticles}-ukupno" class="w-100 p-xs m-border-input border-none form__input h-100 ukupno" >
                 <span class="registration-form__error"></span>
             </div>
             <i class="fas fa-times remove-icon w-5 border d-flex jc-c ai-c m-d-flex pointer m-p-xs m-w-100"></i>
@@ -2001,6 +1933,7 @@ function add_invoice() {
                 }
             });
             fetchArticlesForCurrentUser('include/get_articles.inc.php');
+            getFirmBills('include/get_bills.inc.php');
         }
 
         if(e.currentTarget.value == 'dodajFirmu') {
@@ -2060,15 +1993,17 @@ function add_invoice() {
     // ##############################
 
     let addNewBill = document.getElementById('fiskalni');
+    let addBillForm = document.getElementById('add-bill-form');
 
     addNewBill.addEventListener('change', e => {
         if(addNewBill.value == 'dodajFiskalni') {
+            let firmaId = addBillForm.querySelector('#firmaId');
+            createAndSelectNewOption(firma.value, firma.options[firma.selectedIndex].text, firmaId);
             let billModal = document.querySelector('.modal-overlay-bill');
             billModal.classList.add('active');
         }
     });
 
-    let addBillForm = document.getElementById('add-bill-form');
 
     addBillForm.addEventListener('submit', e => {
         e.preventDefault();
@@ -2340,7 +2275,7 @@ function add_invoice() {
 
     function displayArticleOptions (articles) {
         list = '<option value="">Izaberite artikal</option>';
-        list += '<option value="noviArtikal"> Dodajte novi artikal </option>'
+        list += '<option value="noviArtikal"> dodaj novi artikal </option>'
         for(let item of articles) {
             list += `<option value="${item['ime']}"> ${item['ime']} </option>`;
         }
@@ -2348,7 +2283,7 @@ function add_invoice() {
     }
 
     function displayArticleOptionsOnFirmChange() {
-        list = '<option value="noviArtikal"> Dodajte novi artikal </option>'
+        list = '<option value="noviArtikal"> dodaj novi artikal </option>'
         for(let item of articles) {
             list += `<option value="${item['ime']}"> ${item['ime']} </option>`;
         }
@@ -2369,11 +2304,18 @@ function add_invoice() {
         let total = 0;
         for(let totalInput of totalInputs) {
             let value = totalInput.value ? totalInput.value : '0KM';
-            value = value.substring(0, value.length - 2);
+            if(selectInvoiceType.value == 'Storno faktura') {
+                value = value.substring(1, value.length - 2);
+            } else {
+                value = value.substring(0, value.length - 2);
+            }
             const container = totalInput.parentElement.parentElement;
             total += parseFloat(value);
         }
         total = total.toFixed(2);
+        if (selectInvoiceType.value == 'Storno faktura') {
+            total = '-' + total;
+        }
         total += ' KM';
         return total;
     }
@@ -2383,11 +2325,18 @@ function add_invoice() {
         let total = 0;
         for(let totalInput of totalInputs) {
             let value = totalInput.value ? totalInput.value : '0KM';
-            value = value.substring(0, value.length - 2);
+            if (selectInvoiceType.value == 'Storno faktura') {
+                value = value.substring(1, value.length - 2);
+            } else {
+                value = value.substring(0, value.length - 2);
+            }
             const container = totalInput.parentElement.parentElement;
             total += parseFloat(value);
         }
         total = total.toFixed(2);
+        if(selectInvoiceType.value == 'Storno faktura') {
+            total = '-' + total;
+        }
         total += ' KM';
         return total;
     }
@@ -2397,11 +2346,18 @@ function add_invoice() {
         let total = 0;
         for(let totalInput of totalInputs) {
             let value = totalInput.value ? totalInput.value : '0KM';
-            value = value.substring(0, value.length - 2);
+            if (selectInvoiceType.value == 'Storno faktura') {
+                value = value.substring(1, value.length - 2);
+            } else {
+                value = value.substring(0, value.length - 2);
+            }
             const container = totalInput.parentElement.parentElement;
             total += parseFloat(value);    
         }
         total = total.toFixed(2);
+        if(selectInvoiceType.value == 'Storno faktura') {
+            total = '-' + total;
+        }
         total += ' KM';
         return total;
     }
@@ -2435,15 +2391,27 @@ function add_invoice() {
 
             let ukupno = container.querySelector('.ukupno');
             let ukupnoValue = (cijena.value * kolicina.value - (cijena.value * kolicina.value * rabat.value / 100)).toFixed(2);
-            ukupno.value = ukupnoValue != 0 ? ukupnoValue + 'KM' : '';
+            if(selectInvoiceType.value == 'Storno faktura') {
+                ukupno.value = ukupnoValue != 0 ? '-' + ukupnoValue + 'KM' : '';
+            } else {
+                ukupno.value = ukupnoValue != 0 ? ukupnoValue + 'KM' : '';
+            }
 
             let pdv = container.querySelector('.PDV');
             let pdvValue = (ukupnoValue * 14.53 / 100).toFixed(2); 
-            pdv.value = pdvValue != 0 ? pdvValue + 'KM' : '';
+            if (selectInvoiceType.value == 'Storno faktura') {
+                pdv.value = pdvValue != 0 ? '-' + pdvValue + 'KM' : '';
+            } else {
+                pdv.value = pdvValue != 0 ? pdvValue + 'KM' : '';
+            }
 
             let bezPDV = container.querySelector('.bezPDV');
             let bezPDVValue = (ukupnoValue - pdvValue).toFixed(2);
-            bezPDV.value = bezPDVValue != 0 ? bezPDVValue + 'KM' : '';
+            if (selectInvoiceType.value == 'Storno faktura') {
+                bezPDV.value = bezPDVValue != 0 ? '-' + bezPDVValue + 'KM' : '';
+            } else {
+                bezPDV.value = bezPDVValue != 0 ? bezPDVValue + 'KM' : '';
+            }
 
         }
     }
@@ -2461,25 +2429,6 @@ function add_invoice() {
     }
 
 
-    function setImage(inputField, img) {
-        img.src = URL.createObjectURL(inputField.files[0]);
-        img.onload = function() {
-            URL.revokeObjectURL(img.src);
-        }
-    }
-
-
-    function showImagePreviewOnChange(fileUploads) {
-        for(let fileUpload of fileUploads) {
-            fileUpload.addEventListener('change', e => {
-                const container = e.target.parentElement;
-                let img = container.querySelector('img');
-                setImage(fileUpload, img);
-            });
-        }
-    }
-
-
     function setValueForRowTotal(container) {
         let cijena = container.querySelector('.cijena');
         let kolicina = container.querySelector('.kolicina');
@@ -2487,14 +2436,26 @@ function add_invoice() {
         if(cijena.value !== '' && kolicina.value !== '') {
             let ukupno = container.querySelector('.ukupno');
             let ukupnoValue = (cijena.value * kolicina.value - (cijena.value * kolicina.value * rabat.value / 100)).toFixed(2);
-            ukupno.value = ukupnoValue + 'KM';
+            if (selectInvoiceType.value == 'Storno faktura') {
+                ukupno.value = '-' + ukupnoValue + 'KM';
+            } else {
+                ukupno.value = ukupnoValue + 'KM';
+            }
             if(pdv !== '0') {
                 let pdv = container.querySelector('.PDV');
                 let pdvValue = (ukupnoValue * 14.53 / 100).toFixed(2); 
-                pdv.value = pdvValue + 'KM';
+                if(selectInvoiceType.value == 'Storno faktura') {
+                    pdv.value = '-' + pdvValue + 'KM';
+                } else {
+                    pdv.value = pdvValue + 'KM';
+                }
                 let bezPDV = container.querySelector('.bezPDV');
                 let bezPDVValue = (ukupnoValue - pdvValue).toFixed(2);
-                bezPDV.value = bezPDVValue + 'KM';
+                if(selectInvoiceType.value == 'Storno faktura') {
+                    bezPDV.value = '-' + bezPDVValue + 'KM';
+                } else {
+                    bezPDV.value = bezPDVValue + 'KM';
+                }
                 setTotalValues();
             } else {
                 let bezPDV = container.querySelector('.bezPDV');
@@ -2604,6 +2565,27 @@ function add_invoice() {
         });
     }
 
+    function getFirmBills(url) {
+        let formData = new FormData();
+        formData.append('submit', '');
+        let firmId = document.getElementById('firma').value;
+        formData.append('id', firmId);
+        postData(url, formData)
+        .then(result => {
+            addBillOptionsToBillField(result);
+        });
+    }
+
+    function addBillOptionsToBillField(result) {
+        let currentBill = document.getElementById('fiskalni');
+        if (currentBill.value == '') {
+            currentBill.innerHTML = '<option value=""> Izaberite fiskalni račun </option>' + displayBillOptions(result);
+        } else {
+            let option = `<option value="${currentBill.value}" selected>${currentBill.options[currentBill.selectedIndex].text}</option>`;
+            currentBill.innerHTML = option + displayBillOptions(result);
+        }
+    }
+
     function addArticleOptionsToArticleFields(result) {
         let articleOptions = document.querySelectorAll('.imeArtikla');
         for(let articleOption of articleOptions) {
@@ -2614,6 +2596,14 @@ function add_invoice() {
                 articleOption.innerHTML = currentArticleOption + displayArticleOptionsOnFirmChange(result) ;
             }
         }
+    }
+
+    function displayBillOptions(result) {
+        let list = '<option value="dodajFiskalni">Dodaj novi fiskalni račun</option>'
+        for (let item of result) {
+            list += `<option value="${item['id']}"> ${item['broj']} </option>`;
+        }
+        return list;
     }
 
 
@@ -2657,44 +2647,44 @@ function add_invoice() {
         div.classList.add('m-mb-m');
         
         div.innerHTML = `
-            <div class="w-30 border relative m-d-flex m-w-100">
-                <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">Naziv</span>
-                <select id="${numberOfArticles}-artikli" name="${numberOfArticles}-imeArtikla" class="dropdown w-100 p-xs form__input border-none h-100 imeArtikla">
+            <div class="w-30 border relative m-d-flex m-w-100 m-mb-xs m-border-none">
+                <span class="w-100 p-x d-none m-w-30 m-d-block">Naziv</span>
+                <select id="${numberOfArticles}-artikli" name="${numberOfArticles}-imeArtikla" class="dropdown w-100 p-xs m-border-input form__input border-none h-100 imeArtikla">
                 ${displayArticleOptions(articles)}
                 </select>
                 <span class="registration-form__error"></span>
             </div>
-            <div class="w-10 border m-d-flex m-w-100">
-                <span class="w-100 d-none p-x btn-primary weight-600 d-none m-w-100 m-d-block">Cijena</span>
-                <input type="number" name="${numberOfArticles}-cijena" step="0.01" class="w-100 p-xs form__input border-none h-100 cijena">
+            <div class="w-10 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                <span class="w-100 d-none p-x d-none m-w-30 m-d-block">Cijena</span>
+                <input type="number" name="${numberOfArticles}-cijena" step="0.01" class="w-100 p-xs m-border-input form__input border-none h-100 cijena">
                 <span class="registration-form__error"></span>
             </div>
-            <div class="w-10 border m-d-flex m-w-100">
-                <span class="w-100 p-x btn-primary weight-600 d-none m-w-100 m-d-block">Količina</span>
-                <input type="number" name="${numberOfArticles}-kolicina" step="0.01" class="w-100 p-xs form__input border-none h-100 kolicina" >
+            <div class="w-10 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                <span class="w-100 p-x d-none m-w-30 m-d-block">Količina</span>
+                <input type="number" name="${numberOfArticles}-kolicina" step="0.01" class="w-100 p-xs m-border-input form__input border-none h-100 kolicina" >
                 <span class="registration-form__error"></span>
             </div>
-            <div class="w-10 border m-d-flex m-w-100">
-                <span class="w-100 p-x btn-primary weight-600 d-none m-w-100 m-d-block">Rabat</span>
-                <select name="${numberOfArticles}-rabat" class="w-100 p-xs form__input border-none h-100 rabat">
+            <div class="w-10 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                <span class="w-100 p-x d-none m-w-30 m-d-block">Rabat</span>
+                <select name="${numberOfArticles}-rabat" class="w-100 p-xs m-border-input form__input border-none h-100 rabat">
                 <option value="0" selected>0%</option>
                 ${displayOptionsBetweenOneAndHundred()}
                 </select>
                 <span class="registration-form__error"></span>
             </div>
-            <div class="w-15 border m-d-flex m-w-100">
-                <span class="w-100 p-x btn-primary weight-600 d-none m-w-100 m-d-block">Cijena bez PDV</span>
-                <input type="text" name="${numberOfArticles}-bezPdv" ${pdv == '1' ? '' : "disabled='true'"} class="w-100 p-xs form__input border-none h-100 bezPDV" >
+            <div class="w-15 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                <span class="w-100 p-x d-none m-w-30 m-d-block">Cijena bez PDV</span>
+                <input type="text" name="${numberOfArticles}-bezPdv" ${pdv == '1' ? '' : "disabled='true'"} class="w-100 p-xs m-border-input form__input border-none h-100 bezPDV" >
                 <span class="registration-form__error"></span>
             </div>
-            <div class="w-10 border m-d-flex m-w-100">
-                <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">PDV</span>
-                <input type="text" name="${numberOfArticles}-pdv" ${pdv == '1' ? '' : "disabled='true'"} class="w-100 p-xs border-none form__input h-100 PDV" >
+            <div class="w-10 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                <span class="w-100 p-x d-none m-w-30 m-d-block">PDV</span>
+                <input type="text" name="${numberOfArticles}-pdv" ${pdv == '1' ? '' : "disabled='true'"} class="w-100 p-xs m-border-input border-none form__input h-100 PDV" >
                 <span class="registration-form__error"></span>
             </div>
-            <div class="w-10 border m-d-flex m-w-100">
-                <span class="w-100 p-x btn-primary weight-600 d-none m-w-45 m-d-block">Ukupno</span>
-                <input type="text" name="${numberOfArticles}-ukupno" class="w-100 p-xs border-none form__input h-100 ukupno" >
+            <div class="w-10 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                <span class="w-100 d-none m-w-30 m-d-block">Ukupno</span>
+                <input type="text" name="${numberOfArticles}-ukupno" class="w-100 p-xs m-border-input border-none form__input h-100 ukupno" >
                 <span class="registration-form__error"></span>
             </div>
             <i class="fas fa-times remove-icon w-5 border d-flex jc-c ai-c m-d-flex pointer m-p-xs m-w-100"></i>
@@ -2733,9 +2723,17 @@ function hideSuccessMessage(container) {
 const toggle = document.getElementById('sidebar-toggle');
 let sidebar = document.querySelector('.sidebar');
 let main = document.querySelector('main');
-let navigation = document.querySelector('.navigation-container');
+let navigation = document.querySelector('.navigation');
 let sidebarOverlay = document.querySelector('.sidebar-overlay');
 let sidebarMenuDropdowns = document.querySelectorAll('.sidebar__dropdown-toggle');
+
+let widthScreen = window.innerWidth
+    || document.documentElement.clientWidth
+    || document.body.clientWidth;
+
+if(widthScreen > 992) {
+    toggleActiveClass();
+}
 
 toggle.addEventListener('click', () => {
     toggleActiveClass();
@@ -2760,3 +2758,78 @@ function toggleActiveClass() {
 }
 
 
+function removeImageAndFileValue() {
+    let removeImageIcons = document.querySelectorAll('.remove-image');
+    if(removeImageIcons) {
+        for(let removeImageIcon of removeImageIcons) {
+            removeImageIcon.addEventListener('click', e => {
+                let container = e.currentTarget.parentElement;
+                let img = container.querySelector('img');
+                let file = container.querySelector('input');
+                img.src = '';
+                file.value = '';
+                removeImageIcon.style.display = 'none';
+            });
+        }
+    }
+}
+removeImageAndFileValue();
+
+function setImage(inputField, img) {
+    img.src = URL.createObjectURL(inputField.files[0]);
+    img.onload = function () {
+        URL.revokeObjectURL(img.src);
+    }
+}
+
+
+function showImagePreviewOnChange(fileUploads) {
+    for (let fileUpload of fileUploads) {
+        fileUpload.addEventListener('change', e => {
+            const container = e.target.parentElement;
+            let img = container.querySelector('img');
+            let  removeImageIcon = container.querySelector('.remove-image');
+            if(removeImageIcon) {
+                removeImageIcon.style.display = 'block';
+            }
+            setImage(fileUpload, img);
+        });
+    }
+}
+
+let checkbox = document.getElementById('theme-toggle');
+let userImage = document.getElementById('theme-image');
+let logoImage = document.getElementById('theme-logo');
+
+checkbox.addEventListener('click', function () {
+   let getUrl = window.location;
+    let baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1] + '/include/theme.inc.php';
+    getData(baseUrl)
+    .then(result => {
+        if (!result) {
+            trans();
+            document.documentElement.setAttribute('data-theme', 'dark');
+            logoImage.src = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1] + '/images/logo-2.png';
+            userImage.src = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1] + '/images/default2.png';
+        } else {
+            trans();
+            document.documentElement.setAttribute('data-theme', 'light');
+            logoImage.src = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1] + '/images/logo.png';
+            userImage.src = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1] + '/images/default.png';
+        }
+    });
+});
+
+let trans = () => {
+    document.documentElement.classList.add('transition');
+    window.setTimeout(() => {
+        document.documentElement.classList.remove('transition');
+    }, 1000);
+}
+
+async function getData(url) {
+    const response = await fetch(url, {
+        method: 'GET',
+    });
+    return response.json(); // parses JSON response into native JavaScript object
+}

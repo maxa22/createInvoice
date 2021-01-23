@@ -42,16 +42,10 @@
         }
 
         $oldFirm = Firm::findById($args['id']);
-
-        if($_FILES['logo']['error'] == 4) {
-            // if user doesen't upload image, don't update image path
-            $args['logo'] = $oldFirm['logo'];
-        } else {
-            if($oldFirm['logo']) {
-                $args['logo'] = 'logo';
-                unlink('../images/' . $oldFirm['logo']);
-                Validate::validateFile($args['logo'], 'logo');
-            }
+        $args['logo'] = 'logo';
+        if($oldFirm['logo']) {
+            unlink('../images/' . $oldFirm['logo']);
+            Validate::validateFile($args['logo'], 'logo');
         }
 
         

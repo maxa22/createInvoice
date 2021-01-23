@@ -27,13 +27,11 @@ $articles = Article::findAllWithOffset('userId', $id, $paginate->limit, $paginat
 ?>
 
 <main>
+    <h1 class="card__header text-center weight-500 w-100">Artikli</h1>
 <div class="hero">  
-    <div class="mt-s mb-s">
-        <h1>Artikli</h1>
-    </div>                          
         <?php if(!empty($articles)) { ?>
             <div class="card mb-s m-card-unset">
-                <div class="d-flex btn-primary mm-d-none">
+                <div class="d-flex articlesHeader mm-d-none">
                     <span class="w-10 p-xs border weight-600 m-d-none">Šifra</span>
                     <span class="w-25 p-xs border weight-600 m-d-none">Naziv</span>
                     <span class="w-10 p-xs border weight-600 m-d-none">Cijena</span>
@@ -42,24 +40,24 @@ $articles = Article::findAllWithOffset('userId', $id, $paginate->limit, $paginat
         <?php foreach($articles as $article) { ?>
                 <form action="" method="POST" class="update-article m-card m-mb-m">
                 <div class="d-flex m-flex-column">
-                    <div class="w-10 border m-d-flex m-w-100">
-                        <span class="w-30 p-xs weight-600 btn-primary d-none m-d-block">Id</span>
-                        <input type="text" name="<?php echo $article['id']; ?>-idArtikla-<?php echo $id; ?>" disabled class="w-100 p-xs border-none h-100" value="<?php echo $article['idArtikla']; ?>" >
+                    <div class="w-10 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                        <span class="w-30 p-xs  d-none m-d-block">Id</span>
+                        <input type="text" name="<?php echo $article['id']; ?>-idArtikla-<?php echo $id; ?>" disabled class="w-100 p-xs m-border-input form__input border-none h-100" value="<?php echo $article['idArtikla']; ?>" >
                         <span class="registration-form__error"></span>
                     </div>
-                    <div class="w-25 border m-d-flex m-w-100">
-                        <span class="w-30 d-none p-xs weight-600 btn-primary d-none m-d-block">Naziv</span>
-                        <input type="text" name="ime" disabled class="w-100 p-xs border-none h-100" value="<?php echo $article['ime']; ?>" >
+                    <div class="w-25 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                        <span class="w-30 d-none p-xs  d-none m-d-block">Naziv</span>
+                        <input type="text" name="ime" disabled class="w-100 p-xs m-border-input form__input border-none h-100" value="<?php echo $article['ime']; ?>" >
                         <span class="registration-form__error"></span>
                     </div>
-                    <div class="w-10 border m-d-flex m-w-100">
-                        <span class="w-30 p-xs btn-primary weight-600 btn-primary d-none m-d-block">Cijena</span>
-                        <input type="number" name="cijena" step="0.01" disabled class="w-100 p-xs border-none h-100" value="<?php echo $article['cijena']; ?>" >
+                    <div class="w-10 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                        <span class="w-30 p-xs d-none m-d-block">Cijena</span>
+                        <input type="number" name="cijena" step="0.01" disabled class="w-100 p-xs m-border-input form__input border-none h-100" value="<?php echo $article['cijena']; ?>" >
                         <span class="registration-form__error"></span>
                     </div>
-                    <div class="w-45 border m-d-flex m-w-100">
-                        <span class="w-30 p-xs btn-primary weight-600 d-none m-d-block">Opis</span>
-                        <textarea type="text" name="opis" disabled class="w-100 p-xs border-none h-100" value="<?php echo $article['opis']; ?> "><?php echo $article['opis']; ?></textarea>
+                    <div class="w-45 border m-d-flex m-w-100 m-mb-xs m-border-none">
+                        <span class="w-30 p-xs d-none m-d-block">Opis</span>
+                        <textarea type="text" name="opis" disabled class="w-100 p-xs m-border-input form__input border-none h-100" value="<?php echo $article['opis']; ?> "><?php echo $article['opis']; ?></textarea>
                         <span class="registration-form__error"></span>
                     </div>
                     <div class="w-10 d-flex jc-c ai-c info text-center border m-w-100 m-p-xs">
@@ -97,6 +95,6 @@ $articles = Article::findAllWithOffset('userId', $id, $paginate->limit, $paginat
                 <p>Niste dodali nijedan artikal...</p>
             </div>
         <?php } ?>
-        <a href="<?php base(); ?>add_article" class="btn btn-primary mt-s">Dodaj artikal</a>
+        <a href="<?php base(); ?>add_article" class="btn btn-primary btn-large text-center mt-s">Dodaj artikal <i class="fas fa-plus hide-icon"></i></a>
     </div>
 </main>

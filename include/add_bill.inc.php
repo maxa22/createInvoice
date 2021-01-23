@@ -11,6 +11,7 @@
     if(isset($_POST['submit'])) {
         $args['broj'] = $_POST['broj'];
         $args['userId'] = $_SESSION['id'];
+        $args['firmaId'] = $_POST['firmaId'];
         
         
         foreach($args as $key => $value) {
@@ -25,9 +26,6 @@
         }
 
         $args['slika'] = 'slika';
-        if($_FILES['slika']['error'] == 4) {
-            Message::addError('slika', 'Polje ne smije biti prazno');
-        }
         Validate::validateFile('slika', 'slika');
         $error = Message::getError();
 

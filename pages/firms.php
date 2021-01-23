@@ -32,10 +32,8 @@ $firms = Firm::findAllWithOffset('userId', $id, $paginate->limit, $paginate->off
 ?>
 
 <main>
+    <h1 class="card__header text-center weight-500 w-100">Firme</h1>
 <div class="hero">
-<div class="mt-s mb-s">
-    <h1>Firme</h1>
-</div> 
 <?php
 
     if(count($firms) > 0) { ?>
@@ -60,7 +58,7 @@ $firms = Firm::findAllWithOffset('userId', $id, $paginate->limit, $paginate->off
                     <span class="d-block mb-xs">Email: <?php echo $firm['email']; ?></span>
                     <span class="d-block mb-xs">Telefon: <?php echo $firm['telefon']; ?></span>
                 </div>
-                <a href="<?php base(); ?>update_firm/<?php echo $firm['id']; ?>" class="btn btn-info d-block w-100 mb-xs">Uredi</a>
+                <a href="<?php base(); ?>update_firm/<?php echo $firm['id']; ?>" class="btn btn-primary text-center d-block w-100 mb-xs">Uredi <i class="fas fa-edit hide-icon"></i></a>
             </div>
             </div>
     <?php } ?>
@@ -84,7 +82,7 @@ $firms = Firm::findAllWithOffset('userId', $id, $paginate->limit, $paginate->off
         <p>Niste dodali nijednu firmu...</p>
     <?php } ?>
     <div class="mt-m">
-        <a href="<?php base(); ?>add_firm" class="btn btn-primary">Dodaj firmu</a>
+        <a href="<?php base(); ?>add_firm" class="btn btn-primary btn-large text-center">Dodaj firmu <i class="fas fa-save hide-icon"></i></a>
     </div>
 </div>
 </div>

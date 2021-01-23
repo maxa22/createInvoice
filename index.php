@@ -8,7 +8,7 @@
     }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="<?php echo isset($_COOKIE['theme']) && $_COOKIE['theme'] == 'dark' ? 'dark' : ''; ?>">
 <?php require_once('section/head.php'); ?>
 <body>
     <!-- Navigation, same for every page -->

@@ -17,12 +17,12 @@ if(Message::getError()) {
     exit();
 }
 $invoice = Invoice::findById($id);
-if($invoice['userId'] !== $_SESSION['id']) {
-    header('Location: ../index');
-    exit();
+if(!$invoice || $invoice['userId'] !== $_SESSION['id']) {
+    echo "<script type='text/javascript'>window.top.location='../index';</script>"; exit;
 }
 $firm = Firm::findById($invoice['firmaId']);
 $client = Client::findById($invoice['kupacId']);
+$bill = Bill::findById($invoice['fiskalni']);
 
 $date = strtotime($invoice['datum']);
 $datum = date('d.m.Y', $date);
@@ -37,11 +37,8 @@ foreach($articles as $article) {
     }
 }
 ?>
-
 <main>
-<div class="mt-s mb-s">
-    <h1>Pregled fakture</h1>
-</div>
+    <h1 class="card__header text-center card__header-border weight-500">Pregled fakture</h1>
     <div class="pdf-wrapper">
         <div class="pdf-header">
             <div class="pdf-header__logo">
@@ -85,6 +82,9 @@ foreach($articles as $article) {
             <p>Mjesto izdavanja: <?php echo $invoice['mjesto'] ?></p>
             <p>Način plaćanja: <?php echo $invoice['nacin'] ?></p>
             <p>Rok za plaćanje: <?php echo $rok ?></p>
+            <?php if($invoice['fiskalni']) { ?>
+                <p> Fiskalni račun broj: <?php echo $bill['broj']; ?></p>
+            <?php }?>
         </div>
         <div class="pdf-client-info">
             <p>Klijent: <?php echo $client['ime'] ?></p>
@@ -115,7 +115,7 @@ foreach($articles as $article) {
             <?php } ?>
         </div>
         <div class="pdf-invoice-number">
-            <h2><?php echo $invoice['tip'] . ' broj: ' . $invoice['broj']; ?></h2>
+                <h2><?php echo $invoice['tip'] . ' broj: ' . $invoice['broj']; ?></h2>
         </div>
         <table class="pdf-invoice-articles">
             <tr>
@@ -181,9 +181,9 @@ foreach($articles as $article) {
             </tr>
         </table>
         <div class="clear-both"></div>
-        <div class="mt-m">
-            <a href="<?php base(); ?>render_pdf/<?php echo $id; ?>"  target="_blank" rel="nooklijenta" class="btn btn-primary">Ispiši PDF</a>
-            <a href="<?php base(); ?>update_invoice/<?php echo $id; ?>" class="btn btn-primary">Uredi fakturu</a>
+        <div class="mt-xl text-center">
+            <a href="<?php base(); ?>render_pdf/<?php echo $id; ?>"  target="_blank" rel="noopener" class="btn btn-primary text-center">Ispiši PDF<i class="fas fa-print hide-icon"></i></a>
+            <a href="<?php base(); ?>update_invoice/<?php echo $id; ?>" class="btn btn-primary text-center">Uredi <i class="fas fa-edit hide-icon"></i></a>
         </div>
     </div>
 </main>

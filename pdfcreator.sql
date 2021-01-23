@@ -25,9 +25,9 @@ CREATE TABLE IF NOT EXISTS `artikal` (
   KEY `FK_artikal_user` (`userId`),
   CONSTRAINT `FK_artikal_firma` FOREIGN KEY (`firmaId`) REFERENCES `firma` (`id`),
   CONSTRAINT `FK_artikal_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table pdfcreator.artikal: ~21 rows (approximately)
+-- Dumping data for table pdfcreator.artikal: ~2 rows (approximately)
 /*!40000 ALTER TABLE `artikal` DISABLE KEYS */;
 /*!40000 ALTER TABLE `artikal` ENABLE KEYS */;
 
@@ -45,9 +45,9 @@ CREATE TABLE IF NOT EXISTS `artiklifakture` (
   PRIMARY KEY (`id`),
   KEY `FK__faktura` (`fakturaId`),
   CONSTRAINT `FK__faktura` FOREIGN KEY (`fakturaId`) REFERENCES `faktura` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table pdfcreator.artiklifakture: ~15 rows (approximately)
+-- Dumping data for table pdfcreator.artiklifakture: ~5 rows (approximately)
 /*!40000 ALTER TABLE `artiklifakture` DISABLE KEYS */;
 /*!40000 ALTER TABLE `artiklifakture` ENABLE KEYS */;
 
@@ -68,9 +68,9 @@ CREATE TABLE IF NOT EXISTS `faktura` (
   PRIMARY KEY (`id`),
   KEY `FK_faktura_user` (`userId`),
   CONSTRAINT `FK_faktura_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table pdfcreator.faktura: ~7 rows (approximately)
+-- Dumping data for table pdfcreator.faktura: ~2 rows (approximately)
 /*!40000 ALTER TABLE `faktura` DISABLE KEYS */;
 /*!40000 ALTER TABLE `faktura` ENABLE KEYS */;
 
@@ -93,9 +93,9 @@ CREATE TABLE IF NOT EXISTS `firma` (
   PRIMARY KEY (`id`),
   KEY `FK_firma_user` (`userId`),
   CONSTRAINT `FK_firma_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table pdfcreator.firma: ~12 rows (approximately)
+-- Dumping data for table pdfcreator.firma: ~3 rows (approximately)
 /*!40000 ALTER TABLE `firma` DISABLE KEYS */;
 /*!40000 ALTER TABLE `firma` ENABLE KEYS */;
 
@@ -105,13 +105,16 @@ CREATE TABLE IF NOT EXISTS `fiskalniracun` (
   `broj` varchar(250) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `datum` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `slika` varchar(250) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `firmaId` int(11) NOT NULL,
   `userId` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `FK_fiskalniRacun_user` (`userId`),
-  CONSTRAINT `FK_fiskalniRacun_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `FK_fiskalniracun_firma` (`firmaId`),
+  CONSTRAINT `FK_fiskalniRacun_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`),
+  CONSTRAINT `FK_fiskalniracun_firma` FOREIGN KEY (`firmaId`) REFERENCES `firma` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table pdfcreator.fiskalniracun: ~10 rows (approximately)
+-- Dumping data for table pdfcreator.fiskalniracun: ~7 rows (approximately)
 /*!40000 ALTER TABLE `fiskalniracun` DISABLE KEYS */;
 /*!40000 ALTER TABLE `fiskalniracun` ENABLE KEYS */;
 
@@ -134,9 +137,9 @@ CREATE TABLE IF NOT EXISTS `klijent` (
   PRIMARY KEY (`id`),
   KEY `FK__user` (`userId`),
   CONSTRAINT `FK__user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table pdfcreator.klijent: ~7 rows (approximately)
+-- Dumping data for table pdfcreator.klijent: ~1 rows (approximately)
 /*!40000 ALTER TABLE `klijent` DISABLE KEYS */;
 /*!40000 ALTER TABLE `klijent` ENABLE KEYS */;
 

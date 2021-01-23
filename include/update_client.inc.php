@@ -43,15 +43,10 @@
 
         $oldClient = Client::findById($args['id']);
 
-        if($_FILES['logo']['error'] == 4) {
-            // if user doesen't upload image, don't update image path
-            $args['logo'] = $oldClient['logo'];
-        } else {
-            if($oldClient['logo']) {
-                $args['logo'] = 'logo';
-                unlink('../images/' . $oldClient['logo']);
-                Validate::validateFile($args['logo'], 'logo');
-            }
+        $args['logo'] = 'logo';
+        if($oldClient['logo']) {
+            unlink('../images/' . $oldClient['logo']);
+            Validate::validateFile($args['logo'], 'logo');
         }
 
         

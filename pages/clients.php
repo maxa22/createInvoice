@@ -31,13 +31,9 @@ $clients = Client::findAllWithOffset('userId', $id, $paginate->limit, $paginate-
 
 ?>
 
-?>
-
 <main>
+    <h1 class="card__header text-center weight-500 w-100">Klijenti</h1>
 <div class="hero">
-<div class="mt-s mb-s">
-    <h1>Klijenti</h1>
-</div>
 <?php 
 
     if(count($clients) > 0) { ?>
@@ -47,7 +43,6 @@ $clients = Client::findAllWithOffset('userId', $id, $paginate->limit, $paginate-
         ?> 
             <div class="w-25-gap-m l-w-50-gap-m s-w-100 card">
                 <div class="card-body text-center">
-                <!-- promijeniti src slike da bude zapravo logo -->
                 <?php if($client['logo']) { ?>
                     <img src="<?php base(); ?>images/<?php echo $client['logo']; ?>"  class="d-block w-100 mb-s">
                 <?php } ?>
@@ -63,7 +58,7 @@ $clients = Client::findAllWithOffset('userId', $id, $paginate->limit, $paginate-
                     <span class="d-block mb-xs">Email: <?php echo $client['email']; ?></span>
                     <span class="d-block mb-xs">Telefon: <?php echo $client['telefon']; ?></span>
                 </div>
-                <a href="<?php base(); ?>update_client/<?php echo $client['id']; ?>" class="btn btn-info w-100">Uredi</a>
+                <a href="<?php base(); ?>update_client/<?php echo $client['id']; ?>" class="btn text-center btn-primary w-100">Uredi <i class="fas fa-edit hide-icon"></i></a>
             </div>
             </div>
     <?php } ?>
@@ -87,7 +82,7 @@ $clients = Client::findAllWithOffset('userId', $id, $paginate->limit, $paginate-
         <p>Niste dodali nijednu klijenta...</p>
     <?php } ?>
     <div class="mt-m">
-        <a href="<?php base(); ?>add_client" class="btn btn-primary">Dodaj klijenta</a>
+        <a href="<?php base(); ?>add_client" class="btn btn-primary text-center btn-large">Dodaj klijenta <i class="fas fa-plus hide-icon"></i></a>
     </div>
 </div>
 </div>
