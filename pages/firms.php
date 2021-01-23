@@ -82,7 +82,7 @@ $firms = Firm::findAllWithOffset('userId', $id, $paginate->limit, $paginate->off
         <p>Niste dodali nijednu firmu...</p>
     <?php } ?>
     <div class="mt-m">
-        <a href="<?php base(); ?>add_firm" class="btn btn-primary btn-large text-center">Dodaj firmu <i class="fas fa-save hide-icon"></i></a>
+        <a href="<?php base(); ?>add_firm" class="btn btn-primary btn-large text-center">Dodaj firmu <i class="fas fa-plus hide-icon"></i></a>
     </div>
 </div>
 </div>

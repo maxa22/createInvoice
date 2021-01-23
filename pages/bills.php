@@ -89,7 +89,7 @@ $id = Sanitize::sanitizeString($_SESSION['id']);
         <p>Niste dodali nijedan fiskalni račun...</p>
     <?php } ?>
     <div class="mt-m">
-        <a href="<?php base(); ?>add_bill" class="btn btn-primary">Dodaj fiskalni račun</a>
+        <a href="<?php base(); ?>add_bill" class="btn btn-primary btn-large text-center">Dodaj fiskalni <i class="fas fa-plus hide-icon"></i></a>
     </div>
 </div>
 </main>
