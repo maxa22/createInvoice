@@ -124,7 +124,7 @@ main.active {
 }
 .form-container {
   margin: 4rem 0;
-  width: 54rem;
+  max-width: 54rem;
   background-color: var(--background-color);
   border: 0 solid rgba(0, 0, 0, 0.125);
   border-radius: 0.4rem;
@@ -646,6 +646,20 @@ td.pdf-invoice-first {
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
+.icon-hover,
+.icon-hover-danger {
+  -webkit-transition: transform 0.2s ease-in-out;
+  -o-transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
+}
+.icon-hover:hover {
+  transform: scale(1.2);
+}
+.icon-hover-danger:hover {
+  transform: scale(1.2);
+  color: var(--danger);
+}
+
 .p-none {
   padding: 0;
 }

@@ -23,13 +23,13 @@ $id = Sanitize::sanitizeString($_SESSION['id']);
             <div class="w-25-gap-m l-w-50-gap-m s-w-100 card">
             <form action="include/update_bill.inc.php" enctype="multipart/form-data" method="POST">
                 <div class="text-right d-flex jc-f-end">
-                    <span class="edit info editing p-xs">
+                    <span class="edit icon-hover editing p-xs"> 
                         <i class="fas fa-edit d-iblock w-100"></i>
                     </span>
                     <?php 
                     $isBillInInvoice = Invoice::findAllByQuery('fiskalni', $bill['id']);
-                    if(!$isBillInInvoice) {?>
-                        <span class="danger delete__bill editing pointer p-xs">
+                    if(empty($isBillInInvoice)) {?>
+                        <span class="delete__bill editing icon-hover-danger pointer p-xs">
                             <i class="fas fa-trash d-iblock w-100"></i>
                         </span>
                     <?php } ?>

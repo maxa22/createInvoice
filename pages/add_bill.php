@@ -9,7 +9,7 @@
 ?>
 <main>
     <h2 class="card__header text-center card__header-border weight-500">Dodaj fiskalni račun</h2>
-<div class="wrapper d-flex jc-c ai-c">
+<div class="wrapper">
 <div class="form-container m-auto">
 <form action="include/add_bill.inc.php" enctype="multipart/form-data"  method="POST">
     <div class="card-body">

@@ -24,8 +24,8 @@ $invoices = Invoice::findAllByQuery('userId', $id, 'DESC');
             $firm = Firm::findById($invoice['firmaId']);
     ?>
         <div class="w-25-gap-m l-w-50-gap-m s-w-100 card relative">
-            <span class="p-xs danger delete__invoice">
-                <i class="fas fa-trash pointer d-iblock w-100"></i>
+            <span class="p-xs icon-hover-danger pointer delete__invoice">
+                <i class="fas fa-trash d-iblock w-100"></i>
             </span>
             <div class="card-body">
                 <span class="d-block">Firma: </span><span class="d-block mb-xs"> <?php echo $firm['ime'];?></span>

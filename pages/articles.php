@@ -60,14 +60,14 @@ $articles = Article::findAllWithOffset('userId', $id, $paginate->limit, $paginat
                         <textarea type="text" name="opis" disabled class="w-100 p-xs m-border-input form__input border-none h-100" value="<?php echo $article['opis']; ?> "><?php echo $article['opis']; ?></textarea>
                         <span class="registration-form__error"></span>
                     </div>
-                    <div class="w-10 d-flex jc-c ai-c info text-center border m-w-100 m-p-xs">
-                        <span class="w-100 edit editing">
+                    <div class="w-10 d-flex jc-c ai-c text-center border m-w-100 m-p-xs">
+                        <span class="w-100 edit icon-hover editing">
                             <i class="fas fa-edit d-iblock w-100"></i>
                         </span>
-                        <button class="w-100 saving success d-none btn-transparent" name="submit">
+                        <button class="w-100 saving icon-hover d-none btn-transparent" name="submit">
                             <i class="fas fa-check d-iblock w-100 pointer"></i>
                         </button>
-                        <span class="w-100 saving cancel d-none">
+                        <span class="w-100 saving cancel icon-hover d-none">
                             <i class="fas fa-times d-iblock w-100 pointer"></i>
                         </span>
                     </div>
