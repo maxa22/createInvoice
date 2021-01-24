@@ -619,7 +619,10 @@ td.pdf-invoice-first {
 }
 .btn-secondary {
   background-color: var(--secondary);
+  border-color: #6c757d;
   color: #fff;
+  width: 13rem;
+  height: 4rem;
 }
 .btn-info {
   background-color: var(--info);
