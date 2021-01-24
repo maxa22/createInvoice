@@ -124,7 +124,8 @@ main.active {
 }
 .form-container {
   margin: 4rem 0;
-  max-width: 54rem;
+  width: 54rem;
+  max-width: 90%;
   background-color: var(--background-color);
   border: 0 solid rgba(0, 0, 0, 0.125);
   border-radius: 0.4rem;
